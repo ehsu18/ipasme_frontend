@@ -1,5 +1,5 @@
 * {
-  font-family: inter;
+  font-family: 'Inter', sans-serif;
   color: var(--dark);
   margin: 0px;
   text-decoration: none;
@@ -7,11 +7,23 @@
 }
 
 :root{
-  --main-color: #1b73f8;
-  --gray: #d9d9d9;
-  --dark: #383a40;
-  --white: #fff;
-  --back-lightblue: #f2f9fc;
+  /*Colors*/ 
+  --background: #F7F7F7;
+  --dark:#383A40;
+  --medium:#686773;
+  --text-light:#C9C9C9;
+  --gray:#D9D9D9;
+  --back-gray:#F4F4F4;
+  --back-lightblue: #F8FAFB;
+  --act-warning:#FDBB3B;
+  --act-good:#22C56C;
+  --act-danger: #E82721;
+  --back-selected:#F2F9FC;
+  --act-info:#1B73F8;
+  --main-color:#1B73F8;
+  --main-beneficiario:#39C3AA;
+  --main-afiliado:#743BBC;
+  --test: #1B73F8;
 }
 
 .navbar {
@@ -19,7 +31,6 @@
   height: 100vh;
   background-color: var(--white);
   border-right: solid 1px var(--gray);
-
   padding: 24px 0px;
 }
 
@@ -33,13 +44,56 @@
 .nav-logo-container img {
   height: 100%;
 }
+.micro-italic{
+  width: 182px;
+  height: 15px;
+  gap: 24px;
+  padding: 24px ;
 
+}
+
+.micro-italic li{
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 15px;
+  left: 24px;
+  list-style: none;
+
+}
 .tab-option {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 4px 0px 4px 24px;
+  width: 230px;
+  height: 32px;
 }
-.tab-option.selected {
-  background-color: var(--back-lightblue);
+
+.tab-option{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0px 4px 24px;
+}
+.selected.text {
+ font-size: 12px;
+}
+hr{
+  width: 100%;
+  height: 1px solid;
+}
+.user-card{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 24px 0px;
+}
+.user-card img{
+  width: 36px;
+  height: 36px;
+}
+.usuario-info {
+  margin-left: 12px;
+  display: flex;
+  flex-direction: column;
 }
