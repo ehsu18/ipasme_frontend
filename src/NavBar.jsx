@@ -9,6 +9,7 @@ import configuracion from './assets/config.png'
 import ayuda from  './assets/ayuda.png'
 import user from './assets/user.png'
 import arrow from './assets/arrow-circle-left.png'
+import * as icons from './assets/Icons'
 
 function NavBar() {
     return <nav className="navbar">
@@ -41,7 +42,7 @@ function NavBar() {
         </div>
 
         <div className='button-container'>
-            <Button text="Cerrar Sesión" icon={arrow}/>
+            <Button text="Cerrar Sesión" icon={icons.ArrowCircleLeft}/>
         </div>
 
 
@@ -57,7 +58,7 @@ function TabOption({selected=false, text="", icon, link="#"}){
 
 function Button({type='main', text="", icon}){
     return <button className='main-button'>
-        <img src={icon} alt="" />
+        {icon()}
         <span className='title-small'>{text}</span>
     </button>
 }
