@@ -65,7 +65,7 @@
 
 .navbar {
   width: 230px;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: var(--white);
@@ -91,6 +91,9 @@
 
 .navbar ul li {
   padding-left: 24px;
+}
+.navbar ul svg {
+  width: fit-content;
 }
 
 .nav-logo-container {
@@ -119,7 +122,7 @@
   border-left: solid 4px var(--main-color);
   border-right: solid 1px var(--gray);
   box-sizing: border-box;
-  /* corregir el problema del icono que se desplaza por el border */
+  padding-left: 20px;
 }
 .title-small.selected {
   color: var(--main-color);
@@ -129,16 +132,13 @@ hr {
   width: 100%;
   height: 1px solid;
 }
+
 .user-card {
   display: flex;
   /* justify-content: center; */
   align-items: center;
   padding: 0px 24px;
   gap: 12px;
-}
-.user-card img {
-  width: 36px;
-  height: 36px;
 }
 .usuario-info {
   display: flex;
