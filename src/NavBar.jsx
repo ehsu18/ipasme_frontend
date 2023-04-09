@@ -1,7 +1,5 @@
 // import './styles.css'
 import logoIpasme from "./assets/logo-ipasme.png";
-import configuracion from "./assets/config.png";
-import ayuda from "./assets/ayuda.png";
 import * as icons from "./Icons";
 
 function NavBar() {
