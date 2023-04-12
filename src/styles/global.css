@@ -1,0 +1,84 @@
+* {
+  font-family: "Inter", sans-serif;
+  color: var(--dark);
+  margin: 0px;
+  text-decoration: none;
+  padding: 0px;
+}
+
+:root {
+  /*Colors*/
+  --background: #ffffff;
+  --dark: #383a40;
+  --medium: #686773;
+  --text-light: #c9c9c9;
+  --gray: #d9d9d9;
+  --back-gray: #f4f4f4;
+  --back-lightblue: #f8fafb;
+  --act-warning: #fdbb3b;
+  --act-good: #22c56c;
+  --act-danger: #e82721;
+  --back-selected: #f2f9fc;
+  --act-info: #1b73f8;
+  --main-color: #1b73f8;
+  --main-beneficiario: #39c3aa;
+  --main-afiliado: #743bbc;
+  --test: #1b73f8;
+}
+
+/* estilos de texto */
+.micro-italic {
+  font-weight: 400;
+  font-size: 10px;
+  font-style: italic;
+  /* line-height: 15px; */
+  /* left: 24px; */
+  list-style: none;
+}
+.title-small {
+  font-weight: bold;
+  font-size: 12px;
+}
+.paragraph-small {
+  font-weight: regular;
+  font-size: 12px;
+}
+
+/* estilos de botones */
+.main-button {
+  border: none;
+  height: 36px;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0px 12px;
+  border-radius: 4px;
+  background-color: var(--background);
+  filter: drop-shadow(0px 1px 6px rgba(0, 0, 0, 0.12));
+}
+.main-button:hover {
+  animation: 0.2s;
+  background-color: var(--main-color);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+}
+
+.user-card {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  padding: 0px 24px;
+  gap: 12px;
+}
+.usuario-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0px 24px;
+  box-sizing: border-box;
+}

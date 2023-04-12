@@ -1,6 +1,6 @@
-// import './styles.css'
-import logoIpasme from "./assets/logo-ipasme.png";
+import logoIpasme from "../assets/png/logo-ipasme.png";
 import * as icons from "./Icons";
+import {Button1} from "./Buttons"
 
 function NavBar() {
   return (
@@ -39,7 +39,7 @@ function NavBar() {
       </div>
 
       <div className="button-container">
-        <Button text="Cerrar Sesión" icon={icons.ArrowCircleLeft} />
+        <Button1 text="Cerrar Sesión" icon={icons.ArrowCircleLeft} />
       </div>
     </nav>
   );
@@ -57,15 +57,6 @@ function TabOption({ selected = false, text = "", link = "#", icon }) {
         {text}
       </a>
     </li>
-  );
-}
-
-function Button({ type = "main", text = "", icon }) {
-  return (
-    <button className="main-button">
-      {icon()}
-      <span className="title-small">{text}</span>
-    </button>
   );
 }
 
