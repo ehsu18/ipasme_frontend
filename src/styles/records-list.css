@@ -1,0 +1,167 @@
+.main-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-header {
+  background-color: var(--white);
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--border);
+}
+
+.recordslist-options {
+  padding: 12px 24px;
+}
+
+.recordslist-container {
+  /* height: 100%; */
+  flex-grow: 1;
+  align-self: stretch;
+  width: 100%;
+  padding: 0px 24px 24px 24px;
+  gap: 24px;
+}
+
+.recordslist {
+  background-color: var(--white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  flex-grow: 1;
+  height: fit-content;
+}
+
+.recordslist .columns {
+  height: 36px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px 24px;
+  width: 100%;
+}
+.recordslist .columns > span {
+  width: 96px;
+}
+.recordslist .columns > span:nth-child(2) {
+  width: 140px;
+}
+.recordslist .columns > span:nth-child(3) {
+  flex-grow: 1;
+}
+.recordslist .columns > span:nth-last-child(3) {
+  text-align: center;
+}
+.recordslist .columns > span:nth-last-child(2) {
+  width: 120px;
+  text-align: center;
+}
+.recordslist .columns > span:nth-last-child(1) {
+  width: 72px;
+  text-align: center;
+}
+.relations-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  gap: 24px;
+  height: 100%;
+}
+
+.recordslist-item {
+  display: flex;
+  height: 72px;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 24px;
+
+  border-top: 1px solid var(--border);
+}
+.recordslist .selection-box {
+  margin-right: 12px;
+}
+.recordslist-item > span {
+  min-width: 96px;
+}
+.recordslist-item > span:nth-child(2) {
+  min-width: 140px;
+}
+.recordslist-item .name-text {
+  flex-grow: 1;
+}
+.recordslist-item > span:nth-last-child(3) {
+  text-align: center;
+}
+.recordslist-item > div:nth-last-child(2) {
+  min-width: 120px;
+  justify-content: center;
+}
+.recordslist-item > div:nth-last-child(1) {
+  min-width: 72px;
+  display: flex;
+  justify-content: center;
+}
+
+.relations-widget {
+  background-color: var(--white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  gap: 24px;
+  position: sticky;
+  top: 24px;
+  height: fit-content;
+}
+
+.relation-card {
+  height: fit-content;
+  width: 264px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--white);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0px 8px 0px 0px;
+  gap: 16px;
+}
+.relation-card div:nth-child(1) {
+  align-self: stretch;
+  /* height: 100%; */
+  width: 12px;
+  border-radius: 4px 0px 0px 4px;
+  
+}
+.relation-card div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 12px 0px;
+  gap: 4px;
+  flex-grow: 1;
+}
+.relation-card div:nth-child(2) p:nth-child(2){
+  color: var(--medium);
+}
+.relation-card div:nth-child(3) {
+  padding: 8px 0px;
+}
+.relation-card div:nth-child(3) svg path{
+  stroke: var(--medium);
+}

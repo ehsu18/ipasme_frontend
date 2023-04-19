@@ -15,14 +15,14 @@ function NavBar() {
         <TabOption text="Notificaciones" icon={icons.Bell} />
         <TabOption text="Ver Historias" icon={icons.DocumentFilled} />
         <TabOption text="Crear Historia" icon={icons.DocumentPlus} />
-        <TabOption text="Estadisticas" icon={icons.Stats} />
+        <TabOption text="Estad&iacute;sticas" icon={icons.Stats} />
       </ul>
       <div className="divider">
         <div></div>
       </div>
       <ul>
         <li className="micro-italic">Opciones</li>
-        <TabOption text="configuracion" icon={icons.Settings} />
+        <TabOption text="Configuraci&oacute;n" icon={icons.Settings} />
         <TabOption text="Ayuda" icon={icons.QuestionCircle} />
       </ul>
 

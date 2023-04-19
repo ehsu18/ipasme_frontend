@@ -1,12 +1,15 @@
 .navbar {
   width: 230px;
-  min-height: 100vh;
+  height: 100vh;
+  /* max-height: min-content; */
   display: flex;
   flex-direction: column;
   background-color: var(--white);
-  border-right: solid 1px var(--gray);
+  border-right: solid 1px var(--border);
   padding: 24px 0px;
   gap: 24px;
+  top: 0px;
+  position: sticky;
   box-sizing: border-box; /* sino, crece sin tener en cuenta el padding y se sale de la pantalla */
 }
 .navbar .divider {
@@ -16,7 +19,7 @@
 }
 .navbar .divider div {
   height: 1px;
-  background-color: var(--gray);
+  background-color: var(--border);
 }
 .navbar ul {
   display: flex;
@@ -55,7 +58,7 @@
 .tab-option.selected {
   background-color: var(--back-selected);
   border-left: solid 4px var(--main-color);
-  border-right: solid 1px var(--gray);
+  border-right: solid 1px var(--border);
   box-sizing: border-box;
   padding-left: 20px;
 }
