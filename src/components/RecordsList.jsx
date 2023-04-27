@@ -1,7 +1,6 @@
 import { Button1, Button2, PersonTypeTag } from "./Buttons";
-import PropTypes from "prop-types";
 import * as icons from "./Icons";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function repeatComponent(n, component) {
   let list = [];
@@ -11,11 +10,11 @@ function repeatComponent(n, component) {
   return list;
 }
 
-export function RecordsList() {
+export function ViewRecordsPage() {
   // este componente deberia ser una pagina y aparte deberia haber un componente especifico para la lista nada mas
   // ahora mismo se comporta como pagina a pesar de que fue diseñado como componente individual
 
-  let [selected, setSelected] = useState(-1);
+  
 
   return (
     <main className="main-container">
@@ -40,35 +39,54 @@ export function RecordsList() {
 
       <div className="recordslist-container flex-h">
         {/* asi como esta relationwitget deberia haber un recordslist abajo */}
-        <div className="recordslist">
-          <div className="columns">
-            <div className="selection-box"></div>
-            <span className="micro-italic">Número de cédula</span>
-            <span className="micro-italic">Nombre</span>
-            <span className="micro-italic">Edad</span>
-            {/* <span className="micro-italic">Sexo</span> */}
-            <span className="micro-italic">Tipo</span>
-            <span className="micro-italic">Ver</span>
-          </div>
-          <RecordsListItem key={1} id={1} selected={selected} setSelected={setSelected} />
-          <RecordsListItem key={2} id={2} selected={selected} setSelected={setSelected} />
-
-          {/* {repeatComponent(30, RecordsListItem)} */}
-        </div>
+        <RecordsList/>
         <RelationWidget />
       </div>
     </main>
   );
 }
 
-function RecordsListItem({id, selected, setSelected}) {
+export function RecordsList() {
+  let [selected, setSelected] = useState(-1);
+  return (
+    <div className="recordslist">
+      <div className="columns">
+        <div className="selection-box"></div>
+        <span className="micro-italic">Número de cédula</span>
+        <span className="micro-italic">Nombre</span>
+        <span className="micro-italic">Edad</span>
+        {/* <span className="micro-italic">Sexo</span> */}
+        <span className="micro-italic">Tipo</span>
+        <span className="micro-italic">Ver</span>
+      </div>
+      <RecordsListItem
+        key={1}
+        id={1}
+        selected={selected}
+        setSelected={setSelected}
+      />
+      <RecordsListItem
+        key={2}
+        id={2}
+        selected={selected}
+        setSelected={setSelected}
+      />
+
+      {/* {repeatComponent(30, RecordsListItem)} */}
+    </div>
+  );
+}
+
+export function RecordsListItem({ id, selected, setSelected }) {
   // let [selected, setSelected] = useState(false);
 
   return (
     <div
-      className={selected===id ? "recordslist-item selected" : "recordslist-item"}
+      className={
+        selected === id ? "recordslist-item selected" : "recordslist-item"
+      }
       onClick={() => {
-        setSelected(id);      
+        setSelected(id);
       }}
     >
       <div className="selection-box"></div>
@@ -89,7 +107,7 @@ function RecordsListItem({id, selected, setSelected}) {
   );
 }
 
-function RelationWidget({ record = 0 }) {
+export function RelationWidget({ record = 0 }) {
   return (
     <aside className="relations-widget">
       <p className="title-regular">Beneficiarios de esta persona</p>
@@ -100,7 +118,7 @@ function RelationWidget({ record = 0 }) {
   );
 }
 
-function RelationCard({ relation = {} }) {
+export function RelationCard({ relation = {} }) {
   return (
     <div className="relation-card">
       <div style={{ backgroundColor: "var(--main-beneficiario)" }}></div>
