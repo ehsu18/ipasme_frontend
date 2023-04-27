@@ -1,17 +1,26 @@
 import * as icons from "./Icons";
 
-export function Button1({ type = "main", text = "", icon }) {
+export function ButtonBig({ type = "main", text = "", icon }) {
+  /* button types:
+    main: blue background
+    secondary: white background
+    disabled:
+    good:
+    danger:
+    warning:
+  
+  */
   return (
-    <button className="main-button">
+    <button className={"button-big "+type}>
       {icon()}
       <span className="title-small">{text}</span>
     </button>
   );
 }
 
-export function Button2({ type = "main", text = "" }) {
+export function ButtonSmall({ type = "main", text = "" }) {
   return (
-    <button className="second-button">
+    <button className="button-small">
       <span className="title-small">{text}</span>
     </button>
   );

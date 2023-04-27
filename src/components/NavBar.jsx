@@ -1,6 +1,6 @@
 import logoIpasme from "../assets/png/logo-ipasme.png";
 import * as icons from "./Icons";
-import {Button1} from "./Buttons"
+import {ButtonBig} from "./Buttons"
 import { NavLink } from 'react-router-dom';
 import { useState } from "react";
 
@@ -46,7 +46,7 @@ function NavBar() {
       </div>
 
       <div className="button-container">
-        <Button1 text="Cerrar Sesión" icon={icons.ArrowCircleLeft} />
+        <ButtonBig  type="secondary"  text="Cerrar Sesión" icon={icons.ArrowCircleLeft} />
       </div>
     </nav>
   );

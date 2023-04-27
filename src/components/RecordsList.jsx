@@ -1,14 +1,14 @@
-import { Button1, Button2, PersonTypeTag } from "./Buttons";
+import { ButtonBig, ButtonSmall, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
 import { useState } from "react";
 
-function repeatComponent(n, component) {
-  let list = [];
-  for (let i = 0; i < n; i++) {
-    list.push(component({ key: i }));
-  }
-  return list;
-}
+// function repeatComponent(n, component) {
+//   let list = [];
+//   for (let i = 0; i < n; i++) {
+//     list.push(component({ key: i }));
+//   }
+//   return list;
+// }
 
 export function ViewRecordsPage() {
   // este componente deberia ser una pagina y aparte deberia haber un componente especifico para la lista nada mas
@@ -22,18 +22,18 @@ export function ViewRecordsPage() {
         <p className="title-big">Historias M&eacute;dicas</p>
 
         <div className="flex-h gap24">
-          <Button1 text="Añadir historia" icon={icons.DocumentEdit} />
-          <Button1 text="Añadir historia" icon={icons.DocumentEdit} />
+          <ButtonBig type="main" text="Añadir historia" icon={icons.DocumentEdit} />
+          <ButtonBig type="secondary" text="Selector" icon={icons.DocumentEdit} />
         </div>
       </header>
 
       <div className="flex-h gap-auto recordslist-options">
-        <Button1 text="Buscar" icon={icons.Search} />
+        <ButtonBig  type="secondary"  text="Buscar" icon={icons.Search} />
 
         <div className="flex-h gap12">
-          <Button1 text="Filtrar" icon={icons.Filters1} />
-          <Button1 text="Ordenar" icon={icons.Filters2} />
-          <Button1 text="M&aacute;s" icon={icons.MenuVertical} />
+          <ButtonBig type="secondary" text="Filtrar" icon={icons.Filters1} />
+          <ButtonBig  type="secondary" text="Ordenar" icon={icons.Filters2} />
+          <ButtonBig  type="secondary" text="M&aacute;s" icon={icons.MenuVertical} />
         </div>
       </div>
 
@@ -100,7 +100,7 @@ export function RecordsListItem({ id, selected, setSelected }) {
         <PersonTypeTag type="afiliado" />
       </div>
       <div>
-        <Button2 text="Abrir" />
+        <ButtonSmall text="Abrir" />
         {/* <a href="">Abrir</a>   */}
       </div>
     </div>
