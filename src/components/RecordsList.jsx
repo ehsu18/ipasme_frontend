@@ -12,6 +12,8 @@ function repeatComponent(n, component) {
 }
 
 export function RecordsList() {
+  // este componente deberia ser una pagina y aparte deberia haber un componente especifico para la lista nada mas
+  // ahora mismo se comporta como pagina a pesar de que fue diseñado como componente individual
 
   let [selected, setSelected] = useState(-1);
 
@@ -37,6 +39,7 @@ export function RecordsList() {
       </div>
 
       <div className="recordslist-container flex-h">
+        {/* asi como esta relationwitget deberia haber un recordslist abajo */}
         <div className="recordslist">
           <div className="columns">
             <div className="selection-box"></div>
@@ -52,7 +55,7 @@ export function RecordsList() {
 
           {/* {repeatComponent(30, RecordsListItem)} */}
         </div>
-        <RelationWidgets />
+        <RelationWidget />
       </div>
     </main>
   );
@@ -86,7 +89,7 @@ function RecordsListItem({id, selected, setSelected}) {
   );
 }
 
-function RelationWidgets({ record = 0 }) {
+function RelationWidget({ record = 0 }) {
   return (
     <aside className="relations-widget">
       <p className="title-regular">Beneficiarios de esta persona</p>
