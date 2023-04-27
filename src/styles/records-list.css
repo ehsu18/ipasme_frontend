@@ -88,7 +88,14 @@
 
   border-top: 1px solid var(--border);
 }
+
+.recordslist-item.selected {
+  background-color: var(--back-selected);
+  border: solid 1px var(--main-color);
+  border-radius: 4px;
+}
 .recordslist .selection-box {
+  /* revisar esto */
   margin-right: 12px;
 }
 .recordslist-item > span {

@@ -1,5 +1,7 @@
 import { Button1, Button2, PersonTypeTag } from "./Buttons";
+import PropTypes from "prop-types";
 import * as icons from "./Icons";
+import { useState, useEffect } from "react";
 
 function repeatComponent(n, component) {
   let list = [];
@@ -10,6 +12,9 @@ function repeatComponent(n, component) {
 }
 
 export function RecordsList() {
+
+  let [selected, setSelected] = useState(-1);
+
   return (
     <main className="main-container">
       <header className="content-header">
@@ -42,7 +47,10 @@ export function RecordsList() {
             <span className="micro-italic">Tipo</span>
             <span className="micro-italic">Ver</span>
           </div>
-          {repeatComponent(30, RecordsListItem)}
+          <RecordsListItem key={1} id={1} selected={selected} setSelected={setSelected} />
+          <RecordsListItem key={2} id={2} selected={selected} setSelected={setSelected} />
+
+          {/* {repeatComponent(30, RecordsListItem)} */}
         </div>
         <RelationWidgets />
       </div>
@@ -50,9 +58,16 @@ export function RecordsList() {
   );
 }
 
-function RecordsListItem() {
+function RecordsListItem({id, selected, setSelected}) {
+  // let [selected, setSelected] = useState(false);
+
   return (
-    <div className="recordslist-item">
+    <div
+      className={selected===id ? "recordslist-item selected" : "recordslist-item"}
+      onClick={() => {
+        setSelected(id);      
+      }}
+    >
       <div className="selection-box"></div>
       <span className="identification-text title-regular">V-29730724</span>
       <span className="name-text paragraph-regular">
@@ -64,7 +79,7 @@ function RecordsListItem() {
         <PersonTypeTag type="afiliado" />
       </div>
       <div>
-        <Button2 text="Abrir"/>
+        <Button2 text="Abrir" />
         {/* <a href="">Abrir</a>   */}
       </div>
     </div>
@@ -85,7 +100,7 @@ function RelationWidgets({ record = 0 }) {
 function RelationCard({ relation = {} }) {
   return (
     <div className="relation-card">
-      <div style={{backgroundColor: 'var(--main-beneficiario)'}}></div>
+      <div style={{ backgroundColor: "var(--main-beneficiario)" }}></div>
       <div>
         <p className="title-small">Lorem Ipsum Dolor Sit Amet</p>
         <p className="title-small">V-29.730.724</p>

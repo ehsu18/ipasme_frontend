@@ -7,6 +7,7 @@
 
   /* Experimental */
   box-sizing: border-box;
+  color: var(--dark);
 
   /* debuggin */
   /* outline: 1px solid red; */
@@ -31,7 +32,7 @@
   --back-lightblue: #f8fafb;
   --back-selected: #f2f9fc;
 
-  color: var(--dark);
+  
 
 }
 
@@ -119,9 +120,9 @@
   background-color: var(--white);
   filter: drop-shadow(0px 1px 6px rgba(0, 0, 0, 0.12));
 }
-/* .second-button span {
+.second-button span {
   color: var(--main-color);
-} */
+}
 .second-button:hover {
   background-color: var(--main-color);
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
