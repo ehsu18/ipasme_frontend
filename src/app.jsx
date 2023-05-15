@@ -1,6 +1,8 @@
 import NavBar from "./components/NavBar";
 import { HomePage } from "./components/HomePage";
+import { RecordDetailPage } from "./components/RecordDetailPage";
 import { ViewRecordsPage } from "./components/RecordsList";
+import { NewRecordPage } from "./components/NewRecordPage";
 import "./styles/global.css";
 import "./styles/navbar.css";
 import "./styles/app.css";
@@ -14,6 +16,8 @@ function App() {
       <Routes>
         <Route path="/viewrecords" element={<ViewRecordsPage />} />
         <Route path="/" element={<HomePage />} />
+        <Route path="/record_details" element={<RecordDetailPage />} />
+        <Route path="/newrecord" element={<NewRecordPage />}/>
       </Routes>
     </main>
   );
