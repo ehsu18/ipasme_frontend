@@ -7,7 +7,7 @@
 
   /* Experimental */
   box-sizing: border-box;
-  color: var(--dark);
+  /* color: var(--dark); */
 
   /* debuggin */
   /* outline: 1px solid red; */
@@ -32,8 +32,10 @@
   --back-lightblue: #f8fafb;
   --back-selected: #f2f9fc;
 
-  
+}
 
+a {
+  all: unset;
 }
 
 /* estilos de texto */
@@ -216,3 +218,76 @@
   border-radius: 4px;
   border: 1px solid var(--border);
 }
+
+
+.dual-selector {
+  cursor: pointer;
+  /* margin: 24px; testing only */
+  border: none;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 36px;
+  width: fit-content;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-content: center;
+  justify-content: center;
+  /* gap: 0px; */
+  padding: 0px;
+  border-radius: 4px;
+  background-color: var(--white);
+  filter: drop-shadow(0px 1px 6px rgba(0, 0, 0, 0.12));
+}
+
+.dual-selector div {
+  /* background-color: var(--white); */
+  height: 100%;
+  /* width: 50%; */
+  padding: 0px 12px; 
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: var(--dark);
+  font-weight: bold;
+  z-index: 2;
+  text-transform: capitalize;
+}
+
+.dual-selector .no-display {
+  display: none;
+}
+
+.dual-selector .left-container.selected {
+  color: var(--white);
+}
+.dual-selector .right-container.selected {
+  color: var(--white);
+}
+
+.dual-selector .selection-background{
+  background-color: var(--main-color);
+  border-radius: 4px;
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  z-index: 1;
+  /* animation: 1000s; */
+}
+.dual-selector .selection-background.left{
+  left: 0%;
+  /* animation: 1000s; */
+} 
+.dual-selector .selection-background.right{
+  left: 50%;
+  /* animation: 1000s; */
+} 
+/* .button-big.main span {
+  color: var(--white);
+}
+.button-big.main svg path {
+  stroke: var(--white);
+}
+.button-big.secondary {
+  background-color: var(--white);
+} */

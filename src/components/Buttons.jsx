@@ -1,4 +1,5 @@
 import * as icons from "./Icons";
+// import { useState } from "react";
 
 export function ButtonBig({ type = "main", text = "", icon }) {
   /* button types:
@@ -38,4 +39,27 @@ export function PersonTypeTag({ type = "afiliado" }) {
       <span className="title-micro">Beneficiario</span>
     </div>
   );
+}
+
+export function DualSelector({left='left', right='right', selected, setSelected}){
+  
+  
+  return (
+    <div className="dual-selector">
+      <div className={
+        selected===left ? "selection-background left" :
+        selected === right ? "selection-background right" :
+        "no-display"}></div>
+      
+      <div
+        className={selected===left ? "title-small left-container selected" : "title-small left-container"}
+        onClick={(e)=> {setSelected(left)}}
+      >{left}</div>
+
+      <div
+        className={selected===right ? "title-small right-container selected" : "title-small right-container"}
+        onClick={(e)=> {setSelected(right)}}
+      >{right}</div>
+    </div>
+  )
 }

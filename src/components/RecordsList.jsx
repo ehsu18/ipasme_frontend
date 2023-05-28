@@ -1,4 +1,4 @@
-import { ButtonBig, ButtonSmall, PersonTypeTag } from "./Buttons";
+import { ButtonBig, ButtonSmall, PersonTypeTag, DualSelector } from "./Buttons";
 import * as icons from "./Icons";
 import { useState, useEffect } from "react";
 import * as api from '../tools/api';
@@ -11,6 +11,9 @@ export function ViewRecordsPage() {
 
   let [selectedItem, setSelectedItem] = useState(-1);
   let [recordsList, setRecords] = useState([])
+  let [selectedListMode, setSelectedListMode] = useState('Todos')
+
+  // TODO se debe hacer el useeffect para que se traiga la configuracion del selector desde la base de datos
 
   useEffect(() => {
     api.getAffiliates()
@@ -25,7 +28,12 @@ export function ViewRecordsPage() {
 
         <div className="flex-h gap24">
           <ButtonBig type="main" text="Añadir historia" icon={icons.DocumentEdit} />
-          <ButtonBig type="secondary" text="Selector" icon={icons.DocumentEdit} />
+          <DualSelector 
+            left='Todos'
+            right='Afiliados'
+            selected = {selectedListMode}
+            setSelected =  {setSelectedListMode}
+          />   
         </div>
       </header>
 

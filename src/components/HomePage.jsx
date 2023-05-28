@@ -1,3 +1,14 @@
+import { DualSelector } from "./Buttons"
+import { useState } from "react"
+
 export function HomePage() {
-    return (<h1>Home Page</h1>)
+
+    let[selected, setSelected] = useState('right')
+
+    return (<DualSelector 
+        left='left'
+        right='right'
+        selected = {selected}
+        setSelected =  {setSelected}
+    />)
 }
