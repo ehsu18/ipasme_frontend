@@ -1,6 +1,6 @@
 import { ButtonBig, ButtonSmall, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // function repeatComponent(n, component) {
 //   let list = [];
@@ -48,6 +48,22 @@ export function ViewRecordsPage() {
 
 export function RecordsList() {
   let [selected, setSelected] = useState(-1);
+  // let [recordsList, setRecord] = useState([])
+
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/affiliate")
+      .then((response) => response.json())
+      .then((json) => {
+        // setRecord(lista)
+        console.log(json)
+      })
+      .catch((error) => {
+        console.log('fallo')
+      });
+  }, []);
+
+
   return (
     <div className="recordslist">
       <div className="columns">
@@ -59,6 +75,7 @@ export function RecordsList() {
         <span className="micro-italic">Tipo</span>
         <span className="micro-italic">Ver</span>
       </div>
+
       <RecordsListItem
         key={1}
         id={1}
