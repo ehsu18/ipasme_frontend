@@ -166,6 +166,9 @@
   gap: 4px;
   flex-grow: 1;
 }
+.relation-card div:nth-child(2) p:nth-child(1){
+  text-transform: capitalize;
+}
 .relation-card div:nth-child(2) p:nth-child(2){
   color: var(--medium);
 }
@@ -175,3 +178,5 @@
 .relation-card div:nth-child(3) svg path{
   stroke: var(--medium);
 }
+
+/* TODO cambiar el ancho variable a ancho estatico del relationwidget */

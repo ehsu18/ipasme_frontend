@@ -6,6 +6,18 @@ import * as api from '../tools/api';
 export function ViewRecordsPage() {
   // este componente deberia ser una pagina y aparte deberia haber un componente especifico para la lista nada mas
   // ahora mismo se comporta como pagina a pesar de que fue diseñado como componente individual
+  
+  // TODO se deberia poder deseleccionar usando la tecla esc
+
+  let [selectedItem, setSelectedItem] = useState(-1);
+  let [recordsList, setRecords] = useState([])
+
+  useEffect(() => {
+    api.getAffiliates()
+    .then(data=>setRecords(data))
+    .catch(error=>console.log(error))
+  }, []);
+  
   return (
     <main className="main-container">
       <header className="content-header">
@@ -28,25 +40,22 @@ export function ViewRecordsPage() {
       </div>
 
       <div className="recordslist-container flex-h">
-        <RecordsList/>
-        <RelationWidget />
+        <RecordsList
+        selectedItem = {selectedItem}
+        setSelectedItem = {setSelectedItem}
+        recordsList = {recordsList}
+        />
+
+        <RelationWidget 
+        selectedItem = {selectedItem}
+        recordsList = {recordsList}
+        />
       </div>
     </main>
   );
 }
 
-export function RecordsList() {
-  let [selectedItem, setSelectedItem] = useState(-1);
-  let [recordsList, setRecords] = useState([])
-
-
-  useEffect(() => {
-    api.getAffiliates()
-    .then(data=>setRecords(data))
-    .catch(error=>console.log(error))
-
-  }, []);
-
+export function RecordsList({selectedItem, setSelectedItem, recordsList}) {
 
   return (
     <div className="recordslist">
@@ -61,7 +70,6 @@ export function RecordsList() {
       </div>
 
       {recordsList ? recordsList.map((r, index)=>{
-        console.log(r)
         return <RecordsListItem
           key={index} id={index}
           selected={selectedItem}
@@ -105,27 +113,74 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
   );
 }
 
-export function RelationWidget({ record = 0 }) {
+export function RelationWidget({selectedItem, recordsList}) {
+
+  let [affiliates, setAffiliates] = useState([])
+  let [beneficiarys, setBeneficiarys] = useState([])
+
+  useEffect(()=>{
+    if (recordsList[selectedItem] === undefined) {
+      return
+    }
+
+    api.getAffiliateAffiliates(recordsList[selectedItem]['id'])
+    .then(data=>setAffiliates(data))
+    .catch(error=>console.error(error))
+  },[selectedItem, recordsList])
+
+  useEffect(()=>{
+    if (recordsList[selectedItem] === undefined) {
+      return
+    }
+
+    api.getAffiliateBeneficiarys(recordsList[selectedItem]['id'])
+    .then(data=>setBeneficiarys(data))
+    .catch(error=>console.error(error))
+  },[selectedItem, recordsList])
+
+  if (selectedItem === -1){
+    return (
+      <aside className="relations-widget">
+        <p className="empty-message">Seleccione una historia para ver sus relaciones.</p>
+      </aside>
+    )
+  }
   return (
     <aside className="relations-widget">
-      <p className="title-regular">Beneficiarios de esta persona</p>
-      <RelationCard />
       <p className="title-regular">Afiliados de esta persona</p>
-      <RelationCard />
+      { affiliates.length > 0 ? affiliates.map((aff, index)=>{
+        return <RelationCard 
+          key={index}
+          record={aff}
+        />
+      }) : <span>Esta persona no tiene afiliados</span> }
+      <p className="title-regular">Beneficiarios de esta persona</p>
+      { beneficiarys.length > 0 ? beneficiarys.map((aff, index)=>{
+        return <RelationCard 
+          key={index}
+          record={aff}
+        />
+      }) : <span>Esta persona no tiene beneficiarios</span> }
     </aside>
   );
 }
 
-export function RelationCard({ relation = {} }) {
+export function RelationCard({ record = {}}) {
+
   return (
     <div className="relation-card">
-      <div style={{ backgroundColor: "var(--main-beneficiario)" }}></div>
+      {/* TODO hay que checar cuando falle el type ver que se hace porque sino se pone como affiliado */}
+
+      <div style={ record['type']==='beneficiary' ?
+                  { backgroundColor: "var(--main-beneficiario)" } :
+                  { backgroundColor: "var(--main-afiliado)" }}></div>
       <div>
-        <p className="title-small">Lorem Ipsum Dolor Sit Amet</p>
-        <p className="title-small">V-29.730.724</p>
+        <p className="title-small">{record['name'].trim() + ' ' + record['lastname'].trim()}</p>
+        <p className="title-small">{'V-' + record['document']}</p>
         <p className="paragraph-micro">
           Lorem Ipsum Dolor Sit Amet es hija/hijo de Elian Enrique Sumalave
           Urbina.
+          {/* esto lo deberia mandar la api */}
         </p>
       </div>
       <div>{icons.MenuVertical("24px")}</div>
