@@ -1,21 +1,11 @@
 import { ButtonBig, ButtonSmall, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
 import { useState, useEffect } from "react";
-
-// function repeatComponent(n, component) {
-//   let list = [];
-//   for (let i = 0; i < n; i++) {
-//     list.push(component({ key: i }));
-//   }
-//   return list;
-// }
+import * as api from '../tools/api';
 
 export function ViewRecordsPage() {
   // este componente deberia ser una pagina y aparte deberia haber un componente especifico para la lista nada mas
   // ahora mismo se comporta como pagina a pesar de que fue diseñado como componente individual
-
-  
-
   return (
     <main className="main-container">
       <header className="content-header">
@@ -38,7 +28,6 @@ export function ViewRecordsPage() {
       </div>
 
       <div className="recordslist-container flex-h">
-        {/* asi como esta relationwitget deberia haber un recordslist abajo */}
         <RecordsList/>
         <RelationWidget />
       </div>
@@ -47,20 +36,15 @@ export function ViewRecordsPage() {
 }
 
 export function RecordsList() {
-  let [selected, setSelected] = useState(-1);
-  // let [recordsList, setRecord] = useState([])
+  let [selectedItem, setSelectedItem] = useState(-1);
+  let [recordsList, setRecords] = useState([])
 
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/affiliate")
-      .then((response) => response.json())
-      .then((json) => {
-        // setRecord(lista)
-        console.log(json)
-      })
-      .catch((error) => {
-        console.log('fallo')
-      });
+    api.getAffiliates()
+    .then(data=>setRecords(data))
+    .catch(error=>console.log(error))
+
   }, []);
 
 
@@ -76,25 +60,22 @@ export function RecordsList() {
         <span className="micro-italic">Ver</span>
       </div>
 
-      <RecordsListItem
-        key={1}
-        id={1}
-        selected={selected}
-        setSelected={setSelected}
-      />
-      <RecordsListItem
-        key={2}
-        id={2}
-        selected={selected}
-        setSelected={setSelected}
-      />
+      {recordsList ? recordsList.map((r, index)=>{
+        console.log(r)
+        return <RecordsListItem
+          key={index} id={index}
+          selected={selectedItem}
+          setSelected={setSelectedItem}
+          recordData={r}
+        />
+      }) : <h1>Error</h1> }
 
-      {/* {repeatComponent(30, RecordsListItem)} */}
+     
     </div>
   );
 }
 
-export function RecordsListItem({ id, selected, setSelected }) {
+export function RecordsListItem({ id, selected, setSelected, recordData }) {
   // let [selected, setSelected] = useState(false);
 
   return (
@@ -107,9 +88,9 @@ export function RecordsListItem({ id, selected, setSelected }) {
       }}
     >
       <div className="selection-box"></div>
-      <span className="identification-text title-regular">V-29730724</span>
+      <span className="identification-text title-regular">{'V-'+recordData['document']}</span>
       <span className="name-text paragraph-regular">
-        Elian Enrique Sumalave Urbina
+        {recordData['name'].trim() + ' ' + recordData['lastname'].trim()}
       </span>
       <span className="age-text paragraph-regular">21 a&ntilde;os</span>
       {/* <span className="sex-text paragraph-regular">Masculino</span> */}

@@ -107,6 +107,8 @@
 }
 .recordslist-item .name-text {
   flex-grow: 1;
+  text-transform: capitalize; 
+
 }
 .recordslist-item > span:nth-last-child(3) {
   text-align: center;
