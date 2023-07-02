@@ -7,7 +7,11 @@ import "./styles/global.css";
 import "./styles/navbar.css";
 import "./styles/app.css";
 import "./styles/records-list.css";
+import "./styles/NewRecordPage.css"
 import { Routes, Route } from "react-router-dom";
+import { CreatingRecordPage } from "./components/CreatingRecordPage";
+// TODO revisar si es mejor importar los css asi o en sus respectivas paginas
+
 
 function App() {
   return (
@@ -18,6 +22,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/record_details" element={<RecordDetailPage />} />
         <Route path="/newrecord" element={<NewRecordPage />}/>
+        <Route path="/creating_record" element={<CreatingRecordPage />}/>
       </Routes>
     </main>
   );

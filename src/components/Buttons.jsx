@@ -1,7 +1,7 @@
 import * as icons from "./Icons";
 // import { useState } from "react";
 
-export function ButtonBig({ type = "main", text = "", icon }) {
+export function ButtonBig({ action, id, type = "main", text = "", icon }) {
   /* button types:
     main: blue background
     secondary: white background
@@ -12,7 +12,7 @@ export function ButtonBig({ type = "main", text = "", icon }) {
   
   */
   return (
-    <button className={"button-big "+type}>
+    <button id={id} onClick={action} className={"button-big "+type}>
       {icon()}
       <span className="title-small">{text}</span>
     </button>
@@ -43,7 +43,7 @@ export function PersonTypeTag({ type = "afiliado" }) {
 
 export function DualSelector({left='left', right='right', selected, setSelected}){
   
-  
+  // TODO no se puede seleccionar el fondo blanco
   return (
     <div className="dual-selector">
       <div className={

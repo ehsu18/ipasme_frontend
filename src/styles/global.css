@@ -82,6 +82,10 @@ a {
   list-style: none;
 }
 
+.text-center {
+  text-align: center;
+}
+
 /* estilos de botones */
 .button-big {
   border: none;
@@ -89,6 +93,7 @@ a {
   width: fit-content;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 0px 12px;
   border-radius: 4px;
