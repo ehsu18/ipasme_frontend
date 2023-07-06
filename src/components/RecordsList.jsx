@@ -14,6 +14,7 @@ export function ViewRecordsPage() {
   let [selectedListMode, setSelectedListMode] = useState('Todos')
 
   // TODO se debe hacer el useeffect para que se traiga la configuracion del selector desde la base de datos
+  // manejar errores de conexion, de lista vacia, etc
 
   useEffect(() => {
     api.getAffiliates()
@@ -114,7 +115,7 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
         <PersonTypeTag type="afiliado" />
       </div>
       <div>
-        <ButtonSmall text="Abrir" />
+        <ButtonSmall text="Abrir" action={()=>{window.location.href = '/record_details/'+recordData['id']}}/>
         {/* <a href="">Abrir</a>   */}
       </div>
     </div>

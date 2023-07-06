@@ -19,9 +19,9 @@ export function ButtonBig({ action, id, type = "main", text = "", icon }) {
   );
 }
 
-export function ButtonSmall({ type = "main", text = "" }) {
+export function ButtonSmall({ type = "main", text = "" , action}) {
   return (
-    <button className="button-small">
+    <button onClick={action} className="button-small">
       <span className="title-small">{text}</span>
     </button>
   );

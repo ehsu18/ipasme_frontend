@@ -1,17 +1,20 @@
 import NavBar from "./components/NavBar";
 import { HomePage } from "./components/HomePage";
-import { RecordDetailPage } from "./components/RecordDetailPage";
 import { ViewRecordsPage } from "./components/RecordsList";
 import { NewRecordPage } from "./components/NewRecordPage";
 import "./styles/global.css";
 import "./styles/navbar.css";
 import "./styles/app.css";
 import "./styles/records-list.css";
-import "./styles/NewRecordPage.css"
-import { Routes, Route } from "react-router-dom";
+import "./styles/NewRecordPage.css";
+import {
+  Routes,
+  Route,
+  Switch,
+} from "react-router-dom";
 import { CreatingRecordPage } from "./components/CreatingRecordPage";
+import { RecordDetailsPage } from "./components/RecordDetailsPage";
 // TODO revisar si es mejor importar los css asi o en sus respectivas paginas
-
 
 function App() {
   return (
@@ -20,9 +23,8 @@ function App() {
       <Routes>
         <Route path="/viewrecords" element={<ViewRecordsPage />} />
         <Route path="/" element={<HomePage />} />
-        <Route path="/record_details" element={<RecordDetailPage />} />
+        <Route path="/record_details/:id" element={<RecordDetailsPage />} />
         <Route path="/newrecord" element={<NewRecordPage />}/>
-        <Route path="/creating_record" element={<CreatingRecordPage />}/>
       </Routes>
     </main>
   );

@@ -3,12 +3,16 @@ const AFFILIATE_URL = 'affiliate'
 const RELATION_AFFILIATES_URL = 'affiliate_affiliates/'
 const RELATION_BENEFICIARYS_URL = 'affiliate_beneficiarys/'
 
-export async function getAffiliates() {
+export async function getAffiliates(id='') {
 
-    return await fetch(API_URL+AFFILIATE_URL)
+    if( id !=='' ){id = '/'+id}
+    return await fetch(API_URL+AFFILIATE_URL+id)
     .then((response) => response.json())
     .then((json) => {
       return json
+    })
+    .catch((error)=>{
+      throw new Error(error)
     })
 
 }
