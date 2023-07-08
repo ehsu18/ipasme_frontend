@@ -91,7 +91,7 @@ export function RecordDetailsPage() {
             </div>
           </nav>
 
-          <RecordDetailsSection title="Datos personales">
+          <RecordDetailsSection title="Datos personales" lastModified={recordBasic['personal-date-modified'] || 'indefinido'}>
             <RecordDetailsDataContainer
               label="Cedula"
               name="document"
@@ -133,7 +133,8 @@ export function RecordDetailsPage() {
               data={recordBasic["sex"] || "indefinido"}
             />
           </RecordDetailsSection>
-          <RecordDetailsSection title="Datos de contacto">
+          
+          <RecordDetailsSection title="Datos de contacto" lastModified={recordBasic['contact-date-modified'] || 'indefinido'}>
             <RecordDetailsDataContainer
               label="Telefono personal"
               name="personalphone"
@@ -151,35 +152,47 @@ export function RecordDetailsPage() {
               doubleColumn
             />
           </RecordDetailsSection>
-          {recordBasic['type'] == 'affiliate' ? 
-            <RecordDetailsSection title='Datos laborales' >
+          
+          {recordBasic["type"] == "affiliate" ? (
+            <RecordDetailsSection title="Datos laborales" lastModified={recordBasic['job-date-modified'] || 'indefinido'}>
               <RecordDetailsDataContainer
-              label="Estado laboral"
-              name="jobstatus"
-              data={recordBasic["jobstatus"] || "indefinido"}
-            />
-            <RecordDetailsDataContainer
-              label="Cargo"
-              name="jobtitle"
-              data={recordBasic["jobtitle"] || "indefinido"}
-            />
-            <RecordDetailsDataContainer
-              label="Direccion del plantel"
-              name="jobdirection"
-              data={recordBasic["jobdirection"] || "indefinido"}
-              doubleColumn
-            />
+                label="Estado laboral"
+                name="jobstatus"
+                data={recordBasic["jobstatus"] || "indefinido"}
+              />
+              <RecordDetailsDataContainer
+                label="Cargo"
+                name="jobtitle"
+                data={recordBasic["jobtitle"] || "indefinido"}
+              />
+              <RecordDetailsDataContainer
+                label="Direccion del plantel"
+                name="jobdirection"
+                data={recordBasic["jobdirection"] || "indefinido"}
+                doubleColumn
+              />
             </RecordDetailsSection>
-          : null}
+          ) : null}
         </div>
       </div>
     </main>
   );
 }
 
-function RecordDetailsSection({ title, children }) {
+function RecordDetailsSection({ title, children, lastModified}) {
+  let [editingStatus, setEditingStatus] = useState(false);
   return (
-    <section className="recorddetails-section">
+    <section
+      className="recorddetails-section"
+      style={
+        editingStatus
+          ? {
+              border: "solid 1px var(--main-color)",
+              background: "var(--back-selected)"
+            }
+          : {}
+      }
+    >
       <header className="felx-h">
         {icons.User1(24)}
         <span className="title-regular">{title}</span>
@@ -189,9 +202,19 @@ function RecordDetailsSection({ title, children }) {
 
       <div className="flex-h recorddetails-section-info">
         <span className="micro-italic">
-          Realice los cambios necesarios y luego haga click en guardar
+          {editingStatus ? 
+          "Realice los cambios necesarios y luego haga click en guardar" :
+          "Actualizados por ultima vez el: " + lastModified}
         </span>
-        <ButtonBig text="Editar" icon={icons.DocumentEdit} type="main" />
+        <ButtonBig
+          text={editingStatus ? "Guardar" : "Editar"}
+          icon={icons.DocumentEdit}
+          type={editingStatus ? "main" : "secondary"}
+          action={(e) => {
+            // qui action deberia cambiar si esta editando o no
+            setEditingStatus(!editingStatus);
+          }}
+        />
       </div>
     </section>
   );

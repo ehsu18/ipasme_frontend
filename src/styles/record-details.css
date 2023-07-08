@@ -65,8 +65,10 @@
     width: 100%;
     padding: 24px;
     gap: 24px;
+    border: solid 1px var(--white);
     border-bottom: solid 1px var(--border);
 }
+
 .recorddetails-section header{
     grid-column: 1 / span 2;
     align-items: center;
