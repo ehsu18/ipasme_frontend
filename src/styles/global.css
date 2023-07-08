@@ -306,7 +306,7 @@ a {
   border-radius: 4px;
 }
 
-.entry-1-disabled {
+.entry-1-readonly {
   all: unset;
   padding: 8px 0px;
 }
