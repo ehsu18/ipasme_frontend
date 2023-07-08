@@ -8,6 +8,10 @@ export function RecordDetailsPage() {
   let { id } = useParams();
   const [recordBasic, configRecordBasic] = useState({});
 
+  let [basicEditStatus, setBasicEditStatus] = useState(false);
+  let [contactEditStatus, setContactEditStatus] = useState(false);
+  let [jobEditStatus, setJobEditStatus] = useState(false);
+
   useEffect(() => {
     getRecords(id)
       .then((response) => response.json())
@@ -91,84 +95,113 @@ export function RecordDetailsPage() {
             </div>
           </nav>
 
-          <RecordDetailsSection title="Datos personales" lastModified={recordBasic['personal-date-modified'] || 'indefinido'}>
+          <RecordDetailsSection
+            title="Datos personales"
+            lastModified={recordBasic["personal-date-modified"] || "indefinido"}
+            editStatus={basicEditStatus}
+            setEditStatus={setBasicEditStatus}
+          >
             <RecordDetailsDataContainer
               label="Cedula"
               name="document"
               data={recordBasic["document"] || "indefinido"}
+              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
               label="Nacionalidad"
               name="nationality"
               data={recordBasic["nationality"] || "indefinido"}
+              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
               label="Nombres"
               name="name"
               data={recordBasic["name"] || "indefinido"}
+              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
               label="Apellidos"
               name="lastname"
               data={recordBasic["lastname"] || "indefinido"}
+              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
               label="Fecha de nacimiento"
               name="dateofbirth"
               data={recordBasic["dateofbirth"] || "indefinido"}
+              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
               label="Estado civil"
               name="civilstatus"
               data={recordBasic["civilstatus"] || "indefinido"}
+              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
               label="Lugar de nacimiento"
               name="placeofbirth"
               data={recordBasic["placeofbirth"] || "indefinido"}
+              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
               label="Sexo"
               name="sex"
               data={recordBasic["sex"] || "indefinido"}
+              sectionEditingStatus={basicEditStatus}
             />
           </RecordDetailsSection>
-          
-          <RecordDetailsSection title="Datos de contacto" lastModified={recordBasic['contact-date-modified'] || 'indefinido'}>
+
+          <RecordDetailsSection
+            title="Datos de contacto"
+            lastModified={recordBasic["contact-date-modified"] || "indefinido"}
+            setEditStatus={setContactEditStatus}
+            editStatus={contactEditStatus}
+          >
             <RecordDetailsDataContainer
               label="Telefono personal"
               name="personalphone"
               data={recordBasic["personalphone"] || "indefinido"}
+              sectionEditingStatus={contactEditStatus}
             />
             <RecordDetailsDataContainer
               label="Telefono opcional"
               name="optionalphone"
               data={recordBasic["optionalphone"] || "indefinido"}
+              sectionEditingStatus={contactEditStatus}
             />
             <RecordDetailsDataContainer
               label="Direccion de habitacion"
               name="direction"
               data={recordBasic["direction"] || "indefinido"}
+              sectionEditingStatus={contactEditStatus}
               doubleColumn
             />
           </RecordDetailsSection>
-          
+
           {recordBasic["type"] == "affiliate" ? (
-            <RecordDetailsSection title="Datos laborales" lastModified={recordBasic['job-date-modified'] || 'indefinido'}>
+            <RecordDetailsSection
+              title="Datos laborales"
+              lastModified={recordBasic["job-date-modified"] || "indefinido"}
+              editStatus={jobEditStatus}
+              setEditStatus={setJobEditStatus}
+            >
               <RecordDetailsDataContainer
                 label="Estado laboral"
                 name="jobstatus"
                 data={recordBasic["jobstatus"] || "indefinido"}
+                sectionEditingStatus={jobEditStatus}
               />
               <RecordDetailsDataContainer
                 label="Cargo"
                 name="jobtitle"
                 data={recordBasic["jobtitle"] || "indefinido"}
+                sectionEditingStatus={jobEditStatus}
               />
               <RecordDetailsDataContainer
                 label="Direccion del plantel"
                 name="jobdirection"
                 data={recordBasic["jobdirection"] || "indefinido"}
+                sectionEditingStatus={jobEditStatus}
                 doubleColumn
               />
             </RecordDetailsSection>
@@ -179,16 +212,15 @@ export function RecordDetailsPage() {
   );
 }
 
-function RecordDetailsSection({ title, children, lastModified}) {
-  let [editingStatus, setEditingStatus] = useState(false);
+function RecordDetailsSection({ title, children, lastModified, editStatus, setEditStatus}) {
+  
   return (
     <section
       className="recorddetails-section"
       style={
-        editingStatus
+        editStatus
           ? {
               border: "solid 1px var(--main-color)",
-              background: "var(--back-selected)"
             }
           : {}
       }
@@ -202,17 +234,17 @@ function RecordDetailsSection({ title, children, lastModified}) {
 
       <div className="flex-h recorddetails-section-info">
         <span className="micro-italic">
-          {editingStatus ? 
-          "Realice los cambios necesarios y luego haga click en guardar" :
-          "Actualizados por ultima vez el: " + lastModified}
+          {editStatus
+            ? "Realice los cambios necesarios y luego haga click en guardar"
+            : "Actualizados por ultima vez el: " + lastModified}
         </span>
         <ButtonBig
-          text={editingStatus ? "Guardar" : "Editar"}
+          text={editStatus ? "Guardar" : "Editar"}
           icon={icons.DocumentEdit}
-          type={editingStatus ? "main" : "secondary"}
+          type={editStatus ? "main" : "secondary"}
           action={(e) => {
             // qui action deberia cambiar si esta editando o no
-            setEditingStatus(!editingStatus);
+            setEditStatus(!editStatus);
           }}
         />
       </div>
@@ -220,7 +252,13 @@ function RecordDetailsSection({ title, children, lastModified}) {
   );
 }
 
-function RecordDetailsDataContainer({ label, data, name, doubleColumn }) {
+function RecordDetailsDataContainer({
+  label,
+  data,
+  name,
+  doubleColumn,
+  sectionEditingStatus,
+}) {
   // let [state, setState] = useState();
 
   // readonly, active, blocked, selected ... soon -> hover, error, warning
@@ -231,7 +269,12 @@ function RecordDetailsDataContainer({ label, data, name, doubleColumn }) {
     >
       <span className="micro-italic">{label}</span>
       <input
-        className={"entry-1-" + "readonly" + " paragraph-regular"}
+        className={
+          "paragraph-regular " + 
+          (sectionEditingStatus
+            ? "entry-1-active "
+            : "entry-1-readonly")
+        }
         type={label}
         name={name}
         value={data}
