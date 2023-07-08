@@ -1,6 +1,6 @@
 * {
   font-family: "Inter", sans-serif;
-  
+
   margin: 0px;
   text-decoration: none;
   padding: 0px;
@@ -23,6 +23,7 @@
   --medium: #686773;
   --gray: #c9c9c9;
   --border: #d9d9d9;
+  --back-lightblue: #F8FAFB;
 
   --act-warning: #fdbb3b;
   --act-good: #22c56c;
@@ -31,7 +32,6 @@
   --white: #ffffff;
   --back-lightblue: #f8fafb;
   --back-selected: #f2f9fc;
-
 }
 
 a {
@@ -152,7 +152,6 @@ a {
   color: var(--white);
 }
 
-
 /* usuario en el navbar */
 .user-card {
   display: flex;
@@ -201,6 +200,10 @@ a {
   display: flex;
   flex-direction: row;
 }
+.flex-v {
+  display: flex;
+  flex-direction: column;
+}
 .gap24 {
   gap: 24px;
 }
@@ -223,7 +226,6 @@ a {
   border-radius: 4px;
   border: 1px solid var(--border);
 }
-
 
 .dual-selector {
   cursor: pointer;
@@ -248,7 +250,7 @@ a {
   /* background-color: var(--white); */
   height: 100%;
   /* width: 50%; */
-  padding: 0px 12px; 
+  padding: 0px 12px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -270,7 +272,7 @@ a {
   color: var(--white);
 }
 
-.dual-selector .selection-background{
+.dual-selector .selection-background {
   background-color: var(--main-color);
   border-radius: 4px;
   position: absolute;
@@ -279,14 +281,14 @@ a {
   z-index: 1;
   /* animation: 1000s; */
 }
-.dual-selector .selection-background.left{
+.dual-selector .selection-background.left {
   left: 0%;
   /* animation: 1000s; */
-} 
-.dual-selector .selection-background.right{
+}
+.dual-selector .selection-background.right {
   left: 50%;
   /* animation: 1000s; */
-} 
+}
 /* .button-big.main span {
   color: var(--white);
 }
@@ -296,3 +298,36 @@ a {
 .button-big.secondary {
   background-color: var(--white);
 } */
+
+.common-container {
+  background-color: var(--white);
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.entry-1-disabled {
+  all: unset;
+  padding: 8px 0px;
+}
+.entry-1-active {
+  all: unset;
+  border: solid 1px var(--border);
+  border-radius: 4px;
+  background-color: var(--back-lightblue);
+  padding: 8px;
+}
+.entry-1-selected {
+  all: unset;
+  border: solid 1px var(--main-color);
+  border-radius: 4px;
+  background-color: var(--back-selected);
+  padding: 8px;
+}
+.entry-1-blocked {
+  all: unset;
+  /* border: solid 1px var(--border); */
+  border-radius: 4px;
+  background-color: var(--back-lightblue);
+  padding: 8px;
+}

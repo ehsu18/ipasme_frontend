@@ -1,0 +1,84 @@
+.recorddetails-container {
+  /* height: 100%; */
+  flex-grow: 1;
+  align-self: stretch;
+  width: 100%;
+  padding: 24px;
+  gap: 24px;
+}
+
+.recorddetails-header {
+    padding: 24px;
+    width: 100%;
+    justify-content: space-between;
+}
+.recorddetails-header .left{
+    gap: 16px;
+    align-items: center;
+}
+.recorddetails-header .left .accent{
+    align-self: stretch;
+    width: 16px;
+}
+.recorddetails-header .left .flex-v{
+    padding: 4px 0px;
+}
+.recorddetails-header .left .title-regular{
+    color: var(--medium);
+}
+.recorddetails-header .left .title {
+    gap: 12px;
+}
+
+.recorddetails-header .right {
+    width: min-content;
+    height: 100%;
+    border-left: solid 1px var(--border);
+    padding: 12px;
+    gap: 4px;
+}
+
+.recorddetails-header .right span {
+    white-space: nowrap;
+}
+
+
+.recorddetails-nav {
+    padding: 0px 12px;
+}
+.recorddetails-nav .recorddetails-tab {
+    padding: 0px 12px 8px 12px;
+    border-bottom: solid 2px var(--border);
+    color: var(--dark);
+}
+.recorddetails-nav .recorddetails-tab:last-child {
+    flex-grow: 1;
+}
+.recorddetails-nav .recorddetails-tab-selected{
+    border-bottom: solid 2px var(--main-color);
+    color: var(--main-color);
+}
+
+.recorddetails-section{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    padding: 24px;
+    gap: 24px;
+    border-bottom: solid 1px var(--border);
+}
+.recorddetails-section header{
+    grid-column: 1 / span 2;
+    align-items: center;
+    display: flex;
+    gap: 6px;
+    }
+.recorddetails-section-datacontainer {
+    display: flex;
+    flex-direction: column;
+}
+.recorddetails-section-info {
+    grid-column:  span 2;
+    justify-content: space-between;
+    align-items: center;
+}

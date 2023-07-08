@@ -14,10 +14,11 @@ export function ViewRecordsPage() {
   let [selectedListMode, setSelectedListMode] = useState('Todos')
 
   // TODO se debe hacer el useeffect para que se traiga la configuracion del selector desde la base de datos
-  // manejar errores de conexion, de lista vacia, etc
+  // TODO manejar errores de conexion, de lista vacia, etc
 
   useEffect(() => {
     api.getAffiliates()
+    .then((response) => response.json())
     .then(data=>setRecords(data))
     .catch(error=>console.log(error))
   }, []);
@@ -67,7 +68,7 @@ export function ViewRecordsPage() {
 export function RecordsList({selectedItem, setSelectedItem, recordsList}) {
 
   return (
-    <div className="recordslist">
+    <div className="common-container recordslist">
       <div className="columns">
         <div className="selection-box"></div>
         <span className="micro-italic">Número de cédula</span>
@@ -123,6 +124,7 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
 }
 
 export function RelationWidget({selectedItem, recordsList}) {
+  // TODO adaptar esto para poderlo utilizar en otras paginas y componentes
 
   let [affiliates, setAffiliates] = useState([])
   let [beneficiarys, setBeneficiarys] = useState([])

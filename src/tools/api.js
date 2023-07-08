@@ -1,5 +1,6 @@
 const API_URL = 'http://localhost:8000/api/'
-const AFFILIATE_URL = 'affiliate'
+const AFFILIATE_URL = 'affiliate';
+const RECORDS_URL = 'records'
 const RELATION_AFFILIATES_URL = 'affiliate_affiliates/'
 const RELATION_BENEFICIARYS_URL = 'affiliate_beneficiarys/'
 
@@ -7,13 +8,13 @@ export async function getAffiliates(id='') {
 
     if( id !=='' ){id = '/'+id}
     return await fetch(API_URL+AFFILIATE_URL+id)
-    .then((response) => response.json())
-    .then((json) => {
-      return json
-    })
-    .catch((error)=>{
-      throw new Error(error)
-    })
+    // .then((response) => response.json())
+    // .then((json) => {
+    //   return json
+    // })
+    // .catch((error)=>{
+    //   throw new Error(error)
+    // })
 
 }
 
@@ -44,5 +45,19 @@ export async function getAffiliateBeneficiarys(id) {
   .then((json) => {
     return json
   })
+
+}
+
+export async function getRecords(id='') {
+
+  if( id !=='' ){id = '/'+id}
+  return await fetch(API_URL+RECORDS_URL+id)
+  // .then((response) => response.json())
+  // .then((json) => {
+  //   return json
+  // })
+  // .catch((error)=>{
+  //   throw new Error(error)
+  // })
 
 }

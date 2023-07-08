@@ -7,6 +7,7 @@ import "./styles/navbar.css";
 import "./styles/app.css";
 import "./styles/records-list.css";
 import "./styles/NewRecordPage.css";
+import "./styles/record-details.css";
 import {
   Routes,
   Route,
