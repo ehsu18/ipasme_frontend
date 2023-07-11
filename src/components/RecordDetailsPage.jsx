@@ -1,4 +1,4 @@
-import { getRecords } from "../tools/api";
+import { getRecords, putAffiliate } from "../tools/api";
 import { useParams } from "react-router-dom";
 import { ButtonBig, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
@@ -100,6 +100,7 @@ export function RecordDetailsPage() {
             lastModified={recordBasic["personal-date-modified"] || "indefinido"}
             editStatus={basicEditStatus}
             setEditStatus={setBasicEditStatus}
+            data={recordBasic}
           >
             <RecordDetailsDataContainer
               label="Cedula"
@@ -232,6 +233,7 @@ function RecordDetailsSection({
   lastModified,
   editStatus,
   setEditStatus,
+  data
 }) {
   return (
     <section
@@ -261,8 +263,18 @@ function RecordDetailsSection({
           text={editStatus ? "Guardar" : "Editar"}
           icon={icons.DocumentEdit}
           type={editStatus ? "main" : "secondary"}
-          action={(e) => {
+          action={async (e) => {
             // qui action deberia cambiar si esta editando o no
+            // TODO a;adir el boton cancelar
+            if (editStatus === true){
+              let changes = {};
+              console.log(children)
+              children.forEach(element => {
+                changes[element.props.name] = data[element.props.name];
+              });
+              let response = await putAffiliate( data['id'] ,changes)
+              console.log(response)
+            }
             setEditStatus(!editStatus);
           }}
         />
