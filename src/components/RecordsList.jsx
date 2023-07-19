@@ -80,12 +80,16 @@ export function RecordsList({selectedItem, setSelectedItem, recordsList}) {
       </div>
 
       {recordsList ? recordsList.map((r, index)=>{
-        return <RecordsListItem
+        try{
+          return <RecordsListItem
           key={index} id={index}
           selected={selectedItem}
           setSelected={setSelectedItem}
           recordData={r}
-        />
+          />
+        } catch {
+          return <div><span>Error cargando esta historia: {(r['id'] + ' ' +r['names']) || 'No hay datos'}</span></div>
+        }
       }) : <h1>Error</h1> }
 
      
@@ -95,8 +99,9 @@ export function RecordsList({selectedItem, setSelectedItem, recordsList}) {
 
 export function RecordsListItem({ id, selected, setSelected, recordData }) {
   // let [selected, setSelected] = useState(false);
+  console.log(recordData)
 
-  return (
+  try{return (
     <div
       className={
         selected === id ? "recordslist-item selected" : "recordslist-item"
@@ -108,7 +113,7 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
       <div className="selection-box"></div>
       <span className="identification-text title-regular">{'V-'+recordData['document']}</span>
       <span className="name-text paragraph-regular">
-        {recordData['name'].trim() + ' ' + recordData['lastname'].trim()}
+        {recordData['names'].trim() + ' ' + recordData['lastnames'].trim()}
       </span>
       <span className="age-text paragraph-regular">21 a&ntilde;os</span>
       {/* <span className="sex-text paragraph-regular">Masculino</span> */}
@@ -120,7 +125,11 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
         {/* <a href="">Abrir</a>   */}
       </div>
     </div>
-  );
+  );} catch {
+    return (
+      <div className="recordslist-item"><span>Error</span></div>
+    )
+  }
 }
 
 export function RelationWidget({selectedItem, recordsList}) {
@@ -186,7 +195,7 @@ export function RelationCard({ record = {}}) {
                   { backgroundColor: "var(--main-beneficiario)" } :
                   { backgroundColor: "var(--main-afiliado)" }}></div>
       <div>
-        <p className="title-small">{record['name'].trim() + ' ' + record['lastname'].trim()}</p>
+        <p className="title-small">{record['names'].trim() + ' ' + record['lastnames'].trim()}</p>
         <p className="title-small">{'V-' + record['document']}</p>
         <p className="paragraph-micro">
           Lorem Ipsum Dolor Sit Amet es hija/hijo de Elian Enrique Sumalave

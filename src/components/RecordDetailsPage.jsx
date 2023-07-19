@@ -58,7 +58,7 @@ export function RecordDetailsPage() {
               <div className="felx-v">
                 <div className="title flex-h">
                   <span className="title-big">
-                    {recordBasic.name + " " + recordBasic.lastname}
+                    {recordBasic.names + " " + recordBasic.lastnames}
                   </span>
                   <PersonTypeTag type={recordBasic["type"]} />
                 </div>
@@ -118,14 +118,14 @@ export function RecordDetailsPage() {
             />
             <RecordDetailsDataContainer
               label="Nombres"
-              name="name"
+              name="names"
               data={recordBasic}
               setData={setRecordBasic}
               sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
               label="Apellidos"
-              name="lastname"
+              name="lastnames"
               data={recordBasic}
               setData={setRecordBasic}
               sectionEditingStatus={basicEditStatus}
@@ -153,7 +153,7 @@ export function RecordDetailsPage() {
             />
             <RecordDetailsDataContainer
               label="Sexo"
-              name="sex"
+              name="gender"
               data={recordBasic}
               setData={setRecordBasic}
               sectionEditingStatus={basicEditStatus}
@@ -270,7 +270,7 @@ function RecordDetailsSection({
               let changes = {};
               console.log(children)
               children.forEach(element => {
-                changes[element.props.name] = data[element.props.name];
+                changes[element.props.name] = data[element.props.name]; // or null?
               });
               let response = await putAffiliate( data['id'] ,changes)
               console.log(response)
@@ -292,7 +292,7 @@ function RecordDetailsDataContainer({
   sectionEditingStatus,
 }) {
   // let [state, setState] = useState();
-
+  // TODO los valores indefinidos se deben representar con el placeholder
   // readonly, active, blocked, selected ... soon -> hover, error, warning
   return (
     <div
@@ -308,7 +308,7 @@ function RecordDetailsDataContainer({
         }
         type={label}
         name={name}
-        value={data[name] || "indefinido"}
+        value={data[name] || "indefinido"} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
         
         onChange={(e) =>
           setData({
