@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 export function RecordDetailsPage() {
   let { id } = useParams();
   let [recordBasic, setRecordBasic] = useState({});
-
+  let [originalData, setOriginalData] = useState({});
   let [basicEditStatus, setBasicEditStatus] = useState(false);
   let [contactEditStatus, setContactEditStatus] = useState(false);
   let [jobEditStatus, setJobEditStatus] = useState(false);
@@ -17,6 +17,9 @@ export function RecordDetailsPage() {
       .then((response) => response.json())
       .then((json) => {
         setRecordBasic(json);
+        setOriginalData(json);
+        console.log('json recibido >')
+        console.log(json)
       })
       .catch((error) => {
         throw new Error(error);
@@ -101,6 +104,8 @@ export function RecordDetailsPage() {
             editStatus={basicEditStatus}
             setEditStatus={setBasicEditStatus}
             data={recordBasic}
+            originalData={originalData}
+            setOriginalData = {setOriginalData}
           >
             <RecordDetailsDataContainer
               label="Cedula"
@@ -109,11 +114,12 @@ export function RecordDetailsPage() {
               setData={setRecordBasic}
               sectionEditingStatus={basicEditStatus}
             />
-            <RecordDetailsDataContainer
+            <RecordDetailsOptionsContainer
               label="Nacionalidad"
               name="nationality"
               data={recordBasic}
               setData={setRecordBasic}
+              options={['V','E']}
               sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
@@ -130,16 +136,17 @@ export function RecordDetailsPage() {
               setData={setRecordBasic}
               sectionEditingStatus={basicEditStatus}
             />
-            <RecordDetailsDataContainer
+            <RecordDetailsFechaContainer
               label="Fecha de nacimiento"
               name="dateofbirth"
               data={recordBasic}
               setData={setRecordBasic}
               sectionEditingStatus={basicEditStatus}
             />
-            <RecordDetailsDataContainer
+            <RecordDetailsOptionsContainer
               label="Estado civil"
               name="civilstatus"
+              options={['Soltero', 'Casado', 'Viudo', 'Divorciado']}
               data={recordBasic}
               setData={setRecordBasic}
               sectionEditingStatus={basicEditStatus}
@@ -151,10 +158,11 @@ export function RecordDetailsPage() {
               setData={setRecordBasic}
               sectionEditingStatus={basicEditStatus}
             />
-            <RecordDetailsDataContainer
+            <RecordDetailsOptionsContainer
               label="Sexo"
               name="gender"
               data={recordBasic}
+              options={['M', 'F']}
               setData={setRecordBasic}
               sectionEditingStatus={basicEditStatus}
             />
@@ -165,6 +173,8 @@ export function RecordDetailsPage() {
             lastModified={recordBasic["contact-date"] || "indefinido"}
             setEditStatus={setContactEditStatus}
             editStatus={contactEditStatus}
+            originalData={originalData}
+            setOriginalData = {setOriginalData}
           >
             <RecordDetailsDataContainer
               label="Telefono personal"
@@ -196,6 +206,8 @@ export function RecordDetailsPage() {
               lastModified={recordBasic["job-date"] || "indefinido"}
               editStatus={jobEditStatus}
               setEditStatus={setJobEditStatus}
+              originalData={originalData}
+              setOriginalData = {setOriginalData}
             >
               <RecordDetailsDataContainer
                 label="Estado laboral"
@@ -233,7 +245,9 @@ function RecordDetailsSection({
   lastModified,
   editStatus,
   setEditStatus,
-  data
+  data,
+  originalData,
+  setOriginalData
 }) {
   return (
     <section
@@ -263,17 +277,39 @@ function RecordDetailsSection({
           text={editStatus ? "Guardar" : "Editar"}
           icon={icons.DocumentEdit}
           type={editStatus ? "main" : "secondary"}
-          action={async (e) => {
+          action={(e) => {
             // qui action deberia cambiar si esta editando o no
             // TODO a;adir el boton cancelar
-            if (editStatus === true){
+            if (editStatus === true) {
               let changes = {};
-              console.log(children)
-              children.forEach(element => {
+              // console.log(children);
+              console.log('validando cambios antes de enviar a backend...')
+              children.forEach((element) => {
+                console.log(element.props.name, '\n', 
+                  'original> ', originalData[element.props.name],
+                  '\nactual> ', data[element.props.name])
+                if (originalData[element.props.name] == data[element.props.name]){
+                  
+                  console.log('sin cambios')
+                  return;
+                }
+                console.log('con cambios')
                 changes[element.props.name] = data[element.props.name]; // or null?
               });
-              let response = await putAffiliate( data['id'] ,changes)
-              console.log(response)
+              let promesa = putAffiliate(data["id"], changes);
+              promesa.then((response)=>{
+                return response.json()
+              }).then((data)=>{
+                console.log(data)
+                if (data['result'] === 'ok'){
+                  setOriginalData({
+                    ...originalData,
+                    ...changes
+                  })
+                } 
+              }).catch((error)=>{
+                console.error(error) 
+              })
             }
             setEditStatus(!editStatus);
           }}
@@ -282,7 +318,6 @@ function RecordDetailsSection({
     </section>
   );
 }
-
 function RecordDetailsDataContainer({
   label,
   data,
@@ -306,17 +341,101 @@ function RecordDetailsDataContainer({
           "paragraph-regular " +
           (sectionEditingStatus ? "entry-1-active " : "entry-1-readonly")
         }
-        type={label}
+        type='text' // TODO cambie esto de label a 'text' porque no entendi por que lo habia hecho asi
         name={name}
         value={data[name] || "indefinido"} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
-        
         onChange={(e) =>
           setData({
             ...data,
             [name]: e.target.value,
           })
         }
-        
+      />
+    </div>
+  );
+}
+function RecordDetailsOptionsContainer({
+  label,
+  data,
+  options,
+  setData,
+  name,
+  doubleColumn,
+  sectionEditingStatus,
+}) {
+  // let [state, setState] = useState();
+  // TODO los valores indefinidos se deben representar con el placeholder
+  // readonly, active, blocked, selected ... soon -> hover, error, warning
+  // TODO revisar a fondo porque copie y pegue del otro componente
+  return (
+    <div
+      className="recorddetails-section-datacontainer"
+      style={doubleColumn ? { gridColumn: "span 2" } : {}}
+    >
+      <span className="micro-italic">{label}</span>
+      <select
+        className={
+          "paragraph-regular " +
+          (sectionEditingStatus ? "entry-1-active " : "entry-1-readonly")
+        }
+        name={name}
+        value={data[name] ||'default'} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
+        onChange={(e) =>
+          setData({
+            ...data,
+            [name]: e.target.value,
+          })
+        }
+        placeholder="Indefinido"
+        disabled={!sectionEditingStatus}
+      >
+        <option disabled value='default'>- seleccione -</option>
+        {options.map((option, index)=>{
+          return <option key={index} value={option}>{option}</option>
+        })}
+      </select>
+    </div>
+  );
+}
+function RecordDetailsFechaContainer({
+  label,
+  data,
+  setData,
+  name,
+  doubleColumn,
+  sectionEditingStatus,
+}) {
+  // let [state, setState] = useState();
+  // TODO los valores indefinidos se deben representar con el placeholder
+  // readonly, active, blocked, selected ... soon -> hover, error, warning
+  let [date, setDate] = useState('')
+  useEffect(()=>{
+    if(data[name]){
+      setDate(data[name].split('T')[0])
+    }
+  },[data]);
+  
+  return (
+    <div
+      className="recorddetails-section-datacontainer"
+      style={doubleColumn ? { gridColumn: "span 2" } : {}}
+    >
+      <span className="micro-italic">{label}</span>
+      <input
+        readOnly={!sectionEditingStatus}
+        className={
+          "paragraph-regular " +
+          (sectionEditingStatus ? "entry-1-active " : "entry-1-readonly")
+        }
+        type='date'
+        name={name}
+        value={date} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
+        onChange={(e) =>
+          setData({
+            ...data,
+            [name]: e.target.value,
+          })
+        }
       />
     </div>
   );

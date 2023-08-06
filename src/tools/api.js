@@ -48,10 +48,11 @@ export async function getAffiliateBeneficiarys(id) {
 
 }
 
-export async function putAffiliate(id, data) {
+export  function putAffiliate(id, data) {
+  console.log(data)
   if (!id.match("^[\\w]{24}$")){throw new Error(`invalid id (${id}) at put affiliate`)}
   if (data == undefined){throw new Error('no data received')}
-  let response = await fetch(API_URL+AFFILIATE_URL+'/'+id,{
+  return fetch(API_URL+AFFILIATE_URL+'/'+id,{
     method:'PUT',
     headers: {
       'Accept': 'application/json',
@@ -59,7 +60,7 @@ export async function putAffiliate(id, data) {
     },
     body: JSON.stringify(data)
   })
-  return await response.json();
+  
 }
 
 export async function getRecords(id='') {
