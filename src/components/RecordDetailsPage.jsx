@@ -18,8 +18,8 @@ export function RecordDetailsPage() {
       .then((json) => {
         setRecordBasic(json);
         setOriginalData(json);
-        console.log('json recibido >')
-        console.log(json)
+        console.log("json recibido >");
+        console.log(json);
       })
       .catch((error) => {
         throw new Error(error);
@@ -105,7 +105,7 @@ export function RecordDetailsPage() {
             setEditStatus={setBasicEditStatus}
             data={recordBasic}
             originalData={originalData}
-            setOriginalData = {setOriginalData}
+            setOriginalData={setOriginalData}
           >
             <RecordDetailsDataContainer
               label="Cedula"
@@ -119,7 +119,7 @@ export function RecordDetailsPage() {
               name="nationality"
               data={recordBasic}
               setData={setRecordBasic}
-              options={['V','E']}
+              options={["V", "E"]}
               sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
@@ -146,7 +146,7 @@ export function RecordDetailsPage() {
             <RecordDetailsOptionsContainer
               label="Estado civil"
               name="civilstatus"
-              options={['Soltero', 'Casado', 'Viudo', 'Divorciado']}
+              options={["Soltero", "Casado", "Viudo", "Divorciado"]}
               data={recordBasic}
               setData={setRecordBasic}
               sectionEditingStatus={basicEditStatus}
@@ -162,7 +162,7 @@ export function RecordDetailsPage() {
               label="Sexo"
               name="gender"
               data={recordBasic}
-              options={['M', 'F']}
+              options={["M", "F"]}
               setData={setRecordBasic}
               sectionEditingStatus={basicEditStatus}
             />
@@ -173,8 +173,9 @@ export function RecordDetailsPage() {
             lastModified={recordBasic["contact-date"] || "indefinido"}
             setEditStatus={setContactEditStatus}
             editStatus={contactEditStatus}
+            data={recordBasic}
             originalData={originalData}
-            setOriginalData = {setOriginalData}
+            setOriginalData={setOriginalData}
           >
             <RecordDetailsDataContainer
               label="Telefono personal"
@@ -206,8 +207,9 @@ export function RecordDetailsPage() {
               lastModified={recordBasic["job-date"] || "indefinido"}
               editStatus={jobEditStatus}
               setEditStatus={setJobEditStatus}
+              data={recordBasic}
               originalData={originalData}
-              setOriginalData = {setOriginalData}
+              setOriginalData={setOriginalData}
             >
               <RecordDetailsDataContainer
                 label="Estado laboral"
@@ -247,7 +249,7 @@ function RecordDetailsSection({
   setEditStatus,
   data,
   originalData,
-  setOriginalData
+  setOriginalData,
 }) {
   return (
     <section
@@ -273,47 +275,70 @@ function RecordDetailsSection({
             ? "Realice los cambios necesarios y luego haga click en guardar"
             : "Actualizados por ultima vez el: " + lastModified}
         </span>
-        <ButtonBig
-          text={editStatus ? "Guardar" : "Editar"}
-          icon={icons.DocumentEdit}
-          type={editStatus ? "main" : "secondary"}
-          action={(e) => {
-            // qui action deberia cambiar si esta editando o no
-            // TODO a;adir el boton cancelar
-            if (editStatus === true) {
-              let changes = {};
-              // console.log(children);
-              console.log('validando cambios antes de enviar a backend...')
-              children.forEach((element) => {
-                console.log(element.props.name, '\n', 
-                  'original> ', originalData[element.props.name],
-                  '\nactual> ', data[element.props.name])
-                if (originalData[element.props.name] == data[element.props.name]){
-                  
-                  console.log('sin cambios')
-                  return;
-                }
-                console.log('con cambios')
-                changes[element.props.name] = data[element.props.name]; // or null?
-              });
-              let promesa = putAffiliate(data["id"], changes);
-              promesa.then((response)=>{
-                return response.json()
-              }).then((data)=>{
-                console.log(data)
-                if (data['result'] === 'ok'){
-                  setOriginalData({
-                    ...originalData,
-                    ...changes
+        <div className="flex-h gap12">
+          {editStatus ? (
+            <ButtonBig
+              text="Cancelar"
+              icon={icons.CrossSmall}
+              type="secondary"
+              action={async (e) => {
+                setEditStatus(false);
+              }}
+            />
+          ) : (
+            ""
+          )}
+          <ButtonBig
+            text={editStatus ? "Guardar" : "Editar"}
+            icon={icons.DocumentEdit}
+            type={editStatus ? "main" : "secondary"}
+            action={(e) => {
+              // qui action deberia cambiar si esta editando o no
+              // TODO a;adir el boton cancelar
+              if (editStatus === true) {
+                let changes = {};
+                // console.log(children);
+                console.log("validando cambios antes de enviar a backend...");
+                children.forEach((element) => {
+                  console.log(
+                    element.props.name,
+                    "\n",
+                    "original> ",
+                    originalData[element.props.name],
+                    "\nactual> ",
+                    data[element.props.name]
+                  );
+                  if (
+                    originalData[element.props.name] == data[element.props.name]
+                  ) {
+                    console.log("sin cambios");
+                    return;
+                  }
+                  console.log("con cambios");
+                  changes[element.props.name] = data[element.props.name]; // or null?
+                });
+                let promesa = putAffiliate(data["id"], changes);
+                promesa
+                  .then((response) => {
+                    return response.json();
                   })
-                } 
-              }).catch((error)=>{
-                console.error(error) 
-              })
-            }
-            setEditStatus(!editStatus);
-          }}
-        />
+                  .then((data) => {
+                    console.log(data);
+                    if (data["result"] === "ok") {
+                      setOriginalData({
+                        ...originalData,
+                        ...changes,
+                      });
+                    }
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              }
+              setEditStatus(!editStatus);
+            }}
+          />
+        </div>
       </div>
     </section>
   );
@@ -341,14 +366,16 @@ function RecordDetailsDataContainer({
           "paragraph-regular " +
           (sectionEditingStatus ? "entry-1-active " : "entry-1-readonly")
         }
-        type='text' // TODO cambie esto de label a 'text' porque no entendi por que lo habia hecho asi
+        type="text" // TODO cambie esto de label a 'text' porque no entendi por que lo habia hecho asi
         name={name}
         value={data[name] || "indefinido"} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
-        onChange={(e) =>
+        onChange={(e) =>{
           setData({
             ...data,
             [name]: e.target.value,
           })
+          console.log('data cambiado, cambio detectado en ', name)
+        }
         }
       />
     </div>
@@ -379,7 +406,7 @@ function RecordDetailsOptionsContainer({
           (sectionEditingStatus ? "entry-1-active " : "entry-1-readonly")
         }
         name={name}
-        value={data[name] ||'default'} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
+        value={data[name] || "default"} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
         onChange={(e) =>
           setData({
             ...data,
@@ -389,9 +416,15 @@ function RecordDetailsOptionsContainer({
         placeholder="Indefinido"
         disabled={!sectionEditingStatus}
       >
-        <option disabled value='default'>- seleccione -</option>
-        {options.map((option, index)=>{
-          return <option key={index} value={option}>{option}</option>
+        <option disabled value="default">
+          - seleccione -
+        </option>
+        {options.map((option, index) => {
+          return (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          );
         })}
       </select>
     </div>
@@ -408,13 +441,13 @@ function RecordDetailsFechaContainer({
   // let [state, setState] = useState();
   // TODO los valores indefinidos se deben representar con el placeholder
   // readonly, active, blocked, selected ... soon -> hover, error, warning
-  let [date, setDate] = useState('')
-  useEffect(()=>{
-    if(data[name]){
-      setDate(data[name].split('T')[0])
+  let [date, setDate] = useState("");
+  useEffect(() => {
+    if (data[name]) {
+      setDate(data[name].split("T")[0]);
     }
-  },[data]);
-  
+  }, [data]);
+
   return (
     <div
       className="recorddetails-section-datacontainer"
@@ -427,7 +460,7 @@ function RecordDetailsFechaContainer({
           "paragraph-regular " +
           (sectionEditingStatus ? "entry-1-active " : "entry-1-readonly")
         }
-        type='date'
+        type="date"
         name={name}
         value={date} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
         onChange={(e) =>
