@@ -37,6 +37,11 @@ a {
   all: unset;
 }
 
+
+.scroll {
+  overflow: scroll;
+}
+
 /* estilos de texto */
 .overline {
   font-size: 16px;
