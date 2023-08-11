@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { ButtonBig, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
 import { useEffect, useState } from "react";
+import { today } from "../tools/utilities";
 
 export function RecordDetailsPage() {
   let { id } = useParams();
@@ -18,8 +19,6 @@ export function RecordDetailsPage() {
       .then((json) => {
         setRecordBasic(json);
         setOriginalData(json);
-        console.log("json recibido >");
-        console.log(json);
       })
       .catch((error) => {
         throw new Error(error);
@@ -100,7 +99,7 @@ export function RecordDetailsPage() {
 
           <RecordDetailsSection
             title="Datos personales"
-            lastModified={recordBasic["personal-date-modified"] || "indefinido"}
+            lastModifiedName={"personaldata_last_mod_date"}
             editStatus={basicEditStatus}
             setEditStatus={setBasicEditStatus}
             data={recordBasic}
@@ -170,7 +169,7 @@ export function RecordDetailsPage() {
 
           <RecordDetailsSection
             title="Datos de contacto"
-            lastModified={recordBasic["contact-date"] || "indefinido"}
+            lastModifiedName={recordBasic["contact-date"] || "indefinido"}
             setEditStatus={setContactEditStatus}
             editStatus={contactEditStatus}
             data={recordBasic}
@@ -204,7 +203,7 @@ export function RecordDetailsPage() {
           {recordBasic["type"] === "affiliate" ? (
             <RecordDetailsSection
               title="Datos laborales"
-              lastModified={recordBasic["job-date"] || "indefinido"}
+              lastModifiedName={recordBasic["job-date"] || "indefinido"}
               editStatus={jobEditStatus}
               setEditStatus={setJobEditStatus}
               data={recordBasic}
@@ -244,13 +243,14 @@ export function RecordDetailsPage() {
 function RecordDetailsSection({
   title,
   children,
-  lastModified,
+  // lastModifiedName,
   editStatus,
   setEditStatus,
   data,
   originalData,
   setOriginalData,
 }) {
+  // let lastModifiedDate = new Date(data[lastModifiedName]) || 'error de fecha';
   return (
     <section
       className="recorddetails-section"
@@ -271,11 +271,14 @@ function RecordDetailsSection({
 
       <div className="flex-h recorddetails-section-info">
         <span className="micro-italic">
-          {editStatus
-            ? "Realice los cambios necesarios y luego haga click en guardar"
-            : "Actualizados por ultima vez el: " + lastModified}
+          {
+            editStatus
+              ? "Realice los cambios necesarios y luego haga click en guardar"
+              : "" /*"Actualizados por ultima vez el: " + lastModifiedDate*/
+          }
         </span>
         <div className="flex-h gap12">
+          {/* TODO cancelar aun no es util */}
           {editStatus ? (
             <ButtonBig
               text="Cancelar"
@@ -298,32 +301,24 @@ function RecordDetailsSection({
               if (editStatus === true) {
                 let changes = {};
                 // console.log(children);
-                console.log("validando cambios antes de enviar a backend...");
                 children.forEach((element) => {
-                  console.log(
-                    element.props.name,
-                    "\n",
-                    "original> ",
-                    originalData[element.props.name],
-                    "\nactual> ",
-                    data[element.props.name]
-                  );
                   if (
                     originalData[element.props.name] == data[element.props.name]
                   ) {
-                    console.log("sin cambios");
                     return;
                   }
-                  console.log("con cambios");
                   changes[element.props.name] = data[element.props.name]; // or null?
                 });
+                if (Object.keys(changes).length === 0) {
+                  return;
+                }
+                // changes[lastModifiedName] = today(); // TODO deberia hacerlo el backend
                 let promesa = putAffiliate(data["id"], changes);
                 promesa
                   .then((response) => {
                     return response.json();
                   })
                   .then((data) => {
-                    console.log(data);
                     if (data["result"] === "ok") {
                       setOriginalData({
                         ...originalData,
@@ -332,7 +327,7 @@ function RecordDetailsSection({
                     }
                   })
                   .catch((error) => {
-                    console.error(error);
+                    console.error(error); // TODO mostrar este error en ui
                   });
               }
               setEditStatus(!editStatus);
@@ -369,14 +364,12 @@ function RecordDetailsDataContainer({
         type="text" // TODO cambie esto de label a 'text' porque no entendi por que lo habia hecho asi
         name={name}
         value={data[name] || "indefinido"} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
-        onChange={(e) =>{
+        onChange={(e) => {
           setData({
             ...data,
             [name]: e.target.value,
-          })
-          console.log('data cambiado, cambio detectado en ', name)
-        }
-        }
+          });
+        }}
       />
     </div>
   );

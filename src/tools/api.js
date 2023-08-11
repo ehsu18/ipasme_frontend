@@ -21,7 +21,7 @@ export async function getAffiliates(id='') {
 export async function getAffiliateAffiliates(id) {
 
   if(!id){
-    console.log(id)
+    // console.log(id)
     throw new Error('An id is needed to get relations');
   }
 
@@ -36,7 +36,7 @@ export async function getAffiliateAffiliates(id) {
 export async function getAffiliateBeneficiarys(id) {
 
   if(!id){
-    console.log(id)
+    // console.log(id)
     throw new Error('An id is needed to get relations');
   }
 
@@ -49,7 +49,7 @@ export async function getAffiliateBeneficiarys(id) {
 }
 
 export  function putAffiliate(id, data) {
-  console.log(data)
+  // console.log(data)
   if (!id.match("^[\\w]{24}$")){throw new Error(`invalid id (${id}) at put affiliate`)}
   if (data == undefined){throw new Error('no data received')}
   return fetch(API_URL+AFFILIATE_URL+'/'+id,{
