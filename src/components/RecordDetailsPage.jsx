@@ -178,21 +178,21 @@ export function RecordDetailsPage() {
           >
             <RecordDetailsDataContainer
               label="Telefono personal"
-              name="personalphone"
+              name="phone_personal"
               data={recordBasic}
               setData={setRecordBasic}
               sectionEditingStatus={contactEditStatus}
             />
             <RecordDetailsDataContainer
               label="Telefono opcional"
-              name="optionalphone"
+              name="phone_optional"
               data={recordBasic}
               setData={setRecordBasic}
               sectionEditingStatus={contactEditStatus}
             />
             <RecordDetailsDataContainer
               label="Direccion de habitacion"
-              name="direction"
+              name="home_direction"
               data={recordBasic}
               setData={setRecordBasic}
               sectionEditingStatus={contactEditStatus}
@@ -212,21 +212,21 @@ export function RecordDetailsPage() {
             >
               <RecordDetailsDataContainer
                 label="Estado laboral"
-                name="jobstatus"
+                name="job_status"
                 data={recordBasic}
                 setData={setRecordBasic}
                 sectionEditingStatus={jobEditStatus}
               />
               <RecordDetailsDataContainer
                 label="Cargo"
-                name="jobtitle"
+                name="job_title"
                 data={recordBasic}
                 setData={setRecordBasic}
                 sectionEditingStatus={jobEditStatus}
               />
               <RecordDetailsDataContainer
                 label="Direccion del plantel"
-                name="jobdirection"
+                name="job_direction"
                 data={recordBasic}
                 setData={setRecordBasic}
                 sectionEditingStatus={jobEditStatus}
