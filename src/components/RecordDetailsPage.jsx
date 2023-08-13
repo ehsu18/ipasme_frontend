@@ -2,23 +2,20 @@ import { getRecords, putAffiliate } from "../tools/api";
 import { useParams } from "react-router-dom";
 import { ButtonBig, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { today } from "../tools/utilities";
+import { type } from "@testing-library/user-event/dist/type";
 
 export function RecordDetailsPage() {
   let { id } = useParams();
-  let [recordBasic, setRecordBasic] = useState({});
-  let [originalData, setOriginalData] = useState({});
-  let [basicEditStatus, setBasicEditStatus] = useState(false);
-  let [contactEditStatus, setContactEditStatus] = useState(false);
-  let [jobEditStatus, setJobEditStatus] = useState(false);
+  let [recordData, setRecordData] = useState({});
 
   useEffect(() => {
     getRecords(id)
       .then((response) => response.json())
       .then((json) => {
-        setRecordBasic(json);
-        setOriginalData(json);
+        setRecordData(json);
+        console.log(json)
       })
       .catch((error) => {
         throw new Error(error);
@@ -50,7 +47,7 @@ export function RecordDetailsPage() {
             <section className="left flex-h">
               <div
                 style={
-                  recordBasic["type"] === "beneficiary"
+                  recordData["type"] === "beneficiary"
                     ? { backgroundColor: "var(--main-beneficiario)" }
                     : { backgroundColor: "var(--main-afiliado)" }
                 }
@@ -60,11 +57,11 @@ export function RecordDetailsPage() {
               <div className="felx-v">
                 <div className="title flex-h">
                   <span className="title-big">
-                    {recordBasic.names + " " + recordBasic.lastnames}
+                    {recordData.names + " " + recordData.lastnames}
                   </span>
-                  <PersonTypeTag type={recordBasic["type"]} />
+                  <PersonTypeTag type={recordData["type"]} />
                 </div>
-                <span className="title-regular">{recordBasic.document}</span>
+                <span className="title-regular">{recordData.document}</span>
               </div>
             </section>
 
@@ -99,137 +96,88 @@ export function RecordDetailsPage() {
 
           <RecordDetailsSection
             title="Datos personales"
-            lastModifiedName={"personaldata_last_mod_date"}
-            editStatus={basicEditStatus}
-            setEditStatus={setBasicEditStatus}
-            data={recordBasic}
-            originalData={originalData}
-            setOriginalData={setOriginalData}
+            name="basic_info"
+
+            recordData={recordData}
+            setRecordData={setRecordData}
           >
             <RecordDetailsDataContainer
               label="Cedula"
               name="document"
-              data={recordBasic}
-              setData={setRecordBasic}
-              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsOptionsContainer
               label="Nacionalidad"
               name="nationality"
-              data={recordBasic}
-              setData={setRecordBasic}
               options={["V", "E"]}
-              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
               label="Nombres"
               name="names"
-              data={recordBasic}
-              setData={setRecordBasic}
-              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
               label="Apellidos"
               name="lastnames"
-              data={recordBasic}
-              setData={setRecordBasic}
-              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsFechaContainer
               label="Fecha de nacimiento"
               name="dateofbirth"
-              data={recordBasic}
-              setData={setRecordBasic}
-              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsOptionsContainer
               label="Estado civil"
               name="civilstatus"
               options={["Soltero", "Casado", "Viudo", "Divorciado"]}
-              data={recordBasic}
-              setData={setRecordBasic}
-              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsDataContainer
               label="Lugar de nacimiento"
               name="placeofbirth"
-              data={recordBasic}
-              setData={setRecordBasic}
-              sectionEditingStatus={basicEditStatus}
             />
             <RecordDetailsOptionsContainer
               label="Sexo"
               name="gender"
-              data={recordBasic}
               options={["M", "F"]}
-              setData={setRecordBasic}
-              sectionEditingStatus={basicEditStatus}
             />
           </RecordDetailsSection>
 
+
           <RecordDetailsSection
             title="Datos de contacto"
-            lastModifiedName={recordBasic["contact-date"] || "indefinido"}
-            setEditStatus={setContactEditStatus}
-            editStatus={contactEditStatus}
-            data={recordBasic}
-            originalData={originalData}
-            setOriginalData={setOriginalData}
+            name={"contact_info"}
+            recordData={recordData}
+            setRecordData={setRecordData}
           >
             <RecordDetailsDataContainer
               label="Telefono personal"
               name="phone_personal"
-              data={recordBasic}
-              setData={setRecordBasic}
-              sectionEditingStatus={contactEditStatus}
             />
             <RecordDetailsDataContainer
               label="Telefono opcional"
               name="phone_optional"
-              data={recordBasic}
-              setData={setRecordBasic}
-              sectionEditingStatus={contactEditStatus}
             />
             <RecordDetailsDataContainer
               label="Direccion de habitacion"
               name="home_direction"
-              data={recordBasic}
-              setData={setRecordBasic}
-              sectionEditingStatus={contactEditStatus}
               doubleColumn
             />
-          </RecordDetailsSection>
+          </RecordDetailsSection> 
 
-          {recordBasic["type"] === "affiliate" ? (
+          {recordData["type"] === "affiliate" ? (
             <RecordDetailsSection
               title="Datos laborales"
-              lastModifiedName={recordBasic["job-date"] || "indefinido"}
-              editStatus={jobEditStatus}
-              setEditStatus={setJobEditStatus}
-              data={recordBasic}
-              originalData={originalData}
-              setOriginalData={setOriginalData}
+              name="job_info"
+              recordData={recordData}
+              setRecordData={setRecordData}
             >
               <RecordDetailsDataContainer
                 label="Estado laboral"
                 name="job_status"
-                data={recordBasic}
-                setData={setRecordBasic}
-                sectionEditingStatus={jobEditStatus}
               />
               <RecordDetailsDataContainer
                 label="Cargo"
                 name="job_title"
-                data={recordBasic}
-                setData={setRecordBasic}
-                sectionEditingStatus={jobEditStatus}
               />
               <RecordDetailsDataContainer
                 label="Direccion del plantel"
                 name="job_direction"
-                data={recordBasic}
-                setData={setRecordBasic}
-                sectionEditingStatus={jobEditStatus}
                 doubleColumn
               />
             </RecordDetailsSection>
@@ -242,15 +190,25 @@ export function RecordDetailsPage() {
 
 function RecordDetailsSection({
   title,
+  name,
   children,
-  // lastModifiedName,
-  editStatus,
-  setEditStatus,
-  data,
-  originalData,
-  setOriginalData,
+
+  recordData,
+  setRecordData,
 }) {
-  // let lastModifiedDate = new Date(data[lastModifiedName]) || 'error de fecha';
+
+  let [editStatus, setEditStatus] = useState(false)
+  let [data, setData] = useState({})
+
+  useEffect(()=>{
+    setData(recordData[name])
+  },[recordData])
+
+  // useEffect(()=>{
+  //   console.log(children.map((c)=>{return c}))
+    
+  // },[children])
+
   return (
     <section
       className="recorddetails-section"
@@ -267,7 +225,13 @@ function RecordDetailsSection({
         <span className="title-regular">{title}</span>
       </header>
 
-      {children}
+      {React.Children.map(children, (child)=>
+        React.cloneElement(child, {
+          data: data,
+          setData: setData,
+          sectionEditingStatus: editStatus
+        })
+      )}
 
       <div className="flex-h recorddetails-section-info">
         <span className="micro-italic">
@@ -298,38 +262,39 @@ function RecordDetailsSection({
             action={(e) => {
               // qui action deberia cambiar si esta editando o no
               // TODO a;adir el boton cancelar
-              if (editStatus === true) {
-                let changes = {};
-                // console.log(children);
-                children.forEach((element) => {
-                  if (
-                    originalData[element.props.name] == data[element.props.name]
-                  ) {
-                    return;
-                  }
-                  changes[element.props.name] = data[element.props.name]; // or null?
-                });
-                if (Object.keys(changes).length === 0) {
-                  return;
-                }
-                // changes[lastModifiedName] = today(); // TODO deberia hacerlo el backend
-                let promesa = putAffiliate(data["id"], changes);
-                promesa
-                  .then((response) => {
-                    return response.json();
-                  })
-                  .then((data) => {
-                    if (data["result"] === "ok") {
-                      setOriginalData({
-                        ...originalData,
-                        ...changes,
-                      });
-                    }
-                  })
-                  .catch((error) => {
-                    console.error(error); // TODO mostrar este error en ui
-                  });
-              }
+              // if (editStatus === true) {
+              //   let changes = {};
+              //   // console.log(children);
+              //   children.forEach((element) => {
+              //     if (
+              //       originalData[element.props.name] == data[element.props.name]
+              //     ) {
+              //       return;
+              //     }
+              //     changes[element.props.name] = data[element.props.name]; // or null?
+              //   });
+              //   if (Object.keys(changes).length === 0) {
+              //     return;
+              //   }
+              //   // changes[lastModifiedName] = today(); // TODO deberia hacerlo el backend
+              //   let promesa = putAffiliate(data["id"], changes);
+              //   promesa
+              //     .then((response) => {
+              //       return response.json();
+              //     })
+              //     .then((data) => {
+              //       if (data["result"] === "ok") {
+              //         setOriginalData({
+              //           ...originalData,
+              //           ...changes,
+              //         });
+              //       }
+              //     })
+              //     .catch((error) => {
+              //       console.error(error); // TODO mostrar este error en ui
+              //     });
+              // }
+              console.log('boton guardar/editar')
               setEditStatus(!editStatus);
             }}
           />
@@ -339,12 +304,13 @@ function RecordDetailsSection({
   );
 }
 function RecordDetailsDataContainer({
-  label,
-  data,
-  setData,
-  name,
-  doubleColumn,
-  sectionEditingStatus,
+  label='',
+  name='',
+  doubleColumn=false,
+
+  data={},
+  setData=()=>{},
+  sectionEditingStatus=false,
 }) {
   // let [state, setState] = useState();
   // TODO los valores indefinidos se deben representar con el placeholder
@@ -375,13 +341,13 @@ function RecordDetailsDataContainer({
   );
 }
 function RecordDetailsOptionsContainer({
-  label,
-  data,
-  options,
-  setData,
-  name,
-  doubleColumn,
-  sectionEditingStatus,
+  label='',
+  name='',
+  doubleColumn=false,
+  options=[],
+  data={},
+  setData=()=>{},
+  sectionEditingStatus=false,
 }) {
   // let [state, setState] = useState();
   // TODO los valores indefinidos se deben representar con el placeholder
@@ -400,12 +366,12 @@ function RecordDetailsOptionsContainer({
         }
         name={name}
         value={data[name] || "default"} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
-        onChange={(e) =>
-          setData({
-            ...data,
-            [name]: e.target.value,
-          })
-        }
+        // onChange={(e) =>
+        //   setData({
+        //     ...data,
+        //     [name]: e.target.value,
+        //   })
+        // }
         placeholder="Indefinido"
         disabled={!sectionEditingStatus}
       >
@@ -424,12 +390,12 @@ function RecordDetailsOptionsContainer({
   );
 }
 function RecordDetailsFechaContainer({
-  label,
-  data,
-  setData,
-  name,
-  doubleColumn,
-  sectionEditingStatus,
+  label='',
+  name='',
+  doubleColumn=false,
+  data={},
+  setData=()=>{},
+  sectionEditingStatus=false,
 }) {
   // let [state, setState] = useState();
   // TODO los valores indefinidos se deben representar con el placeholder
