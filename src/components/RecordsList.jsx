@@ -111,14 +111,15 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
       }}
     >
       <div className="selection-box"></div>
-      <span className="identification-text title-regular">{'V-'+recordData['document']}</span>
+      <span className="identification-text title-regular">{'V-'+recordData['basic_info']['document']}</span>
       <span className="name-text paragraph-regular">
-        {recordData['names'].trim() + ' ' + recordData['lastnames'].trim()}
+        {recordData["basic_info"]['names'].trim() + ' ' + recordData['basic_info']['lastnames'].trim()}
       </span>
       <span className="age-text paragraph-regular">21 a&ntilde;os</span>
       {/* <span className="sex-text paragraph-regular">Masculino</span> */}
       <div className="flex-h">
-        <PersonTypeTag type="afiliado" />
+        {/* TODO debe resvisarse el tipo */}
+        <PersonTypeTag type={recordData["type"] === "affiliate" ? "affiliate" : "beneficiary"} />
       </div>
       <div>
         <ButtonSmall text="Abrir" action={()=>{window.location.href = '/record_details/'+recordData['id']}}/>

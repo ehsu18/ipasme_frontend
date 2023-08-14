@@ -161,9 +161,10 @@ export function RecordDetailsPage() {
               recordData={recordData}
               setRecordData={setRecordData}
             >
-              <RecordDetailsDataContainer
+              <RecordDetailsOptionsContainer
                 label="Estado laboral"
                 name="job_status"
+                options={['Activo', 'Reposo', 'Jubilado', 'Inactivo']}
               />
               <RecordDetailsDataContainer label="Cargo" name="job_title" />
               <RecordDetailsDataContainer
