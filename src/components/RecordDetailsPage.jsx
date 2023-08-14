@@ -192,6 +192,7 @@ function RecordDetailsSection({
 
   useEffect(() => {
     setData(recordData[name]);
+    console.log('section loading data', name)
   },[recordData, name]);
 
   return (
@@ -272,14 +273,14 @@ function RecordDetailsSection({
                 .then((response) => {
                   return response.json();
                 })
-                .then((data) => {
+                .then((json) => {
                   // mostrar un mensaje en ui
-                  // if (data["result"] === "ok") {
-                  //   setRecordData({
-                  //     ...recordData,
-                  //     [name]:data,
-                  //   });
-                  // }
+                  if (json["result"] === "ok") {
+                    setRecordData({
+                      ...recordData,
+                      [name]:data,
+                    });
+                  }
                   console.log("datos guardados")
                 })
                 .catch((error) => {
