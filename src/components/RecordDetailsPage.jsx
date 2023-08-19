@@ -138,6 +138,7 @@ export function RecordDetailsPage() {
             name={"contact_info"}
             recordData={recordData}
             setRecordData={setRecordData}
+            icon={icons.Phone}
           >
             <RecordDetailsDataContainer
               label="Telefono personal"
@@ -160,6 +161,7 @@ export function RecordDetailsPage() {
               name="job_info"
               recordData={recordData}
               setRecordData={setRecordData}
+              icon={icons.Suitcase}
             >
               <RecordDetailsOptionsContainer
                 label="Estado laboral"
@@ -174,6 +176,21 @@ export function RecordDetailsPage() {
               />
             </RecordDetailsSection>
           ) : null}
+
+          <RecordDetailsSection
+            title="Datos médicos básicos"
+            name="medic_info"
+            recordData={recordData}
+            setRecordData={setRecordData}
+            icon={icons.PinpaperPlus}
+          >
+            
+            <RecordDetailsDataContainer label="Grupo RH" name="rh_group" />
+            <RecordDetailsDataContainer label="Enfermedades hereditarias" name="enfermedades_hereditarias" />
+            <RecordDetailsDataContainer label="Enfermedades Crónicas" name="enfermedades_cronicas" />
+            <RecordDetailsDataContainer label="Alergias" name="alergias" />
+
+          </RecordDetailsSection>
         </div>
       </div>
     </main>
@@ -184,6 +201,7 @@ function RecordDetailsSection({
   title,
   name,
   children,
+  icon,
 
   recordData,
   setRecordData,
@@ -195,6 +213,8 @@ function RecordDetailsSection({
     setData(recordData[name]);
     console.log('section loading data', name)
   },[recordData, name]);
+
+  // TODO manejar la seleccion del icono
 
   return (
     <section
@@ -208,7 +228,7 @@ function RecordDetailsSection({
       }
     >
       <header className="felx-h">
-        {icons.User1(24)}
+        {icon ? icon(24) : icons.User1(24)}
         <span className="title-regular">{title}</span>
       </header>
 
