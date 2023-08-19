@@ -51,7 +51,7 @@ export async function getAffiliateBeneficiarys(id) {
 export  function putAffiliate(id, data) {
   // console.log(data)
   if (!id.match("^[\\w]{24}$")){throw new Error(`invalid id (${id}) at put affiliate`)}
-  if (data == undefined){throw new Error('no data received')}
+  if (data === undefined){throw new Error('no data received')}
   return fetch(API_URL+AFFILIATE_URL+'/'+id,{
     method:'PUT',
     headers: {
@@ -75,4 +75,27 @@ export async function getRecords(id='') {
   //   throw new Error(error)
   // })
 
+}
+
+export function getCitas(citaId){
+  return [
+    {
+      fecha: '2023-08-19T06:38:54.584Z',
+      area: 'Medicina general',
+      diagnose: 'fiebre',
+      cita_id: 'example'
+    },
+    {
+      fecha: '2023-08-19T06:38:54.584Z',
+      area: 'Medicina general',
+      diagnose: 'fiebre',
+      cita_id: 'example'
+    },
+    {
+      fecha: '2023-08-19T06:38:54.584Z',
+      area: 'Medicina general',
+      diagnose: 'fiebre',
+      cita_id: 'example'
+    }
+  ]
 }

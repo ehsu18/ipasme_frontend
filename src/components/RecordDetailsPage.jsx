@@ -1,9 +1,8 @@
-import { getRecords, putAffiliate } from "../tools/api";
+import { getCitas, getRecords, putAffiliate } from "../tools/api";
 import { useParams } from "react-router-dom";
 import { ButtonBig, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
 import React, { useEffect, useState } from "react";
-
 
 export function RecordDetailsPage() {
   let { id } = useParams();
@@ -166,7 +165,7 @@ export function RecordDetailsPage() {
               <RecordDetailsOptionsContainer
                 label="Estado laboral"
                 name="job_status"
-                options={['Activo', 'Reposo', 'Jubilado', 'Inactivo']}
+                options={["Activo", "Reposo", "Jubilado", "Inactivo"]}
               />
               <RecordDetailsDataContainer label="Cargo" name="job_title" />
               <RecordDetailsDataContainer
@@ -184,13 +183,18 @@ export function RecordDetailsPage() {
             setRecordData={setRecordData}
             icon={icons.PinpaperPlus}
           >
-            
             <RecordDetailsDataContainer label="Grupo RH" name="rh_group" />
-            <RecordDetailsDataContainer label="Enfermedades hereditarias" name="enfermedades_hereditarias" />
-            <RecordDetailsDataContainer label="Enfermedades Crónicas" name="enfermedades_cronicas" />
+            <RecordDetailsDataContainer
+              label="Enfermedades hereditarias"
+              name="enfermedades_hereditarias"
+            />
+            <RecordDetailsDataContainer
+              label="Enfermedades Crónicas"
+              name="enfermedades_cronicas"
+            />
             <RecordDetailsDataContainer label="Alergias" name="alergias" />
-
           </RecordDetailsSection>
+          <CitasTable />
         </div>
       </div>
     </main>
@@ -211,8 +215,8 @@ function RecordDetailsSection({
 
   useEffect(() => {
     setData(recordData[name]);
-    console.log('section loading data', name)
-  },[recordData, name]);
+    console.log("section loading data", name);
+  }, [recordData, name]);
 
   // TODO manejar la seleccion del icono
 
@@ -272,7 +276,7 @@ function RecordDetailsSection({
                 return;
               }
 
-              setEditStatus(false) // TODO se puede mostrar un mensaje de carga
+              setEditStatus(false); // TODO se puede mostrar un mensaje de carga
 
               let changes = {};
 
@@ -287,9 +291,9 @@ function RecordDetailsSection({
                 // TODO lanzar un mensaje de sin cambios
                 return;
               }
-              
+
               // si hay cambios
-              let promesa = putAffiliate(recordData["id"], {[name] : changes});
+              let promesa = putAffiliate(recordData["id"], { [name]: changes });
               promesa // TODO revisar si esto es necesario
                 .then((response) => {
                   return response.json();
@@ -299,10 +303,10 @@ function RecordDetailsSection({
                   if (json["result"] === "ok") {
                     setRecordData({
                       ...recordData,
-                      [name]:data,
+                      [name]: data,
                     });
                   }
-                  console.log("datos guardados")
+                  console.log("datos guardados");
                 })
                 .catch((error) => {
                   console.error(error); // TODO mostrar este error en ui con un mensaje
@@ -442,5 +446,55 @@ function RecordDetailsFechaContainer({
         }
       />
     </div>
+  );
+}
+function CitasTable({ recordId }) {
+  let [citas, setCitas] = useState([]);
+
+  useEffect(() => {
+    // TODO colocar una animacion de carga
+    setCitas(getCitas());
+  }, [recordId]);
+  return (
+    <section className="recorddetails-section citastable">
+      <header className="felx-h">
+        {icons.PinpaperPlus(24) || null}
+        <span className="title-regular">Record de citas médicas</span>
+      </header>
+      <div
+        className="recorddetails-section-datacontainer"
+        style={{ gridColumn: "span 2" }}
+      >
+        {citas ? (
+          <table className="citastable-table">
+            <tr className="citastable-table-headerrow">
+              {/* <th className="selector-container">selector</th> */}
+              <th>Fecha</th>
+              <th>Área médica</th>
+              <th>Diagnóstico</th>
+              <th className="vermas">Ver Consulta</th>
+            </tr>
+            {citas.map((cita, index) => {
+              return (
+                <tr key={index} className="citastable-table-row">
+                  {/* <td className="selector-container">selector</td> */}
+                  <td>{cita.fecha || "No indica"}</td>
+                  <td>{cita.area || "No indica"}</td>
+                  <td>{cita.diagnose || "No indica"}</td>
+                  <td className="vermas title-small">
+                    <a href={"/citas/" + cita.id}>
+                      {icons.EyeOpen(16)} Ver más
+                    </a>
+                  </td>
+                </tr>
+              );
+            })}
+          </table>
+        ) : (
+          "Sin citas"
+        )}
+      </div>
+      {/* TODO hace falta paginar la lista de citas para que no se haga infinita */}
+    </section>
   );
 }
