@@ -1,8 +1,23 @@
 import { getCitas, getRecords, putAffiliate } from "../tools/api";
+import { dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
 import { ButtonBig, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
 import React, { useEffect, useState } from "react";
+
+
+// TODO MANEJAR EL 404
+
+// TODO manejar las fechas correctamente
+//  - new Date da un isostring
+//  - input date da un date string (yyyy-mm-dd)
+//  esto genera problemas porque la fecha se guarda como
+//  isostring lo que hace que se intente convertir luego a
+//  hora local (por lo que se muestra un dia erroneo)
+//  opciones
+//  - guardar la fecha solo como fecha
+//  - guardarla como isostring pero bien hecho (local) para
+//    evitar el error del dia
 
 export function RecordDetailsPage() {
   let { id } = useParams();
@@ -194,7 +209,7 @@ export function RecordDetailsPage() {
             />
             <RecordDetailsDataContainer label="Alergias" name="alergias" />
           </RecordDetailsSection>
-          <CitasTable />
+          <CitasTable recordId={recordData.id} />
         </div>
       </div>
     </main>
@@ -449,11 +464,21 @@ function RecordDetailsFechaContainer({
   );
 }
 function CitasTable({ recordId }) {
-  let [citas, setCitas] = useState([]);
+  let [citas, setCitas] = useState(false);
 
   useEffect(() => {
     // TODO colocar una animacion de carga
-    setCitas(getCitas());
+
+    getCitas(recordId)
+      .then((response) => response.json())
+      .then((json) => {
+        setCitas(json);
+        console.log(json);
+      })
+      .catch((error) => {
+        setCitas(false);
+        throw new Error(error);
+      });
   }, [recordId]);
   return (
     <section className="recorddetails-section citastable">
@@ -465,7 +490,7 @@ function CitasTable({ recordId }) {
         className="recorddetails-section-datacontainer"
         style={{ gridColumn: "span 2" }}
       >
-        {citas ? (
+        {Array.isArray(citas) && citas.length > 0 ? (
           <table className="citastable-table">
             <tr className="citastable-table-headerrow">
               {/* <th className="selector-container">selector</th> */}
@@ -478,7 +503,9 @@ function CitasTable({ recordId }) {
               return (
                 <tr key={index} className="citastable-table-row">
                   {/* <td className="selector-container">selector</td> */}
-                  <td>{cita.fecha || "No indica"}</td>
+                  <td>
+                    {dateToString(cita.fecha.split("T")[0]) || "No indica"}
+                  </td>
                   <td>{cita.area || "No indica"}</td>
                   <td>{cita.diagnose || "No indica"}</td>
                   <td className="vermas title-small">
@@ -495,6 +522,13 @@ function CitasTable({ recordId }) {
         )}
       </div>
       {/* TODO hace falta paginar la lista de citas para que no se haga infinita */}
+      <div className="flex-h gap12" style={{gridColumn:'2', justifyContent:'right'}}>
+      <ButtonBig
+            text="Añadir cita"
+            icon={icons.DocumentEdit}
+            type="main"
+      />
+      </div>
     </section>
   );
 }
