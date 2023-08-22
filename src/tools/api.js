@@ -1,6 +1,7 @@
 const API_URL = 'http://localhost:8000/api/'
 const AFFILIATE_URL = 'affiliate';
 const CITAS_URL = 'citas';
+const CITASODON_URL = 'citasodon';
 const RECORDS_URL = 'records'
 const RELATION_AFFILIATES_URL = 'affiliate_affiliates/'
 const RELATION_BENEFICIARYS_URL = 'affiliate_beneficiarys/'
@@ -81,24 +82,11 @@ export async function getRecords(id='') {
 export async function getCitas(citaId){
 
   return await fetch(API_URL+CITAS_URL+'/'+citaId)
-  // [
-  //   {
-  //     fecha: '2023-08-19T06:38:54.584Z',
-  //     area: 'Medicina general',
-  //     diagnose: 'fiebre',
-  //     cita_id: 'example'
-  //   },
-  //   {
-  //     fecha: '2023-08-19T06:38:54.584Z',
-  //     area: 'Medicina general',
-  //     diagnose: 'fiebre',
-  //     cita_id: 'example'
-  //   },
-  //   {
-  //     fecha: '2023-08-19T06:38:54.584Z',
-  //     area: 'Medicina general',
-  //     diagnose: 'fiebre',
-  //     cita_id: 'example'
-  //   }
-  // ]
+
+}
+
+export async function getCitasOdon(citaId){
+
+  return await fetch(API_URL+CITASODON_URL+'/'+citaId)
+
 }

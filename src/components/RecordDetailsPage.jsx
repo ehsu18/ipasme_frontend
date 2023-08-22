@@ -1,4 +1,4 @@
-import { getCitas, getRecords, putAffiliate } from "../tools/api";
+import { getCitas, getCitasOdon, getRecords, putAffiliate } from "../tools/api";
 import { dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
 import { ButtonBig, PersonTypeTag } from "./Buttons";
@@ -210,6 +210,7 @@ export function RecordDetailsPage() {
             <RecordDetailsDataContainer label="Alergias" name="alergias" />
           </RecordDetailsSection>
           <CitasTable recordId={recordData.id} />
+          <CitasOdonTable recordId={recordData.id} />
         </div>
       </div>
     </main>
@@ -516,6 +517,73 @@ function CitasTable({ recordId }) {
                   <td>{cita.diagnose || "No indica"}</td>
                   <td className="vermas title-small">
                     <a href={"/citas/" + cita.id}>
+                      {icons.EyeOpen(16)} Ver más
+                    </a>
+                  </td>
+                </tr>
+              );
+            })}
+          </table>
+        ) : (
+          "Sin citas"
+        )}
+      </div>
+      {/* TODO hace falta paginar la lista de citas para que no se haga infinita */}
+      <div className="flex-h gap12" style={{gridColumn:'2', justifyContent:'right'}}>
+      <ButtonBig
+            text="Añadir cita"
+            icon={icons.DocumentEdit}
+            type="main"
+      />
+      </div>
+    </section>
+  );
+}
+function CitasOdonTable({ recordId }) {
+  let [citas, setCitas] = useState(false);
+
+  useEffect(() => {
+    // TODO colocar una animacion de carga
+
+    getCitasOdon(recordId)
+      .then((response) => response.json())
+      .then((json) => {
+        setCitas(json);
+        console.log(json);
+      })
+      .catch((error) => {
+        setCitas(false);
+        throw new Error(error);
+      });
+  }, [recordId]);
+  return (
+    <section className="recorddetails-section citastable">
+      <header className="felx-h">
+        {icons.Tooth(24) || null}
+        <span className="title-regular">Record de citas odontológicas</span>
+      </header>
+      <div
+        className="recorddetails-section-datacontainer"
+        style={{ gridColumn: "span 2" }}
+      >
+        {Array.isArray(citas) && citas.length > 0 ? (
+          <table className="citastable-table">
+            <tr className="citastable-table-headerrow">
+              {/* <th className="selector-container">selector</th> */}
+              <th>Fecha</th>
+              <th>Diagnóstico</th>
+              <th className="vermas">Ver Consulta</th>
+            </tr>
+            {citas.map((cita, index) => {
+              return (
+                <tr key={index} className="citastable-table-row">
+                  {/* <td className="selector-container">selector</td> */}
+                  <td>
+                    {dateToString(cita.fecha.split("T")[0]) || "No indica"}
+                  </td>
+                  <td>{cita.diagnose || "No indica"}</td>
+                  <td className="vermas title-small">
+                    <a href={"/citasodon/" + cita.id}>
                       {icons.EyeOpen(16)} Ver más
                     </a>
                   </td>
