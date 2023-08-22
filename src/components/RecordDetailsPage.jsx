@@ -230,7 +230,7 @@ function RecordDetailsSection({
 
   useEffect(() => {
     setData(recordData[name]);
-    console.log("section loading data", name);
+    // console.log("section loading data", name);
   }, [recordData, name]);
 
   // TODO manejar la seleccion del icono
@@ -292,21 +292,27 @@ function RecordDetailsSection({
               }
 
               setEditStatus(false); // TODO se puede mostrar un mensaje de carga
-
+              
               let changes = {};
-
-              for (let key in data) {
-                if (data[key] !== recordData[name][key]) {
-                  changes[key] = data[key];
+              // ver si existe la data en el objeto principal
+              if (recordData[name]){
+                // si existe, compararla
+                for (let key in data) {
+                  if (data[key] !== recordData[name][key]) {
+                    changes[key] = data[key];
+                  }
                 }
-              }
-
-              if (Object.keys(changes).length === 0) {
-                // no hay cambios
+                
+                //no hay cambios
+                if (Object.keys(changes).length === 0) {
                 // TODO lanzar un mensaje de sin cambios
                 return;
-              }
+                }
 
+              } else {
+                changes = data;
+              }
+              
               // si hay cambios
               let promesa = putAffiliate(recordData["id"], { [name]: changes });
               promesa // TODO revisar si esto es necesario
