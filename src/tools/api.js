@@ -4,6 +4,7 @@ const CITAS_URL = 'citas';
 const CITASODON_URL = 'citasodon';
 const RECORDS_URL = 'records';
 const REPOSOS_URL = 'reposos';
+const AFFILIATECUIDOS_URL = 'affiliate_cuidos';
 const AFFILIATEREPOSOS_URL = 'affiliate_reposos';
 const RELATION_AFFILIATES_URL = 'affiliate_affiliates/'
 const RELATION_BENEFICIARYS_URL = 'affiliate_beneficiarys/'
@@ -104,5 +105,12 @@ export async function getAffiliateReposos(record_id='') {
 
   if( record_id !=='' ){record_id = '/'+record_id}
   return await fetch(API_URL+AFFILIATEREPOSOS_URL+record_id)
+
+}
+
+export async function getAffiliateCuidos(record_id='') {
+
+  if( record_id !=='' ){record_id = '/'+record_id}
+  return await fetch(API_URL+AFFILIATECUIDOS_URL+record_id)
 
 }

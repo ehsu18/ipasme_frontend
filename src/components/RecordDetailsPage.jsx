@@ -1,4 +1,4 @@
-import { getCitas, getCitasOdon, getRecords, putAffiliate, getAffiliateReposos } from "../tools/api";
+import { getCitas, getCitasOdon, getRecords, putAffiliate, getAffiliateReposos, getAffiliateCuidos } from "../tools/api";
 import { dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
 import { ButtonBig, PersonTypeTag } from "./Buttons";
@@ -233,6 +233,13 @@ export function RecordDetailsPage() {
           <RecordDetailsRepososTable
             title = "Record de reposos"
             name = "reposos"
+            icon = {icons.CalendarUser}
+          
+            recordId={recordData.id}
+          />
+          <RecordDetailsCuidosTable
+            title = "Record de cuidos"
+            name = "cuidos"
             icon = {icons.CalendarUser}
           
             recordId={recordData.id}
@@ -692,6 +699,89 @@ function RecordDetailsRepososTable({
               <td>{row.fecha_inicio + " - " + row.fecha_fin}</td>
               <td>{row.dias}</td>
               <td>{row.especialidad}</td>
+              <td><span> - </span></td> {/* TODO calcular esto */}
+              <td className="vermas title-small"><a>{icons.EyeOpen(16)} Abrir</a></td>
+            </tr>
+          ))}
+        </table>
+        
+        : <span>Vac&iacute;o</span>
+      }
+
+      <div className="flex-h recorddetails-section-info">
+        <span className="micro-italic">
+          {/* aqui puede ir un texto */}
+        </span>
+        <div className="flex-h gap12">
+  
+          <ButtonBig
+            text="Añadir"
+            icon={icons.DocumentEdit}
+            type="main"
+            
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+function RecordDetailsCuidosTable({
+  title,
+  name,
+  icon,
+
+  recordId
+}) {
+  let [data, setData] = useState({});
+
+  useEffect(() => {
+    getAffiliateCuidos(recordId)
+    .then((response)=>response.json())
+    .then((data)=>{setData(data)})
+    .catch((error)=>{throw error})
+    // console.log("section loading data", name);
+    // setData([
+    //   {
+    //     fecha_inicio: "2023-05-09",
+    //     fecha_fin:"2023-05-19",
+    //     dias:10,
+    //     area:'Medicina interna',
+    //     id:'adfasdfasdf'
+    //   },
+    //   {
+    //     fecha_inicio: "2023-05-09",
+    //     fecha_fin:"2023-05-19",
+    //     dias:10,
+    //     area:'Medicina interna',
+    //     id:'adfasdfasdf'
+    //   }
+    // ])
+  }, [recordId, name]);
+
+  return (
+    <section
+      className="recorddetails-section"
+    >
+      <header className="felx-h">
+        {icon ? icon(24) : icons.User1(24)}
+        <span className="title-regular">{title}</span>
+      </header>
+
+      {
+        Array.isArray(data) ?
+        <table className="details-table" style={{gridColumn: 'span 2 / auto'}} >
+          <tr className="details-table-headerrow">
+            <th>Fechas</th>
+            <th>D&iacute;as</th>
+            <th>Beneficiario</th>
+            <th>Días acumulados</th>
+            <th>Ver cuido</th>
+          </tr>
+          {data.map((row, index)=>(
+            <tr key={index} className="details-table-row">
+              <td>{row.fecha_inicio + " - " + row.fecha_fin}</td>
+              <td>{row.dias}</td>
+              <td>{row.beneficiary_name || row.beneficiary || row.beneficiary_id}</td>
               <td><span> - </span></td> {/* TODO calcular esto */}
               <td className="vermas title-small"><a>{icons.EyeOpen(16)} Abrir</a></td>
             </tr>
