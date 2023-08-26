@@ -2,7 +2,9 @@ const API_URL = 'http://localhost:8000/api/'
 const AFFILIATE_URL = 'affiliate';
 const CITAS_URL = 'citas';
 const CITASODON_URL = 'citasodon';
-const RECORDS_URL = 'records'
+const RECORDS_URL = 'records';
+const REPOSOS_URL = 'reposos';
+const AFFILIATEREPOSOS_URL = 'affiliate_reposos';
 const RELATION_AFFILIATES_URL = 'affiliate_affiliates/'
 const RELATION_BENEFICIARYS_URL = 'affiliate_beneficiarys/'
 
@@ -88,5 +90,19 @@ export async function getCitas(citaId){
 export async function getCitasOdon(citaId){
 
   return await fetch(API_URL+CITASODON_URL+'/'+citaId)
+
+}
+
+export async function getReposos(id='') {
+
+  if( id !=='' ){id = '/'+id}
+  return await fetch(API_URL+REPOSOS_URL+id)
+
+}
+
+export async function getAffiliateReposos(record_id='') {
+
+  if( record_id !=='' ){record_id = '/'+record_id}
+  return await fetch(API_URL+AFFILIATEREPOSOS_URL+record_id)
 
 }

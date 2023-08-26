@@ -84,34 +84,34 @@
   align-items: center;
 }
 
-.citastable-table td,
-.citastable-table th {
+.details-table td,
+.details-table th {
   padding: 12px 0px;
   vertical-align: middle;
   border-bottom: 1px solid var(--border);
 }
-.citastable-table tr:last-child td {
+.details-table tr:last-child td {
   border: none;
 }
-.citastable-table-headerrow {
+.details-table-headerrow {
   text-align: left;
   padding: 0px 12px;
 }
 
-.citastable-table-row {
+.details-table-row {
   text-align: left;
 }
-.citastable .selector-container {
+.details .selector-container {
   text-align: center;
 }
-.citastable-table-headerrow .vermas {
+.details-table-headerrow .vermas {
   text-align: center;
 }
-.citastable-table-row .vermas {
+.details-table-row .vermas {
   color: var(--main-color);
   text-align: center;
 }
-.citastable-table-row .vermas a {
+.details-table-row .vermas a {
   display: flex;
   align-items: center;
   justify-content: center;

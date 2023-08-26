@@ -1,4 +1,4 @@
-import { getCitas, getCitasOdon, getRecords, putAffiliate } from "../tools/api";
+import { getCitas, getCitasOdon, getRecords, putAffiliate, getAffiliateReposos } from "../tools/api";
 import { dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
 import { ButtonBig, PersonTypeTag } from "./Buttons";
@@ -210,7 +210,33 @@ export function RecordDetailsPage() {
             <RecordDetailsDataContainer label="Alergias" name="alergias" />
           </RecordDetailsSection>
           <CitasTable recordId={recordData.id} />
+          <RecordDetailsSection
+            title="Datos odontológicos básicos"
+            name="odon_info"
+            recordData={recordData}
+            setRecordData={setRecordData}
+            icon={icons.Tooth}
+          >
+            <RecordDetailsDataContainer label="Ubicacion de la carpeta" name="odon_folder" />
+            <RecordDetailsDataContainer
+              label="Padecimientos"
+              name="odon_padecimientos"
+            />
+            <RecordDetailsDataContainer
+              label="Procedimientos anteriores"
+              name="odon_procedimientos"
+              doubleColumn
+            />
+          </RecordDetailsSection>
           <CitasOdonTable recordId={recordData.id} />
+          {/* solo para afiliados */}
+          <RecordDetailsRepososTable
+            title = "Record de reposos"
+            name = "reposos"
+            icon = {icons.CalendarUser}
+          
+            recordId={recordData.id}
+          />
         </div>
       </div>
     </main>
@@ -487,6 +513,9 @@ function CitasTable({ recordId }) {
         throw new Error(error);
       });
   }, [recordId]);
+
+  // TODO todas las tablas deben poder ser ordenadas y filtradas
+
   return (
     <section className="recorddetails-section citastable">
       <header className="felx-h">
@@ -498,8 +527,8 @@ function CitasTable({ recordId }) {
         style={{ gridColumn: "span 2" }}
       >
         {Array.isArray(citas) && citas.length > 0 ? (
-          <table className="citastable-table">
-            <tr className="citastable-table-headerrow">
+          <table className="details-table">
+            <tr className="details-table-headerrow">
               {/* <th className="selector-container">selector</th> */}
               <th>Fecha</th>
               <th>Área médica</th>
@@ -508,7 +537,7 @@ function CitasTable({ recordId }) {
             </tr>
             {citas.map((cita, index) => {
               return (
-                <tr key={index} className="citastable-table-row">
+                <tr key={index} className="details-table-row">
                   {/* <td className="selector-container">selector</td> */}
                   <td>
                     {dateToString(cita.fecha.split("T")[0]) || "No indica"}
@@ -567,8 +596,8 @@ function CitasOdonTable({ recordId }) {
         style={{ gridColumn: "span 2" }}
       >
         {Array.isArray(citas) && citas.length > 0 ? (
-          <table className="citastable-table">
-            <tr className="citastable-table-headerrow">
+          <table className="details-table">
+            <tr className="details-table-headerrow">
               {/* <th className="selector-container">selector</th> */}
               <th>Fecha</th>
               <th>Diagnóstico</th>
@@ -576,7 +605,7 @@ function CitasOdonTable({ recordId }) {
             </tr>
             {citas.map((cita, index) => {
               return (
-                <tr key={index} className="citastable-table-row">
+                <tr key={index} className="details-table-row">
                   {/* <td className="selector-container">selector</td> */}
                   <td>
                     {dateToString(cita.fecha.split("T")[0]) || "No indica"}
@@ -602,6 +631,89 @@ function CitasOdonTable({ recordId }) {
             icon={icons.DocumentEdit}
             type="main"
       />
+      </div>
+    </section>
+  );
+}
+function RecordDetailsRepososTable({
+  title,
+  name,
+  icon,
+
+  recordId
+}) {
+  let [data, setData] = useState({});
+
+  useEffect(() => {
+    getAffiliateReposos(recordId)
+    .then((response)=>response.json())
+    .then((data)=>{setData(data)})
+    .catch((error)=>{throw error})
+    // console.log("section loading data", name);
+    // setData([
+    //   {
+    //     fecha_inicio: "2023-05-09",
+    //     fecha_fin:"2023-05-19",
+    //     dias:10,
+    //     area:'Medicina interna',
+    //     id:'adfasdfasdf'
+    //   },
+    //   {
+    //     fecha_inicio: "2023-05-09",
+    //     fecha_fin:"2023-05-19",
+    //     dias:10,
+    //     area:'Medicina interna',
+    //     id:'adfasdfasdf'
+    //   }
+    // ])
+  }, [recordId, name]);
+
+  return (
+    <section
+      className="recorddetails-section"
+    >
+      <header className="felx-h">
+        {icon ? icon(24) : icons.User1(24)}
+        <span className="title-regular">{title}</span>
+      </header>
+
+      {
+        Array.isArray(data) ?
+        <table className="details-table" style={{gridColumn: 'span 2 / auto'}} >
+          <tr className="details-table-headerrow">
+            <th>Fechas</th>
+            <th>D&iacute;as</th>
+            <th>Especialidad médica</th>
+            <th>Días acumulados</th>
+            <th>Ver reposo</th>
+          </tr>
+          {data.map((row, index)=>(
+            <tr key={index} className="details-table-row">
+              <td>{row.fecha_inicio + " - " + row.fecha_fin}</td>
+              <td>{row.dias}</td>
+              <td>{row.especialidad}</td>
+              <td><span> - </span></td> {/* TODO calcular esto */}
+              <td className="vermas title-small"><a>{icons.EyeOpen(16)} Abrir</a></td>
+            </tr>
+          ))}
+        </table>
+        
+        : <span>Vac&iacute;o</span>
+      }
+
+      <div className="flex-h recorddetails-section-info">
+        <span className="micro-italic">
+          {/* aqui puede ir un texto */}
+        </span>
+        <div className="flex-h gap12">
+  
+          <ButtonBig
+            text="Añadir"
+            icon={icons.DocumentEdit}
+            type="main"
+            
+          />
+        </div>
       </div>
     </section>
   );
