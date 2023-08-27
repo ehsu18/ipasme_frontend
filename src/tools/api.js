@@ -67,6 +67,19 @@ export  function putAffiliate(id, data) {
   })
   
 }
+export async function postAffiliate(data) {
+  // console.log(data)
+  if (data === undefined){throw new Error('no data received')}
+  return await fetch(API_URL+AFFILIATE_URL, {
+    method:'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  
+}
 
 export async function getRecords(id='') {
 

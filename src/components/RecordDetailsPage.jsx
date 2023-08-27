@@ -54,7 +54,7 @@ export function RecordDetailsPage() {
         </div>
       </header>
       {/* TODO revisar si no era content-container */}
-      <div className="recorddetails-container scroll">
+      <div className="recorddetails-container floatingcontainer-parent scroll">
         <div className="recorddetails common-container flex-v">
           <header className="recorddetails-header flex-h">
             <section className="left flex-h">

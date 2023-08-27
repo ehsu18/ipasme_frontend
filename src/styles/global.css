@@ -37,7 +37,6 @@ a {
   all: unset;
 }
 
-
 .scroll {
   overflow: scroll;
 }
@@ -104,33 +103,57 @@ a {
   background-color: var(--white);
   filter: drop-shadow(0px 1px 6px rgba(0, 0, 0, 0.12));
 }
-/* .button-big span {
-  color: var(--dark);
-} */
 
-.button-big.main {
-  background-color: var(--main-color);
-}
-.button-big.main span {
-  color: var(--white);
-}
-.button-big.main svg path {
-  stroke: var(--white);
-}
-.button-big.secondary {
-  background-color: var(--white);
-}
-
-.button-big:hover {
-  background-color: var(--main-color);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-}
 .button-big:hover span {
   color: var(--white);
 }
 .button-big:hover svg path {
   stroke: var(--white);
 }
+.button-big:hover {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+}
+
+
+.button-big.main {
+  background-color: var(--main-color);
+}
+.button-big span {
+  color: var(--white);
+}
+.button-big svg path {
+  stroke: var(--white);
+}
+
+
+.button-big.secondary {
+  background-color: var(--white);
+}
+.button-big.secondary span {
+  color: var(--medium);
+}
+.button-big.secondary svg path {
+  stroke: var(--main-color);
+}
+.button-big.secondary:hover {
+  background-color: var(--main-color);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+}
+.button-big.secondary:hover span {
+  color: var(--white);
+}
+.button-big.secondary:hover svg path {
+  stroke: var(--white);
+}
+
+
+.button-big.danger {
+  background-color: var(--act-danger);
+}
+.button-big.good {
+  background-color: var(--act-good);
+}
+
 
 .button-small {
   color: var(--main-color);
@@ -207,6 +230,10 @@ a {
 .flex-v {
   display: flex;
   flex-direction: column;
+}
+.flex-center-h {
+  /* align-items: center; */
+  justify-content: center;
 }
 .gap24 {
   gap: 24px;
@@ -334,4 +361,15 @@ a {
   border-radius: 4px;
   background-color: var(--back-lightblue);
   padding: 8px;
+}
+
+/* containers */
+.floatingcontainer-parent {
+  /* height: 100%; */
+  flex-grow: 1;
+  align-self: stretch;
+  width: 100%;
+  padding: 24px;
+  gap: 24px;
+
 }

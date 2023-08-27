@@ -1,11 +1,11 @@
-.recorddetails-container {
-  /* height: 100%; */
+/* .recorddetails-container {
+
   flex-grow: 1;
   align-self: stretch;
   width: 100%;
   padding: 24px;
   gap: 24px;
-}
+} */
 
 .recorddetails-header {
   padding: 24px;
@@ -77,6 +77,9 @@
 .recorddetails-section-datacontainer {
   display: flex;
   flex-direction: column;
+}
+.recorddetails-section-datacontainer .entry-1-active {
+  margin-top: 4px;
 }
 .recorddetails-section-info {
   grid-column: span 2;

@@ -8,6 +8,7 @@ import "./styles/app.css";
 import "./styles/records-list.css";
 import "./styles/NewRecordPage.css";
 import "./styles/record-details.css";
+import "./styles/creating_record.css";
 import {
   Routes,
   Route,
@@ -26,6 +27,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/record_details/:id" element={<RecordDetailsPage />} />
         <Route path="/newrecord" element={<NewRecordPage />}/>
+        <Route path="/creating_record/affiliate" element={<CreatingRecordPage />}/>
       </Routes>
     </main>
   );

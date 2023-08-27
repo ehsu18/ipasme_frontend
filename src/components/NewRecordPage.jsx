@@ -21,7 +21,7 @@ export function NewRecordPage(){
                             <p className="paragraph-regular text-center">Estas son las personas que <br /> forman parte del <br /> de Educación y que reciben <br /> los servicios del IPASME.</p>
                         </div>
                         {/* <button className="button">Crear Afiliado</button> */}
-                        <ButtonBig id="create-affiliate-btn" text="Crear Afiliado" icon={User1} action={() => {window.location.href = '/creating_record?type=affiliate'}} />
+                        <ButtonBig id="create-affiliate-btn" text="Crear Afiliado" icon={User1} action={() => {window.location.href = '/creating_record/affiliate'}} />
                     </div>
                     <div className="card">
                         <div className="frame-84">
@@ -29,7 +29,7 @@ export function NewRecordPage(){
                             <p className="paragraph-regular text-center">Estas son las cargas <br /> familiares que los afiliados <br /> registran ante el IPASME para <br /> que reciban sus beneficios.</p>
                         </div>
                         {/* <button className="button">Crear beneficiario</button> */}
-                        <ButtonBig id="create-beneficiary-btn" text="Crear Beneficiario" icon={Users} action={() => {window.location.href = '/creating_record?type=beneficiary'}}/>
+                        <ButtonBig id="create-beneficiary-btn" text="Crear Beneficiario" icon={Users} action={() => {window.location.href = '/creating_record/beneficiary'}}/>
                     </div>
                 </div>
             </div>
