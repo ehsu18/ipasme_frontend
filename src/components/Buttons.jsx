@@ -27,18 +27,29 @@ export function ButtonSmall({ type = "main", text = "" , action}) {
   );
 }
 
-export function PersonTypeTag({ type = "afiliado" }) {
-  return type ? (
-    <div className="persontype-tag afiliado">
-      {icons.User1(14)} 
-      <span className="title-micro">Afiliado</span>
-    </div>
-  ) : (
+export function PersonTypeTag({ type = "undefined" }) {
+
+  if ( type === 'affiliate'){
+    return <div className="persontype-tag afiliado">
+    {icons.User1(14)} 
+    <span className="title-micro">Afiliado</span>
+  </div>
+  } else if (type === 'beneficiary') {
+    return (
     <div className="persontype-tag beneficiario">
       {icons.Users(14)}
       <span className="title-micro">Beneficiario</span>
     </div>
   );
+  } else {
+    return (
+      <div className="persontype-tag undefined">
+        {icons.UserCross(14)}
+        <span className="title-micro">Indefinido</span>
+      </div>
+    );
+  }
+  
 }
 
 export function DualSelector({left='left', right='right', selected, setSelected}){

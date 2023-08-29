@@ -19,6 +19,14 @@ import React, { useEffect, useState } from "react";
 //  - guardarla como isostring pero bien hecho (local) para
 //    evitar el error del dia
 
+// TODO se debe poder cambiar el tipo de historia si es afiliado o no
+
+// TODO No estan funcionando los option
+
+// TODO hacer el componente de numeros o validar no se
+
+// TODO mostrar en interfaz el resultado de guardar las secciones
+
 export function RecordDetailsPage() {
   let { id } = useParams();
   let [recordData, setRecordData] = useState({});
