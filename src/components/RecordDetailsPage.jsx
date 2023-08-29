@@ -5,6 +5,7 @@ import { ButtonBig, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
 import React, { useEffect, useState } from "react";
 
+// TODO notificaciones -> https://www.npmjs.com/package/react-notifications
 
 // TODO MANEJAR EL 404
 
@@ -358,24 +359,26 @@ function RecordDetailsSection({
               }
               
               // si hay cambios
-              let promesa = putAffiliate(recordData["id"], { [name]: changes });
-              promesa // TODO revisar si esto es necesario
+              putAffiliate(recordData["id"], { [name]: changes })
                 .then((response) => {
                   return response.json();
                 })
                 .then((json) => {
                   // mostrar un mensaje en ui
                   if (json["result"] === "ok") {
+                    alert("Datos guardados")
                     setRecordData({
                       ...recordData,
                       [name]: data,
                     });
+                  } else if (json["error"]){
+                    alert("Ocurrió un error y no se guardaron los datos.")
                   }
-                  console.log("datos guardados");
+                   
                 })
                 .catch((error) => {
                   console.error(error); // TODO mostrar este error en ui con un mensaje
-                  // setData(recordData[name])  //TODO esto es necesario o lo hace el useEffect?
+                  alert('Ocurrió un error.')  //TODO esto es necesario o lo hace el useEffect?
                 });
             }}
           />
@@ -447,12 +450,12 @@ function RecordDetailsOptionsContainer({
         }
         name={name}
         value={data[name] || "default"} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
-        // onChange={(e) =>
-        //   setData({
-        //     ...data,
-        //     [name]: e.target.value,
-        //   })
-        // }
+        onChange={(e) =>
+          setData({
+            ...data,
+            [name]: e.target.value,
+          })
+        }
         placeholder="Indefinido"
         disabled={!sectionEditingStatus}
       >
@@ -478,15 +481,6 @@ function RecordDetailsFechaContainer({
   setData = () => {},
   sectionEditingStatus = false,
 }) {
-  // let [state, setState] = useState();
-  // TODO los valores indefinidos se deben representar con el placeholder
-  // readonly, active, blocked, selected ... soon -> hover, error, warning
-  let [date, setDate] = useState("");
-  useEffect(() => {
-    if (data[name]) {
-      setDate(data[name].split("T")[0]);
-    }
-  }, [data, name]);
 
   return (
     <div
@@ -502,7 +496,7 @@ function RecordDetailsFechaContainer({
         }
         type="date"
         name={name}
-        value={date} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
+        value={data[name].split("T")[0] || ''} 
         onChange={(e) =>
           setData({
             ...data,

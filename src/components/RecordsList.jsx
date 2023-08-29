@@ -3,6 +3,9 @@ import * as icons from "./Icons";
 import { useState, useEffect } from "react";
 import * as api from "../tools/api";
 
+// TODO estilo del componente "cargando"
+// TODO el cuadrito de seleccion debe conservar su tama;o
+
 export function ViewRecordsPage() {
   // este componente deberia ser una pagina y aparte deberia haber un componente especifico para la lista nada mas
   // ahora mismo se comporta como pagina a pesar de que fue diseñado como componente individual
