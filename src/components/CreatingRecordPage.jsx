@@ -3,7 +3,11 @@ import * as icons from "./Icons";
 import { ButtonBig } from "./Buttons";
 import { postAffiliate } from "../tools/api";
 
-// hay que manejar la situacion de "la historia ya existe"
+// TODO hay que manejar la situacion de "la historia ya existe"
+
+// TODO hay que poner un indicador de obligatoriedad en los campos
+
+// TODO recargar o cambiar de pagina cuando se registre una historia
 
 export function CreatingRecordPage() {
   let [data, setData] = useState({});
@@ -31,28 +35,28 @@ export function CreatingRecordPage() {
             setData={setData}
           >
             <RecordDetailsDataContainer
-              label="Nombres"
+              label="Nombres (obligatorio)"
               name="names"
               doubleColumn
             />
             <RecordDetailsDataContainer
-              label="Apellidos"
+              label="Apellidos (obligatorio)"
               name="lastnames"
               doubleColumn
             />
             <RecordDetailsDataContainer label="Cédula" name="document" />
             {/* se debe hacer un componente para numero o validar de alguna manera */}
             <RecordDetailsOptionsContainer
-              label="Nacionalidad"
+              label="Nacionalidad (obligatorio)"
               name="nationality"
               options={["V", "E"]}
             />
             <RecordDetailsFechaContainer
-              label="Fecha de nacimiento"
+              label="Fecha de nacimiento (obligatorio)"
               name="dateofbirth"
             />
             <RecordDetailsOptionsContainer
-              label="Sexo / género"
+              label="Sexo / género (obligatorio)"
               name="gender"
               options={["M", "F"]}
             />
@@ -74,7 +78,7 @@ export function CreatingRecordPage() {
               doubleColumn
             />
             <RecordDetailsDataContainer
-              label="Teléfono 1"
+              label="Teléfono 1 (obligatorio)"
               name="phone_personal"
             />
             <RecordDetailsDataContainer
@@ -95,7 +99,7 @@ export function CreatingRecordPage() {
             setData={setData}
           >
             <RecordDetailsDataContainer
-              label="Nombre del plantel"
+              label="Nombre del plantel (obligatorio)"
               name="job_name"
               doubleColumn
             />
@@ -104,10 +108,13 @@ export function CreatingRecordPage() {
               name="job_direction"
               doubleColumn
             />
-            <RecordDetailsDataContainer label="Cargo" name="job_title" />
+            <RecordDetailsDataContainer
+              label="Cargo (obligatorio)"
+              name="job_title"
+            />
             {/* se debe hacer un componente para numero o validar de alguna manera */}
             <RecordDetailsOptionsContainer
-              label="Estado laboral"
+              label="Estado laboral (obligatorio)"
               name="job_status"
               options={["Activo", "Reposo", "Jubilado", "Inactivo"]}
             />
@@ -148,12 +155,12 @@ export function CreatingRecordPage() {
                 }
 
                 // TODO esto se puede llevar a utilities
-                const TXT_REGX = /^\w/
-                const NUM_REGX = /^\d+$/
-                const NATIONALITY_REGX = /^[V||E]$/ //puede expandirse
-                const DATE_REGX = /^\d{4}-\d{2}-\d{2}$/
-                const JOBSTAT_REGX = /^$/ // TODO terminar este regx
-                const GENDER_REGX = /^[M||F]$/
+                const TXT_REGX = /^\w/;
+                const NUM_REGX = /^\d+$/;
+                const NATIONALITY_REGX = /^[V||E]$/; //puede expandirse
+                const DATE_REGX = /^\d{4}-\d{2}-\d{2}$/;
+                const JOBSTAT_REGX = /^$/; // TODO terminar este regx
+                const GENDER_REGX = /^[M||F]$/;
 
                 let validations = {
                   names: TXT_REGX,
@@ -164,7 +171,6 @@ export function CreatingRecordPage() {
                   gender: GENDER_REGX,
                   phone_personal: NUM_REGX,
                   job_name: TXT_REGX,
-                  job_direction: TXT_REGX,
                   job_title: TXT_REGX,
                   job_status: TXT_REGX,
                 };
@@ -174,15 +180,13 @@ export function CreatingRecordPage() {
                   const container = input.parentElement;
                   const msg =
                     container.getElementsByClassName("fielderror-msg")[0];
-                  console.log(input, container, msg)
                   if (data[keyword] === undefined) {
                     // field requerido
                     input.classList.add("entry-1-errorstatus");
                     msg.style.display = "block";
-                    // aqui se puede cambiar el texto de msg
-                    msg.textContent = "Por favor llene este campo"
-                    alert('Hay campos que no se llenaron')
-                    return
+                    msg.textContent = "Por favor llene este campo";
+                    alert("Hay campos que no se llenaron");
+                    return;
                   } else if (validations[keyword].test(data[keyword])) {
                     //todo bien
                     input.classList.remove("entry-1-errorstatus");
@@ -192,24 +196,42 @@ export function CreatingRecordPage() {
                     // existe pero no es valido
                     input.classList.add("entry-1-errorstatus");
                     msg.style.display = "block";
-                    // aqui se puede cambiar el texto
-                    msg.textContent = "Por favor llene este campo correctamente"
-                    alert('Hay que no se llenaron correctamente')
+                    msg.textContent =
+                      "Por favor llene este campo correctamente";
+                    alert("Hay que no se llenaron correctamente");
                   }
                 }
 
                 postAffiliate(data)
                   .then((response) => response.json())
                   .then((json) => {
-                    console.log(json);
+                    // console.log(json);
                     if (json["result"] === "ok") {
                       console.log("guardado");
                       alert("Afiliado registrado con éxito.");
+                    } else if (json["error"] === "Document already exists") {
+                      
+                      try {
+                        let input = document.getElementsByName('document')[0]
+                        let msg = input.parentElement.getElementsByClassName('fielderror-msg')[0]
+                        
+                        input.classList.add("entry-1-errorstatus");
+                        msg.style.display = "block";
+                        msg.textContent = "Ya existe una historia con esta cédula";
+                      } catch (error){
+                        throw error
+                      } finally {
+                        alert(
+                          "Ya hay una historia registrada con es cédula. Por favor revise que esté bien escrita."
+                        );
+                      }
                     }
                   })
                   .catch((error) => {
-                    alert("Error, no se guardó.");
-                    throw new Error(error);
+                    alert(
+                      "Ocurrió un error tratando de registrar la historia."
+                    );
+                    console.log(error.msg);
                   });
               }}
             />
@@ -276,7 +298,12 @@ function RecordDetailsDataContainer({
           });
         }}
       />
-      <span style={{ display: "none",  color:'var(--act-danger)'}} className="title-small fielderror-msg">Llene este campo correctamente</span>
+      <span
+        style={{ display: "none", color: "var(--act-danger)" }}
+        className="title-small fielderror-msg"
+      >
+        Llene este campo correctamente
+      </span>
     </div>
   );
 }
@@ -317,7 +344,12 @@ function RecordDetailsOptionsContainer({
           );
         })}
       </select>
-      <span style={{ display: "none",  color:'var(--act-danger)'}} className="title-small fielderror-msg">Llene este campo correctamente</span>
+      <span
+        style={{ display: "none", color: "var(--act-danger)" }}
+        className="title-small fielderror-msg"
+      >
+        Llene este campo correctamente
+      </span>
     </div>
   );
 }
@@ -341,7 +373,7 @@ function RecordDetailsFechaContainer({
         className={"paragraph-regular entry-1-active "}
         type="date"
         name={name}
-        value={data[name] || ''}
+        value={data[name] || ""}
         onChange={(e) =>
           setData({
             ...data,
@@ -349,7 +381,12 @@ function RecordDetailsFechaContainer({
           })
         }
       />
-      <span style={{ display: "none",  color:'var(--act-danger)'}} className="title-small fielderror-msg">Llene este campo correctamente</span>
+      <span
+        style={{ display: "none", color: "var(--act-danger)" }}
+        className="title-small fielderror-msg"
+      >
+        Llene este campo correctamente
+      </span>
     </div>
   );
 }

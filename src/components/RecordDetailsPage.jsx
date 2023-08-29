@@ -27,6 +27,8 @@ import React, { useEffect, useState } from "react";
 
 // TODO mostrar en interfaz el resultado de guardar las secciones
 
+// TODO manejar reposos y cuidos vacios
+
 export function RecordDetailsPage() {
   let { id } = useParams();
   let [recordData, setRecordData] = useState({});
