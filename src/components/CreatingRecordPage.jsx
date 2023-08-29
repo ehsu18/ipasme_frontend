@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import * as icons from "./Icons";
-import { ButtonBig, PersonTypeTag } from "./Buttons";
+import { ButtonBig } from "./Buttons";
 import { postAffiliate } from "../tools/api";
+
+// hay que manejar la situacion de "la historia ya existe"
 
 export function CreatingRecordPage() {
   let [data, setData] = useState({});
@@ -45,7 +47,7 @@ export function CreatingRecordPage() {
               name="nationality"
               options={["V", "E"]}
             />
-            <RecordDetailsDataContainer
+            <RecordDetailsFechaContainer
               label="Fecha de nacimiento"
               name="dateofbirth"
             />
@@ -144,17 +146,69 @@ export function CreatingRecordPage() {
                 if (Object.keys(data) === 0) {
                   alert("Llene los datos primero");
                 }
+
+                // TODO esto se puede llevar a utilities
+                const TXT_REGX = /^\w/
+                const NUM_REGX = /^\d+$/
+                const NATIONALITY_REGX = /^[V||E]$/ //puede expandirse
+                const DATE_REGX = /^\d{4}-\d{2}-\d{2}$/
+                const JOBSTAT_REGX = /^$/ // TODO terminar este regx
+                const GENDER_REGX = /^[M||F]$/
+
+                let validations = {
+                  names: TXT_REGX,
+                  lastnames: TXT_REGX,
+                  document: NUM_REGX,
+                  nationality: NATIONALITY_REGX,
+                  dateofbirth: DATE_REGX,
+                  gender: GENDER_REGX,
+                  phone_personal: NUM_REGX,
+                  job_name: TXT_REGX,
+                  job_direction: TXT_REGX,
+                  job_title: TXT_REGX,
+                  job_status: TXT_REGX,
+                };
+
+                for (let keyword in validations) {
+                  const input = document.getElementsByName(keyword)[0];
+                  const container = input.parentElement;
+                  const msg =
+                    container.getElementsByClassName("fielderror-msg")[0];
+                  console.log(input, container, msg)
+                  if (data[keyword] === undefined) {
+                    // field requerido
+                    input.classList.add("entry-1-errorstatus");
+                    msg.style.display = "block";
+                    // aqui se puede cambiar el texto de msg
+                    msg.textContent = "Por favor llene este campo"
+                    alert('Hay campos que no se llenaron')
+                    return
+                  } else if (validations[keyword].test(data[keyword])) {
+                    //todo bien
+                    input.classList.remove("entry-1-errorstatus");
+                    msg.style.display = "none";
+                    msg.textContent = null;
+                  } else {
+                    // existe pero no es valido
+                    input.classList.add("entry-1-errorstatus");
+                    msg.style.display = "block";
+                    // aqui se puede cambiar el texto
+                    msg.textContent = "Por favor llene este campo correctamente"
+                    alert('Hay que no se llenaron correctamente')
+                  }
+                }
+
                 postAffiliate(data)
                   .then((response) => response.json())
                   .then((json) => {
                     console.log(json);
-                    if(json['result'] === 'ok'){
-                      console.log('guardado')
-                      alert('Afiliado registrado con éxito.')
+                    if (json["result"] === "ok") {
+                      console.log("guardado");
+                      alert("Afiliado registrado con éxito.");
                     }
                   })
                   .catch((error) => {
-                    alert('Error, no se guardó.')
+                    alert("Error, no se guardó.");
                     throw new Error(error);
                   });
               }}
@@ -214,7 +268,7 @@ function RecordDetailsDataContainer({
         className="paragraph-regular entry-1-active "
         type="text"
         name={name}
-        value={data[name] || ''}
+        value={data[name] || ""}
         onChange={(e) => {
           setData({
             ...data,
@@ -222,6 +276,7 @@ function RecordDetailsDataContainer({
           });
         }}
       />
+      <span style={{ display: "none",  color:'var(--act-danger)'}} className="title-small fielderror-msg">Llene este campo correctamente</span>
     </div>
   );
 }
@@ -262,6 +317,7 @@ function RecordDetailsOptionsContainer({
           );
         })}
       </select>
+      <span style={{ display: "none",  color:'var(--act-danger)'}} className="title-small fielderror-msg">Llene este campo correctamente</span>
     </div>
   );
 }
@@ -271,17 +327,9 @@ function RecordDetailsFechaContainer({
   doubleColumn = false,
   data = {},
   setData = () => {},
-  sectionEditingStatus = false,
 }) {
   // let [state, setState] = useState();
   // TODO los valores indefinidos se deben representar con el placeholder
-  // readonly, active, blocked, selected ... soon -> hover, error, warning
-  let [date, setDate] = useState("");
-  useEffect(() => {
-    if (data[name]) {
-      setDate(data[name].split("T")[0]);
-    }
-  }, [data, name]);
 
   return (
     <div
@@ -290,14 +338,10 @@ function RecordDetailsFechaContainer({
     >
       <span className="micro-italic">{label}</span>
       <input
-        readOnly={!sectionEditingStatus}
-        className={
-          "paragraph-regular " +
-          (sectionEditingStatus ? "entry-1-active " : "entry-1-readonly")
-        }
+        className={"paragraph-regular entry-1-active "}
         type="date"
         name={name}
-        value={date} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
+        value={data[name] || ''}
         onChange={(e) =>
           setData({
             ...data,
@@ -305,6 +349,7 @@ function RecordDetailsFechaContainer({
           })
         }
       />
+      <span style={{ display: "none",  color:'var(--act-danger)'}} className="title-small fielderror-msg">Llene este campo correctamente</span>
     </div>
   );
 }
