@@ -130,7 +130,7 @@ export function RecordDetailsPage() {
             recordData={recordData}
             setRecordData={setRecordData}
           >
-            <RecordDetailsDataContainer label="Cedula" name="document" />
+            <RecordDetailsNumbersContainer label="Cedula" name="document" />
             <RecordDetailsOptionsContainer
               label="Nacionalidad"
               name="nationality"
@@ -413,8 +413,48 @@ function RecordDetailsDataContainer({
         }
         type="text" // TODO cambie esto de label a 'text' porque no entendi por que lo habia hecho asi
         name={name}
-        value={data[name] || "indefinido"} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
+        placeholder="indefinido"
+        value={data[name] || ""} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
         onChange={(e) => {
+          setData({
+            ...data,
+            [name]: e.target.value,
+          });
+        }}
+      />
+    </div>
+  );
+}
+function RecordDetailsNumbersContainer({
+  label = "",
+  name = "",
+  doubleColumn = false,
+
+  data = {},
+  setData = () => {},
+  sectionEditingStatus = false,
+}) {
+  // let [state, setState] = useState();
+  // TODO los valores indefinidos se deben representar con el placeholder
+  // readonly, active, blocked, selected ... soon -> hover, error, warning
+  return (
+    <div
+      className="recorddetails-section-datacontainer"
+      style={doubleColumn ? { gridColumn: "span 2" } : {}}
+    >
+      <span className="micro-italic">{label}</span>
+      <input
+        readOnly={!sectionEditingStatus}
+        placeholder="indefinido"
+        className={
+          "paragraph-regular " +
+          (sectionEditingStatus ? "entry-1-active " : "entry-1-readonly")
+        }
+        type="text" // TODO cambie esto de label a 'text' porque no entendi por que lo habia hecho asi
+        name={name}
+        value={data[name] || ""} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
+        onChange={(e) => {
+          e.target.value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\.*)\./g, '')
           setData({
             ...data,
             [name]: e.target.value,
@@ -449,7 +489,7 @@ function RecordDetailsOptionsContainer({
           (sectionEditingStatus ? "entry-1-active " : "entry-1-readonly")
         }
         name={name}
-        value={data[name] || "default"} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
+        value={data[name] || "default"} 
         onChange={(e) =>
           setData({
             ...data,
@@ -481,6 +521,13 @@ function RecordDetailsFechaContainer({
   setData = () => {},
   sectionEditingStatus = false,
 }) {
+  function convertDate(date){
+    try{
+      return date.split("T")[0]  
+    } catch {
+      return ''
+    }
+  }
 
   return (
     <div
@@ -496,7 +543,7 @@ function RecordDetailsFechaContainer({
         }
         type="date"
         name={name}
-        value={data[name].split("T")[0] || ''} 
+        value={convertDate(data[name])} 
         onChange={(e) =>
           setData({
             ...data,

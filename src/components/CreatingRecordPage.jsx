@@ -44,7 +44,7 @@ export function CreatingRecordPage() {
               name="lastnames"
               doubleColumn
             />
-            <RecordDetailsDataContainer label="Cédula" name="document" />
+            <RecordDetailsNumberContainer label="Cédula" name="document" />
             {/* se debe hacer un componente para numero o validar de alguna manera */}
             <RecordDetailsOptionsContainer
               label="Nacionalidad (obligatorio)"
@@ -292,6 +292,47 @@ function RecordDetailsDataContainer({
         name={name}
         value={data[name] || ""}
         onChange={(e) => {
+          setData({
+            ...data,
+            [name]: e.target.value,
+          });
+        }}
+      />
+      <span
+        style={{ display: "none", color: "var(--act-danger)" }}
+        className="title-small fielderror-msg"
+      >
+        Llene este campo correctamente
+      </span>
+    </div>
+  );
+}
+function RecordDetailsNumberContainer({
+  label = "",
+  name = "",
+  doubleColumn = false,
+
+  data = {},
+  setData = () => {},
+}) {
+  // let [state, setState] = useState();
+  // TODO los valores indefinidos se deben representar con el placeholder
+  // readonly, active, blocked, selected ... soon -> hover, error, warning
+  return (
+    <div
+      className="recorddetails-section-datacontainer"
+      style={doubleColumn ? { gridColumn: "span 2" } : {}}
+    >
+      <span className="micro-italic">{label}</span>
+      <input
+
+        className="paragraph-regular entry-1-active "
+        type="text"
+        name={name}
+        value={data[name] || ""}
+
+        onChange={(e) => {
+          e.target.value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\.*)\./g, '')
           setData({
             ...data,
             [name]: e.target.value,
