@@ -2,3 +2,5 @@ TODO    el boton de cerrar sesion no tiene el color de letra adecuado
 
 TODO    los elementos de la lista de historias deben crecer verticalmente
         si no cabe el texto hasta cierto limite
+        
+TODO    navbar deberia iniciar mostrando en que pantalla estamos

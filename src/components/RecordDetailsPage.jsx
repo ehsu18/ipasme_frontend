@@ -588,17 +588,18 @@ function CitasTable({ recordId }) {
       >
         {Array.isArray(citas) && citas.length > 0 ? (
           <table className="details-table">
+            <thead>
             <tr className="details-table-headerrow">
-              {/* <th className="selector-container">selector</th> */}
               <th>Fecha</th>
               <th>Área médica</th>
               <th>Diagnóstico</th>
               <th className="vermas">Ver Consulta</th>
             </tr>
+            </thead>
+            <tbody>
             {citas.map((cita, index) => {
               return (
                 <tr key={index} className="details-table-row">
-                  {/* <td className="selector-container">selector</td> */}
                   <td>
                     {dateToString(cita.fecha.split("T")[0]) || "No indica"}
                   </td>
@@ -612,6 +613,7 @@ function CitasTable({ recordId }) {
                 </tr>
               );
             })}
+            </tbody>
           </table>
         ) : (
           "Sin citas"
@@ -622,7 +624,7 @@ function CitasTable({ recordId }) {
       <ButtonBig
             text="Añadir cita"
             icon={icons.DocumentEdit}
-            type="main"
+            type="secondary"
       />
       </div>
     </section>
@@ -657,12 +659,15 @@ function CitasOdonTable({ recordId }) {
       >
         {Array.isArray(citas) && citas.length > 0 ? (
           <table className="details-table">
+            <thead>
             <tr className="details-table-headerrow">
               {/* <th className="selector-container">selector</th> */}
               <th>Fecha</th>
               <th>Diagnóstico</th>
               <th className="vermas">Ver Consulta</th>
             </tr>
+            </thead>
+            <tbody>
             {citas.map((cita, index) => {
               return (
                 <tr key={index} className="details-table-row">
@@ -679,6 +684,7 @@ function CitasOdonTable({ recordId }) {
                 </tr>
               );
             })}
+            </tbody>
           </table>
         ) : (
           "Sin citas"
@@ -689,7 +695,7 @@ function CitasOdonTable({ recordId }) {
       <ButtonBig
             text="Añadir cita"
             icon={icons.DocumentEdit}
-            type="main"
+            type="secondary"
       />
       </div>
     </section>
@@ -738,13 +744,12 @@ function RecordDetailsRepososTable({
       </header>
 
       {
-        Array.isArray(data) ?
+        Array.isArray(data) && data.length > 0 ?
         <table className="details-table" style={{gridColumn: 'span 2 / auto'}} >
           <tr className="details-table-headerrow">
             <th>Fechas</th>
             <th>D&iacute;as</th>
             <th>Especialidad médica</th>
-            <th>Días acumulados</th>
             <th>Ver reposo</th>
           </tr>
           {data.map((row, index)=>(
@@ -752,7 +757,6 @@ function RecordDetailsRepososTable({
               <td>{row.fecha_inicio + " - " + row.fecha_fin}</td>
               <td>{row.dias}</td>
               <td>{row.especialidad}</td>
-              <td><span> - </span></td> {/* TODO calcular esto */}
               <td className="vermas title-small"><a>{icons.EyeOpen(16)} Abrir</a></td>
             </tr>
           ))}
@@ -770,7 +774,7 @@ function RecordDetailsRepososTable({
           <ButtonBig
             text="Añadir"
             icon={icons.DocumentEdit}
-            type="main"
+            type="secondary"
             
           />
         </div>
@@ -792,23 +796,6 @@ function RecordDetailsCuidosTable({
     .then((response)=>response.json())
     .then((data)=>{setData(data)})
     .catch((error)=>{throw error})
-    // console.log("section loading data", name);
-    // setData([
-    //   {
-    //     fecha_inicio: "2023-05-09",
-    //     fecha_fin:"2023-05-19",
-    //     dias:10,
-    //     area:'Medicina interna',
-    //     id:'adfasdfasdf'
-    //   },
-    //   {
-    //     fecha_inicio: "2023-05-09",
-    //     fecha_fin:"2023-05-19",
-    //     dias:10,
-    //     area:'Medicina interna',
-    //     id:'adfasdfasdf'
-    //   }
-    // ])
   }, [recordId, name]);
 
   return (
@@ -821,24 +808,26 @@ function RecordDetailsCuidosTable({
       </header>
 
       {
-        Array.isArray(data) ?
+        Array.isArray(data) && data.length > 0 ?
         <table className="details-table" style={{gridColumn: 'span 2 / auto'}} >
+          <thead>
           <tr className="details-table-headerrow">
             <th>Fechas</th>
             <th>D&iacute;as</th>
             <th>Beneficiario</th>
-            <th>Días acumulados</th>
             <th>Ver cuido</th>
           </tr>
+          </thead>
+          <tbody>
           {data.map((row, index)=>(
             <tr key={index} className="details-table-row">
               <td>{row.fecha_inicio + " - " + row.fecha_fin}</td>
               <td>{row.dias}</td>
               <td>{row.beneficiary_name || row.beneficiary || row.beneficiary_id}</td>
-              <td><span> - </span></td> {/* TODO calcular esto */}
               <td className="vermas title-small"><a>{icons.EyeOpen(16)} Abrir</a></td>
             </tr>
           ))}
+          </tbody>
         </table>
         
         : <span>Vac&iacute;o</span>
@@ -853,7 +842,7 @@ function RecordDetailsCuidosTable({
           <ButtonBig
             text="Añadir"
             icon={icons.DocumentEdit}
-            type="main"
+            type="secondary"
             
           />
         </div>
