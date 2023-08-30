@@ -77,11 +77,11 @@ export function CreatingRecordPage() {
               name="email"
               doubleColumn
             />
-            <RecordDetailsDataContainer
+            <RecordDetailsNumberContainer
               label="Teléfono 1 (obligatorio)"
               name="phone_personal"
             />
-            <RecordDetailsDataContainer
+            <RecordDetailsNumberContainer
               label="Teléfono 2"
               name="phone_optional"
             />

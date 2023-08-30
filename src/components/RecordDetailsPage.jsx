@@ -165,11 +165,11 @@ export function RecordDetailsPage() {
             setRecordData={setRecordData}
             icon={icons.Phone}
           >
-            <RecordDetailsDataContainer
+            <RecordDetailsNumbersContainer
               label="Telefono personal"
               name="phone_personal"
             />
-            <RecordDetailsDataContainer
+            <RecordDetailsNumbersContainer
               label="Telefono opcional"
               name="phone_optional"
             />
@@ -313,14 +313,16 @@ function RecordDetailsSection({
           }
         </span>
         <div className="flex-h gap12">
-          {/* TODO cancelar aun no es util */}
+
           {editStatus ? (
             <ButtonBig
               text="Cancelar"
               icon={icons.CrossSmall}
               type="secondary"
               action={async (e) => {
+                setData(recordData[name]);
                 setEditStatus(false);
+                
               }}
             />
           ) : (
