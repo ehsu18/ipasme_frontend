@@ -123,6 +123,19 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
   // let [selected, setSelected] = useState(false);
   // console.log(recordData)
 
+  function calcAge(date) {
+    try {
+      let dob = new Date(date);
+      let month_diff = Date.now() - dob.getTime();
+      let age_d = new Date(month_diff);
+      let year = age_d.getUTCFullYear();
+
+      return Math.abs(year - 1970);
+    } catch {
+      return "";
+    }
+  }
+
   try {
     return (
       <div
@@ -135,25 +148,29 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
       >
         <div className="selection-box"></div>
         <span className="identification-text title-regular">
-          {(recordData["basic_info"]["nationality"] ? recordData["basic_info"]["nationality"] + "-": '') +
-            (recordData["basic_info"]["document"] ? recordData["basic_info"]["document"] : '')}
+          {(recordData["basic_info"]["nationality"]
+            ? recordData["basic_info"]["nationality"] + "-"
+            : "") +
+            (recordData["basic_info"]["document"]
+              ? recordData["basic_info"]["document"]
+              : "")}
         </span>
         <span className="name-text paragraph-regular">
-          {(recordData["basic_info"]["names"] ? recordData["basic_info"]["names"].trim() : '') +
+          {(recordData["basic_info"]["names"]
+            ? recordData["basic_info"]["names"].trim()
+            : "") +
             " " +
-            (recordData["basic_info"]["lastnames"] ? recordData["basic_info"]["lastnames"].trim() : '')}
+            (recordData["basic_info"]["lastnames"]
+              ? recordData["basic_info"]["lastnames"].trim()
+              : "")}
         </span>
-        <span className="age-text paragraph-regular">{
-          "Calc edad"
-        }</span>
+        <span className="age-text paragraph-regular">
+          {calcAge(recordData["basic_info"]["dateofbirth"])}
+        </span>
         {/* <span className="sex-text paragraph-regular">Masculino</span> */}
         <div className="flex-h">
           {/* TODO debe resvisarse el tipo */}
-          <PersonTypeTag
-            type={
-              recordData["type"]
-            }
-          />
+          <PersonTypeTag type={recordData["type"]} />
         </div>
         <div>
           <ButtonSmall
