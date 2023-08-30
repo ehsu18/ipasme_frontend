@@ -1,4 +1,11 @@
-import { getCitas, getCitasOdon, getRecords, putAffiliate, getAffiliateReposos, getAffiliateCuidos } from "../tools/api";
+import {
+  getCitas,
+  getCitasOdon,
+  getRecords,
+  putAffiliate,
+  getAffiliateReposos,
+  getAffiliateCuidos,
+} from "../tools/api";
 import { dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
 import { ButtonBig, PersonTypeTag } from "./Buttons";
@@ -228,7 +235,10 @@ export function RecordDetailsPage() {
             setRecordData={setRecordData}
             icon={icons.Tooth}
           >
-            <RecordDetailsDataContainer label="Ubicacion de la carpeta" name="odon_folder" />
+            <RecordDetailsDataContainer
+              label="Ubicacion de la carpeta"
+              name="odon_folder"
+            />
             <RecordDetailsDataContainer
               label="Padecimientos"
               name="odon_padecimientos"
@@ -242,19 +252,51 @@ export function RecordDetailsPage() {
           <CitasOdonTable recordId={recordData.id} />
           {/* solo para afiliados */}
           <RecordDetailsRepososTable
-            title = "Record de reposos"
-            name = "reposos"
-            icon = {icons.CalendarUser}
-          
+            title="Record de reposos"
+            name="reposos"
+            icon={icons.CalendarUser}
             recordId={recordData.id}
           />
           <RecordDetailsCuidosTable
-            title = "Record de cuidos"
-            name = "cuidos"
-            icon = {icons.CalendarUser}
-          
+            title="Record de cuidos"
+            name="cuidos"
+            icon={icons.CalendarUser}
             recordId={recordData.id}
           />
+          <section className="gap24 flex-h pad24">
+            <div className="flex-v gap4">
+              <span className="title-regular">Borrar esta historia</span>
+              <p className="paragraph-regular ">Esto eliminará todos los datos de esta historia, incluyendo las citas, los reposos y los cuidos. También se eliminará de la lista de relaciones que tengan a esta historia.
+              </p>
+            </div>
+            <ButtonBig
+              type="danger"
+              text="Borrar historia"
+              icon={icons.Trash2}
+              action={() => {
+                if (
+                  window.confirm(
+                    "¿Está seguro de querer ELIMINAR esta historia? Esto no se puede deshacer, por lo que se perderán todos los datos de esta historia incluidas las citas, reposos y cuidos."
+                  )
+                ) {
+                  if (
+                    prompt(
+                      `Escriba el nombre de la historia "${recordData["basic_info"]["names"]}":`
+                    ) !== recordData["basic_info"]["names"]
+                  ) {
+                    alert(
+                      "Escribió mal el nombre, debe escribirlo exactamente igual."
+                    );
+                  }
+                } else {
+                  alert("Cancelado, no se eliminará esta historia.");
+                }
+
+                console.log("Borrando historia...");
+                console.log("Borrada.");
+              }}
+            />
+          </section>
         </div>
       </div>
     </main>
@@ -313,7 +355,6 @@ function RecordDetailsSection({
           }
         </span>
         <div className="flex-h gap12">
-
           {editStatus ? (
             <ButtonBig
               text="Cancelar"
@@ -322,7 +363,6 @@ function RecordDetailsSection({
               action={async (e) => {
                 setData(recordData[name]);
                 setEditStatus(false);
-                
               }}
             />
           ) : (
@@ -339,27 +379,26 @@ function RecordDetailsSection({
               }
 
               setEditStatus(false); // TODO se puede mostrar un mensaje de carga
-              
+
               let changes = {};
               // ver si existe la data en el objeto principal
-              if (recordData[name]){
+              if (recordData[name]) {
                 // si existe, compararla
                 for (let key in data) {
                   if (data[key] !== recordData[name][key]) {
                     changes[key] = data[key];
                   }
                 }
-                
+
                 //no hay cambios
                 if (Object.keys(changes).length === 0) {
-                // TODO lanzar un mensaje de sin cambios
-                return;
+                  // TODO lanzar un mensaje de sin cambios
+                  return;
                 }
-
               } else {
                 changes = data;
               }
-              
+
               // si hay cambios
               putAffiliate(recordData["id"], { [name]: changes })
                 .then((response) => {
@@ -368,19 +407,18 @@ function RecordDetailsSection({
                 .then((json) => {
                   // mostrar un mensaje en ui
                   if (json["result"] === "ok") {
-                    alert("Datos guardados")
+                    alert("Datos guardados");
                     setRecordData({
                       ...recordData,
                       [name]: data,
                     });
-                  } else if (json["error"]){
-                    alert("Ocurrió un error y no se guardaron los datos.")
+                  } else if (json["error"]) {
+                    alert("Ocurrió un error y no se guardaron los datos.");
                   }
-                   
                 })
                 .catch((error) => {
                   console.error(error); // TODO mostrar este error en ui con un mensaje
-                  alert('Ocurrió un error.')  //TODO esto es necesario o lo hace el useEffect?
+                  alert("Ocurrió un error."); //TODO esto es necesario o lo hace el useEffect?
                 });
             }}
           />
@@ -456,7 +494,9 @@ function RecordDetailsNumbersContainer({
         name={name}
         value={data[name] || ""} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
         onChange={(e) => {
-          e.target.value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\.*)\./g, '')
+          e.target.value = e.target.value
+            .replace(/[^0-9.]/g, "")
+            .replace(/(\.*)\./g, "");
           setData({
             ...data,
             [name]: e.target.value,
@@ -491,7 +531,7 @@ function RecordDetailsOptionsContainer({
           (sectionEditingStatus ? "entry-1-active " : "entry-1-readonly")
         }
         name={name}
-        value={data[name] || "default"} 
+        value={data[name] || "default"}
         onChange={(e) =>
           setData({
             ...data,
@@ -523,11 +563,11 @@ function RecordDetailsFechaContainer({
   setData = () => {},
   sectionEditingStatus = false,
 }) {
-  function convertDate(date){
-    try{
-      return date.split("T")[0]  
+  function convertDate(date) {
+    try {
+      return date.split("T")[0];
     } catch {
-      return ''
+      return "";
     }
   }
 
@@ -545,7 +585,7 @@ function RecordDetailsFechaContainer({
         }
         type="date"
         name={name}
-        value={convertDate(data[name])} 
+        value={convertDate(data[name])}
         onChange={(e) =>
           setData({
             ...data,
@@ -589,30 +629,30 @@ function CitasTable({ recordId }) {
         {Array.isArray(citas) && citas.length > 0 ? (
           <table className="details-table">
             <thead>
-            <tr className="details-table-headerrow">
-              <th>Fecha</th>
-              <th>Área médica</th>
-              <th>Diagnóstico</th>
-              <th className="vermas">Ver Consulta</th>
-            </tr>
+              <tr className="details-table-headerrow">
+                <th>Fecha</th>
+                <th>Área médica</th>
+                <th>Diagnóstico</th>
+                <th className="vermas">Ver Consulta</th>
+              </tr>
             </thead>
             <tbody>
-            {citas.map((cita, index) => {
-              return (
-                <tr key={index} className="details-table-row">
-                  <td>
-                    {dateToString(cita.fecha.split("T")[0]) || "No indica"}
-                  </td>
-                  <td>{cita.area || "No indica"}</td>
-                  <td>{cita.diagnose || "No indica"}</td>
-                  <td className="vermas title-small">
-                    <a href={"/citas/" + cita.id}>
-                      {icons.EyeOpen(16)} Ver más
-                    </a>
-                  </td>
-                </tr>
-              );
-            })}
+              {citas.map((cita, index) => {
+                return (
+                  <tr key={index} className="details-table-row">
+                    <td>
+                      {dateToString(cita.fecha.split("T")[0]) || "No indica"}
+                    </td>
+                    <td>{cita.area || "No indica"}</td>
+                    <td>{cita.diagnose || "No indica"}</td>
+                    <td className="vermas title-small">
+                      <a href={"/citas/" + cita.id}>
+                        {icons.EyeOpen(16)} Ver más
+                      </a>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         ) : (
@@ -620,12 +660,15 @@ function CitasTable({ recordId }) {
         )}
       </div>
       {/* TODO hace falta paginar la lista de citas para que no se haga infinita */}
-      <div className="flex-h gap12" style={{gridColumn:'2', justifyContent:'right'}}>
-      <ButtonBig
-            text="Añadir cita"
-            icon={icons.DocumentEdit}
-            type="secondary"
-      />
+      <div
+        className="flex-h gap12"
+        style={{ gridColumn: "2", justifyContent: "right" }}
+      >
+        <ButtonBig
+          text="Añadir cita"
+          icon={icons.DocumentEdit}
+          type="secondary"
+        />
       </div>
     </section>
   );
@@ -660,30 +703,30 @@ function CitasOdonTable({ recordId }) {
         {Array.isArray(citas) && citas.length > 0 ? (
           <table className="details-table">
             <thead>
-            <tr className="details-table-headerrow">
-              {/* <th className="selector-container">selector</th> */}
-              <th>Fecha</th>
-              <th>Diagnóstico</th>
-              <th className="vermas">Ver Consulta</th>
-            </tr>
+              <tr className="details-table-headerrow">
+                {/* <th className="selector-container">selector</th> */}
+                <th>Fecha</th>
+                <th>Diagnóstico</th>
+                <th className="vermas">Ver Consulta</th>
+              </tr>
             </thead>
             <tbody>
-            {citas.map((cita, index) => {
-              return (
-                <tr key={index} className="details-table-row">
-                  {/* <td className="selector-container">selector</td> */}
-                  <td>
-                    {dateToString(cita.fecha.split("T")[0]) || "No indica"}
-                  </td>
-                  <td>{cita.diagnose || "No indica"}</td>
-                  <td className="vermas title-small">
-                    <a href={"/citasodon/" + cita.id}>
-                      {icons.EyeOpen(16)} Ver más
-                    </a>
-                  </td>
-                </tr>
-              );
-            })}
+              {citas.map((cita, index) => {
+                return (
+                  <tr key={index} className="details-table-row">
+                    {/* <td className="selector-container">selector</td> */}
+                    <td>
+                      {dateToString(cita.fecha.split("T")[0]) || "No indica"}
+                    </td>
+                    <td>{cita.diagnose || "No indica"}</td>
+                    <td className="vermas title-small">
+                      <a href={"/citasodon/" + cita.id}>
+                        {icons.EyeOpen(16)} Ver más
+                      </a>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         ) : (
@@ -691,12 +734,15 @@ function CitasOdonTable({ recordId }) {
         )}
       </div>
       {/* TODO hace falta paginar la lista de citas para que no se haga infinita */}
-      <div className="flex-h gap12" style={{gridColumn:'2', justifyContent:'right'}}>
-      <ButtonBig
-            text="Añadir cita"
-            icon={icons.DocumentEdit}
-            type="secondary"
-      />
+      <div
+        className="flex-h gap12"
+        style={{ gridColumn: "2", justifyContent: "right" }}
+      >
+        <ButtonBig
+          text="Añadir cita"
+          icon={icons.DocumentEdit}
+          type="secondary"
+        />
       </div>
     </section>
   );
@@ -706,15 +752,19 @@ function RecordDetailsRepososTable({
   name,
   icon,
 
-  recordId
+  recordId,
 }) {
   let [data, setData] = useState({});
 
   useEffect(() => {
     getAffiliateReposos(recordId)
-    .then((response)=>response.json())
-    .then((data)=>{setData(data)})
-    .catch((error)=>{throw error})
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+      })
+      .catch((error) => {
+        throw error;
+      });
     // console.log("section loading data", name);
     // setData([
     //   {
@@ -735,48 +785,42 @@ function RecordDetailsRepososTable({
   }, [recordId, name]);
 
   return (
-    <section
-      className="recorddetails-section"
-    >
+    <section className="recorddetails-section">
       <header className="felx-h">
         {icon ? icon(24) : icons.User1(24)}
         <span className="title-regular">{title}</span>
       </header>
 
-      {
-        Array.isArray(data) && data.length > 0 ?
-        <table className="details-table" style={{gridColumn: 'span 2 / auto'}} >
+      {Array.isArray(data) && data.length > 0 ? (
+        <table
+          className="details-table"
+          style={{ gridColumn: "span 2 / auto" }}
+        >
           <tr className="details-table-headerrow">
             <th>Fechas</th>
             <th>D&iacute;as</th>
             <th>Especialidad médica</th>
             <th>Ver reposo</th>
           </tr>
-          {data.map((row, index)=>(
+          {data.map((row, index) => (
             <tr key={index} className="details-table-row">
               <td>{row.fecha_inicio + " - " + row.fecha_fin}</td>
               <td>{row.dias}</td>
               <td>{row.especialidad}</td>
-              <td className="vermas title-small"><a>{icons.EyeOpen(16)} Abrir</a></td>
+              <td className="vermas title-small">
+                <a>{icons.EyeOpen(16)} Abrir</a>
+              </td>
             </tr>
           ))}
         </table>
-        
-        : <span>Vac&iacute;o</span>
-      }
+      ) : (
+        <span>Vac&iacute;o</span>
+      )}
 
       <div className="flex-h recorddetails-section-info">
-        <span className="micro-italic">
-          {/* aqui puede ir un texto */}
-        </span>
+        <span className="micro-italic">{/* aqui puede ir un texto */}</span>
         <div className="flex-h gap12">
-  
-          <ButtonBig
-            text="Añadir"
-            icon={icons.DocumentEdit}
-            type="secondary"
-            
-          />
+          <ButtonBig text="Añadir" icon={icons.DocumentEdit} type="secondary" />
         </div>
       </div>
     </section>
@@ -787,64 +831,66 @@ function RecordDetailsCuidosTable({
   name,
   icon,
 
-  recordId
+  recordId,
 }) {
   let [data, setData] = useState({});
 
   useEffect(() => {
     getAffiliateCuidos(recordId)
-    .then((response)=>response.json())
-    .then((data)=>{setData(data)})
-    .catch((error)=>{throw error})
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+      })
+      .catch((error) => {
+        throw error;
+      });
   }, [recordId, name]);
 
   return (
-    <section
-      className="recorddetails-section"
-    >
+    <section className="recorddetails-section">
       <header className="felx-h">
         {icon ? icon(24) : icons.User1(24)}
         <span className="title-regular">{title}</span>
       </header>
 
-      {
-        Array.isArray(data) && data.length > 0 ?
-        <table className="details-table" style={{gridColumn: 'span 2 / auto'}} >
+      {Array.isArray(data) && data.length > 0 ? (
+        <table
+          className="details-table"
+          style={{ gridColumn: "span 2 / auto" }}
+        >
           <thead>
-          <tr className="details-table-headerrow">
-            <th>Fechas</th>
-            <th>D&iacute;as</th>
-            <th>Beneficiario</th>
-            <th>Ver cuido</th>
-          </tr>
+            <tr className="details-table-headerrow">
+              <th>Fechas</th>
+              <th>D&iacute;as</th>
+              <th>Beneficiario</th>
+              <th>Ver cuido</th>
+            </tr>
           </thead>
           <tbody>
-          {data.map((row, index)=>(
-            <tr key={index} className="details-table-row">
-              <td>{row.fecha_inicio + " - " + row.fecha_fin}</td>
-              <td>{row.dias}</td>
-              <td>{row.beneficiary_name || row.beneficiary || row.beneficiary_id}</td>
-              <td className="vermas title-small"><a>{icons.EyeOpen(16)} Abrir</a></td>
-            </tr>
-          ))}
+            {data.map((row, index) => (
+              <tr key={index} className="details-table-row">
+                <td>{row.fecha_inicio + " - " + row.fecha_fin}</td>
+                <td>{row.dias}</td>
+                <td>
+                  {row.beneficiary_name ||
+                    row.beneficiary ||
+                    row.beneficiary_id}
+                </td>
+                <td className="vermas title-small">
+                  <a>{icons.EyeOpen(16)} Abrir</a>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
-        
-        : <span>Vac&iacute;o</span>
-      }
+      ) : (
+        <span>Vac&iacute;o</span>
+      )}
 
       <div className="flex-h recorddetails-section-info">
-        <span className="micro-italic">
-          {/* aqui puede ir un texto */}
-        </span>
+        <span className="micro-italic">{/* aqui puede ir un texto */}</span>
         <div className="flex-h gap12">
-  
-          <ButtonBig
-            text="Añadir"
-            icon={icons.DocumentEdit}
-            type="secondary"
-            
-          />
+          <ButtonBig text="Añadir" icon={icons.DocumentEdit} type="secondary" />
         </div>
       </div>
     </section>

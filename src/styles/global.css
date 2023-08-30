@@ -241,6 +241,12 @@ a {
 .gap12 {
   gap: 12px;
 }
+.gap8 {
+  gap: 8px;
+}
+.gap4 {
+  gap: 4px;
+}
 .gap-auto {
   justify-content: space-between;
 }
