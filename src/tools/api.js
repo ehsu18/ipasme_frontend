@@ -81,6 +81,20 @@ export function postAffiliate(data) {
   });
 }
 
+export function deleteAffiliate(id) {
+  // console.log(data)
+  if (id && !id.match("^[\\w]{24}$")) {
+    throw new Error(`invalid id (${id}) at put affiliate`);
+  }
+  return fetch(API_URL + AFFILIATE_URL + "/" + id, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    }
+  });
+}
+
 export async function getRecords(id = "") {
   if (id !== "") {
     id = "/" + id;

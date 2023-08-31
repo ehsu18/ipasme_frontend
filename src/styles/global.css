@@ -235,6 +235,9 @@ a {
   /* align-items: center; */
   justify-content: center;
 }
+.gap48 {
+  gap: 48px;
+}
 .gap24 {
   gap: 24px;
 }

@@ -5,6 +5,7 @@ import {
   putAffiliate,
   getAffiliateReposos,
   getAffiliateCuidos,
+  deleteAffiliate,
 } from "../tools/api";
 import { dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
@@ -263,7 +264,7 @@ export function RecordDetailsPage() {
             icon={icons.CalendarUser}
             recordId={recordData.id}
           />
-          <section className="gap24 flex-h pad24">
+          <section className="gap48 flex-h pad24">
             <div className="flex-v gap4">
               <span className="title-regular">Borrar esta historia</span>
               <p className="paragraph-regular ">Esto eliminará todos los datos de esta historia, incluyendo las citas, los reposos y los cuidos. También se eliminará de la lista de relaciones que tengan a esta historia.
@@ -287,13 +288,27 @@ export function RecordDetailsPage() {
                     alert(
                       "Escribió mal el nombre, debe escribirlo exactamente igual."
                     );
+                    return
                   }
                 } else {
                   alert("Cancelado, no se eliminará esta historia.");
+                  return
                 }
 
                 console.log("Borrando historia...");
-                console.log("Borrada.");
+                deleteAffiliate(recordData['id'])
+                .then(response=>response.json())
+                .then(json=>{
+                  if(json['result']==="ok"){
+                    alert("Borrada.");
+                  } else {
+                    alert("No se pudo borrar.");
+                  }
+                })
+                .catch((error)=>{
+                  console.log(error)
+                })
+                
               }}
             />
           </section>
