@@ -37,6 +37,9 @@ export function ViewRecordsPage() {
             type="main"
             text="Añadir historia"
             icon={icons.DocumentEdit}
+            action={()=>{
+              window.location.href = '/newrecord';
+            }}
           />
           <DualSelector
             left="Todos"

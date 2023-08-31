@@ -47,7 +47,6 @@ export function RecordDetailsPage() {
       .then((response) => response.json())
       .then((json) => {
         setRecordData(json);
-        console.log(json);
       })
       .catch((error) => {
         throw new Error(error);
@@ -616,12 +615,12 @@ function CitasTable({ recordId }) {
 
   useEffect(() => {
     // TODO colocar una animacion de carga
+    if(recordId === undefined){return}
 
     getCitas(recordId)
       .then((response) => response.json())
       .then((json) => {
         setCitas(json);
-        console.log(json);
       })
       .catch((error) => {
         setCitas(false);
@@ -693,12 +692,11 @@ function CitasOdonTable({ recordId }) {
 
   useEffect(() => {
     // TODO colocar una animacion de carga
-
+    if(recordId === undefined){return}
     getCitasOdon(recordId)
       .then((response) => response.json())
       .then((json) => {
         setCitas(json);
-        console.log(json);
       })
       .catch((error) => {
         setCitas(false);
@@ -772,6 +770,7 @@ function RecordDetailsRepososTable({
   let [data, setData] = useState({});
 
   useEffect(() => {
+    if(recordId === undefined){return}
     getAffiliateReposos(recordId)
       .then((response) => response.json())
       .then((data) => {
@@ -851,6 +850,7 @@ function RecordDetailsCuidosTable({
   let [data, setData] = useState({});
 
   useEffect(() => {
+    if(recordId === undefined){return}
     getAffiliateCuidos(recordId)
       .then((response) => response.json())
       .then((data) => {

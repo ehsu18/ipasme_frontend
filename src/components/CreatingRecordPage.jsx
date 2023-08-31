@@ -244,7 +244,7 @@ export function CreatingRecordPage() {
             />
           </div>
         </div>
-        <ProgressWidget data={data} />
+        {/* <ProgressWidget data={data} s/> */}
         <div></div>
       </div>
     </main>
