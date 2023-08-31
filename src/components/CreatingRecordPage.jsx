@@ -139,11 +139,17 @@ export function CreatingRecordPage() {
             />
             <RecordDetailsDataContainer label="Alergias" name="alergias" />
           </RecordDetailsSection>
+          {/* poner lo de odon_info */}
           <div className="flex-h flex-center-h gap24 pad24">
             <ButtonBig
               type="danger"
               text="Cancelar historia"
               icon={icons.DocumentCross}
+              action={()=>{
+                if (window.confirm("¿Está seguro de querer cancelar? se limpiarán los campos y perderá lo que haya escrito.")){
+                  setData({})
+                }
+              }}
             />
             <ButtonBig
               type="good"
@@ -209,6 +215,7 @@ export function CreatingRecordPage() {
                     if (json["result"] === "ok") {
                       console.log("guardado");
                       alert("Afiliado registrado con éxito.");
+                      setData({})
                     } else if (json["error"] === "Document already exists") {
                       
                       try {
