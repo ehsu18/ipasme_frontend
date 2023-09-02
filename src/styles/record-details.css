@@ -54,6 +54,7 @@
   flex-grow: 1;
 }
 .recorddetails-nav .recorddetails-tab-selected {
+  padding: 0px 12px 8px 12px;
   border-bottom: solid 2px var(--main-color);
   color: var(--main-color);
 }

@@ -7,7 +7,7 @@
 
 .content-header {
   background-color: var(--white);
-  height: 100px;
+  min-height: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;

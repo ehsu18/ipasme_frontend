@@ -41,6 +41,7 @@ import React, { useEffect, useState } from "react";
 export function RecordDetailsPage() {
   let { id } = useParams();
   let [recordData, setRecordData] = useState({});
+  let [focusedTab, setFocusedTab] = useState('basic_tab')
 
   useEffect(() => {
     getRecords(id)
@@ -113,204 +114,209 @@ export function RecordDetailsPage() {
               {/* TODO hacer esto funcional */}
             </section>
           </header>
-          <nav className="flex-h recorddetails-nav">
-            <div className="title-small recorddetails-tab recorddetails-tab-selected">
-              <span>Datos personales</span>
-            </div>
-            <div className="title-small recorddetails-tab">
-              <span>Datos m&eacute;dicos</span>
-            </div>
-            <div className="title-small recorddetails-tab">
-              <span>Datos odontol&oacute;gicos</span>
-            </div>
-            <div className="title-small recorddetails-tab">
-              <span>Reposos y cuidos</span>
-            </div>
-            <div className="title-small recorddetails-tab">
-              <span>Opciones</span>
-            </div>
-          </nav>
 
-          <RecordDetailsSection
-            title="Datos personales"
-            name="basic_info"
-            recordData={recordData}
-            setRecordData={setRecordData}
-          >
-            <RecordDetailsNumbersContainer label="Cedula" name="document" />
-            <RecordDetailsOptionsContainer
-              label="Nacionalidad"
-              name="nationality"
-              options={["V", "E"]}
-            />
-            <RecordDetailsDataContainer label="Nombres" name="names" />
-            <RecordDetailsDataContainer label="Apellidos" name="lastnames" />
-            <RecordDetailsFechaContainer
-              label="Fecha de nacimiento"
-              name="dateofbirth"
-            />
-            <RecordDetailsOptionsContainer
-              label="Estado civil"
-              name="civilstatus"
-              options={["Soltero", "Casado", "Viudo", "Divorciado"]}
-            />
-            <RecordDetailsDataContainer
-              label="Lugar de nacimiento"
-              name="placeofbirth"
-            />
-            <RecordDetailsOptionsContainer
-              label="Sexo"
-              name="gender"
-              options={["M", "F"]}
-            />
-          </RecordDetailsSection>
+          <TabSelector focusedTab={focusedTab} setFocusedTab={setFocusedTab}>
+            <TableSelectorOption name="basic_tab" label="Datos personales" />
+            <TableSelectorOption name="medic_tab" label="Datos médicos" />
+            <TableSelectorOption name="odon_tab" label="Datos odontológicos" />
+            <TableSelectorOption name="reposos_tab" label="Reposos y cuidos" />
+            <TableSelectorOption name="options_tab" label="Opciones" />
+          </TabSelector>
 
-          <RecordDetailsSection
-            title="Datos de contacto"
-            name={"contact_info"}
-            recordData={recordData}
-            setRecordData={setRecordData}
-            icon={icons.Phone}
-          >
-            <RecordDetailsNumbersContainer
-              label="Telefono personal"
-              name="phone_personal"
-            />
-            <RecordDetailsNumbersContainer
-              label="Telefono opcional"
-              name="phone_optional"
-            />
-            <RecordDetailsDataContainer
-              label="Direccion de habitacion"
-              name="home_direction"
-              doubleColumn
-            />
-          </RecordDetailsSection>
-
-          {recordData["type"] === "affiliate" ? (
+          <TabContainer name="basic_tab" focusedTab={focusedTab}>
             <RecordDetailsSection
-              title="Datos laborales"
-              name="job_info"
+              title="Datos personales"
+              name="basic_info"
               recordData={recordData}
               setRecordData={setRecordData}
-              icon={icons.Suitcase}
             >
+              <RecordDetailsNumbersContainer label="Cedula" name="document" />
               <RecordDetailsOptionsContainer
-                label="Estado laboral"
-                name="job_status"
-                options={["Activo", "Reposo", "Jubilado", "Inactivo"]}
+                label="Nacionalidad"
+                name="nationality"
+                options={["V", "E"]}
               />
-              <RecordDetailsDataContainer label="Cargo" name="job_title" />
+              <RecordDetailsDataContainer label="Nombres" name="names" />
+              <RecordDetailsDataContainer label="Apellidos" name="lastnames" />
+              <RecordDetailsFechaContainer
+                label="Fecha de nacimiento"
+                name="dateofbirth"
+              />
+              <RecordDetailsOptionsContainer
+                label="Estado civil"
+                name="civilstatus"
+                options={["Soltero", "Casado", "Viudo", "Divorciado"]}
+              />
               <RecordDetailsDataContainer
-                label="Direccion del plantel"
-                name="job_direction"
+                label="Lugar de nacimiento"
+                name="placeofbirth"
+              />
+              <RecordDetailsOptionsContainer
+                label="Sexo"
+                name="gender"
+                options={["M", "F"]}
+              />
+            </RecordDetailsSection>
+
+            <RecordDetailsSection
+              title="Datos de contacto"
+              name={"contact_info"}
+              recordData={recordData}
+              setRecordData={setRecordData}
+              icon={icons.Phone}
+            >
+              <RecordDetailsNumbersContainer
+                label="Telefono personal"
+                name="phone_personal"
+              />
+              <RecordDetailsNumbersContainer
+                label="Telefono opcional"
+                name="phone_optional"
+              />
+              <RecordDetailsDataContainer
+                label="Direccion de habitacion"
+                name="home_direction"
                 doubleColumn
               />
             </RecordDetailsSection>
-          ) : null}
+            {recordData["type"] === "affiliate" ? (
+              <RecordDetailsSection
+                title="Datos laborales"
+                name="job_info"
+                recordData={recordData}
+                setRecordData={setRecordData}
+                icon={icons.Suitcase}
+              >
+                <RecordDetailsOptionsContainer
+                  label="Estado laboral"
+                  name="job_status"
+                  options={["Activo", "Reposo", "Jubilado", "Inactivo"]}
+                />
+                <RecordDetailsDataContainer label="Cargo" name="job_title" />
+                <RecordDetailsDataContainer
+                  label="Direccion del plantel"
+                  name="job_direction"
+                  doubleColumn
+                />
+              </RecordDetailsSection>
+            ) : null}
+          </TabContainer>
 
-          <RecordDetailsSection
-            title="Datos médicos básicos"
-            name="medic_info"
-            recordData={recordData}
-            setRecordData={setRecordData}
-            icon={icons.PinpaperPlus}
-          >
-            <RecordDetailsDataContainer label="Grupo RH" name="rh_group" />
-            <RecordDetailsDataContainer
-              label="Enfermedades hereditarias"
-              name="enfermedades_hereditarias"
+          <TabContainer name="medic_tab" focusedTab={focusedTab}>
+            <RecordDetailsSection
+              title="Datos médicos básicos"
+              name="medic_info"
+              recordData={recordData}
+              setRecordData={setRecordData}
+              icon={icons.PinpaperPlus}
+            >
+              <RecordDetailsDataContainer label="Grupo RH" name="rh_group" />
+              <RecordDetailsDataContainer
+                label="Enfermedades hereditarias"
+                name="enfermedades_hereditarias"
+              />
+              <RecordDetailsDataContainer
+                label="Enfermedades Crónicas"
+                name="enfermedades_cronicas"
+              />
+              <RecordDetailsDataContainer label="Alergias" name="alergias" />
+            </RecordDetailsSection>
+            <CitasTable recordId={recordData.id} />
+          </TabContainer>
+
+          <TabContainer name="odon_tab" focusedTab={focusedTab}>
+            <RecordDetailsSection
+              title="Datos odontológicos básicos"
+              name="odon_info"
+              recordData={recordData}
+              setRecordData={setRecordData}
+              icon={icons.Tooth}
+            >
+              <RecordDetailsDataContainer
+                label="Ubicacion de la carpeta"
+                name="odon_folder"
+              />
+              <RecordDetailsDataContainer
+                label="Padecimientos"
+                name="odon_padecimientos"
+              />
+              <RecordDetailsDataContainer
+                label="Procedimientos anteriores"
+                name="odon_procedimientos"
+                doubleColumn
+              />
+            </RecordDetailsSection>
+            <CitasOdonTable recordId={recordData.id} />
+          </TabContainer>
+
+          <TabContainer name="reposos_tab" focusedTab={focusedTab}>
+            {/* solo para afiliados */}
+            <RecordDetailsRepososTable
+              title="Record de reposos"
+              name="reposos"
+              icon={icons.CalendarUser}
+              recordId={recordData.id}
             />
-            <RecordDetailsDataContainer
-              label="Enfermedades Crónicas"
-              name="enfermedades_cronicas"
+            <RecordDetailsCuidosTable
+              title="Record de cuidos"
+              name="cuidos"
+              icon={icons.CalendarUser}
+              recordId={recordData.id}
             />
-            <RecordDetailsDataContainer label="Alergias" name="alergias" />
-          </RecordDetailsSection>
-          <CitasTable recordId={recordData.id} />
-          <RecordDetailsSection
-            title="Datos odontológicos básicos"
-            name="odon_info"
-            recordData={recordData}
-            setRecordData={setRecordData}
-            icon={icons.Tooth}
-          >
-            <RecordDetailsDataContainer
-              label="Ubicacion de la carpeta"
-              name="odon_folder"
-            />
-            <RecordDetailsDataContainer
-              label="Padecimientos"
-              name="odon_padecimientos"
-            />
-            <RecordDetailsDataContainer
-              label="Procedimientos anteriores"
-              name="odon_procedimientos"
-              doubleColumn
-            />
-          </RecordDetailsSection>
-          <CitasOdonTable recordId={recordData.id} />
-          {/* solo para afiliados */}
-          <RecordDetailsRepososTable
-            title="Record de reposos"
-            name="reposos"
-            icon={icons.CalendarUser}
-            recordId={recordData.id}
-          />
-          <RecordDetailsCuidosTable
-            title="Record de cuidos"
-            name="cuidos"
-            icon={icons.CalendarUser}
-            recordId={recordData.id}
-          />
-          <section className="gap48 flex-h pad24">
-            <div className="flex-v gap4">
-              <span className="title-regular">Borrar esta historia</span>
-              <p className="paragraph-regular ">Esto eliminará todos los datos de esta historia, incluyendo las citas, los reposos y los cuidos. También se eliminará de la lista de relaciones que tengan a esta historia.
-              </p>
-            </div>
-            <ButtonBig
-              type="danger"
-              text="Borrar historia"
-              icon={icons.Trash2}
-              action={() => {
-                if (
-                  window.confirm(
-                    "¿Está seguro de querer ELIMINAR esta historia? Esto no se puede deshacer, por lo que se perderán todos los datos de esta historia incluidas las citas, reposos y cuidos."
-                  )
-                ) {
+          </TabContainer>
+
+          <TabContainer name="options_tab" focusedTab={focusedTab}>
+            <section className="gap48 flex-h pad24">
+              <div className="flex-v gap4">
+                <span className="title-regular">Borrar esta historia</span>
+                <p className="paragraph-regular ">
+                  Esto eliminará todos los datos de esta historia, incluyendo
+                  las citas, los reposos y los cuidos. También se eliminará de
+                  la lista de relaciones que tengan a esta historia.
+                </p>
+              </div>
+              <ButtonBig
+                type="danger"
+                text="Borrar historia"
+                icon={icons.Trash2}
+                action={() => {
                   if (
-                    prompt(
-                      `Escriba el nombre de la historia "${recordData["basic_info"]["names"]}":`
-                    ) !== recordData["basic_info"]["names"]
+                    window.confirm(
+                      "¿Está seguro de querer ELIMINAR esta historia? Esto no se puede deshacer, por lo que se perderán todos los datos de esta historia incluidas las citas, reposos y cuidos."
+                    )
                   ) {
-                    alert(
-                      "Escribió mal el nombre, debe escribirlo exactamente igual."
-                    );
-                    return
-                  }
-                } else {
-                  alert("Cancelado, no se eliminará esta historia.");
-                  return
-                }
-
-                console.log("Borrando historia...");
-                deleteAffiliate(recordData['id'])
-                .then(response=>response.json())
-                .then(json=>{
-                  if(json['result']==="ok"){
-                    alert("Borrada.");
+                    if (
+                      prompt(
+                        `Escriba el nombre de la historia "${recordData["basic_info"]["names"]}":`
+                      ) !== recordData["basic_info"]["names"]
+                    ) {
+                      alert(
+                        "Escribió mal el nombre, debe escribirlo exactamente igual."
+                      );
+                      return;
+                    }
                   } else {
-                    alert("No se pudo borrar.");
+                    alert("Cancelado, no se eliminará esta historia.");
+                    return;
                   }
-                })
-                .catch((error)=>{
-                  console.log(error)
-                })
-                
-              }}
-            />
-          </section>
+
+                  console.log("Borrando historia...");
+                  deleteAffiliate(recordData["id"])
+                    .then((response) => response.json())
+                    .then((json) => {
+                      if (json["result"] === "ok") {
+                        alert("Borrada.");
+                      } else {
+                        alert("No se pudo borrar.");
+                      }
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                }}
+              />
+            </section>
+          </TabContainer>
         </div>
       </div>
     </main>
@@ -615,7 +621,9 @@ function CitasTable({ recordId }) {
 
   useEffect(() => {
     // TODO colocar una animacion de carga
-    if(recordId === undefined){return}
+    if (recordId === undefined) {
+      return;
+    }
 
     getCitas(recordId)
       .then((response) => response.json())
@@ -692,7 +700,9 @@ function CitasOdonTable({ recordId }) {
 
   useEffect(() => {
     // TODO colocar una animacion de carga
-    if(recordId === undefined){return}
+    if (recordId === undefined) {
+      return;
+    }
     getCitasOdon(recordId)
       .then((response) => response.json())
       .then((json) => {
@@ -770,7 +780,9 @@ function RecordDetailsRepososTable({
   let [data, setData] = useState({});
 
   useEffect(() => {
-    if(recordId === undefined){return}
+    if (recordId === undefined) {
+      return;
+    }
     getAffiliateReposos(recordId)
       .then((response) => response.json())
       .then((data) => {
@@ -850,7 +862,9 @@ function RecordDetailsCuidosTable({
   let [data, setData] = useState({});
 
   useEffect(() => {
-    if(recordId === undefined){return}
+    if (recordId === undefined) {
+      return;
+    }
     getAffiliateCuidos(recordId)
       .then((response) => response.json())
       .then((data) => {
@@ -909,5 +923,47 @@ function RecordDetailsCuidosTable({
         </div>
       </div>
     </section>
+  );
+}
+
+function TabSelector({focusedTab, setFocusedTab, children}) {
+  // TODO if children ...
+  return (
+    <nav className="flex-h recorddetails-nav">
+      {React.Children.map(children, (child) =>
+        React.cloneElement(child, {
+          focusedTab: focusedTab,
+          setFocusedTab: setFocusedTab,
+        })
+      )}
+    </nav>
+  );
+}
+
+function TableSelectorOption({focusedTab, setFocusedTab, name, label}) {
+  return (
+    <div
+      className={
+        "title-small " +
+        (focusedTab === name ? "recorddetails-tab-selected" : "recorddetails-tab")
+      }
+      onClick={(event) => {
+        setFocusedTab(name);
+      }}
+    >
+      <span>{label}</span>
+    </div>
+  );
+}
+
+function TabContainer({name, focusedTab, children}) {
+
+  return (
+    <div
+      className="recorddetails-tab-container"
+      style={focusedTab === name ? { display: "block" } : { display: "none" }}
+    >
+      {children}
+    </div>
   );
 }
