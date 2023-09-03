@@ -5,6 +5,7 @@ import * as api from "../tools/api";
 
 // TODO estilo del componente "cargando"
 // TODO el cuadrito de seleccion debe conservar su tama;o
+// TODO para ordenar/filtrar los elementos se debe hacer directamente en recordsList
 
 export function ViewRecordsPage() {
   // este componente deberia ser una pagina y aparte deberia haber un componente especifico para la lista nada mas
@@ -20,8 +21,7 @@ export function ViewRecordsPage() {
   // TODO manejar errores de conexion, de lista vacia, etc
 
   useEffect(() => {
-    api
-      .getAffiliates()
+    api.getRecords()
       .then((response) => response.json())
       .then((data) => setRecords(data))
       .catch((error) => console.log(error));
@@ -116,7 +116,7 @@ export function RecordsList({ selectedItem, setSelectedItem, recordsList }) {
           }
         })
       ) : (
-        <h1>Cargando historias</h1>
+        <h3>Lista vacía</h3>
       )}
     </div>
   );
@@ -204,81 +204,118 @@ export function RelationWidget({ selectedItem, recordsList }) {
 
   let [affiliates, setAffiliates] = useState([]);
   let [beneficiarys, setBeneficiarys] = useState([]);
+  let [record, setRecord] = useState(null)
 
   useEffect(() => {
     if (recordsList[selectedItem] === undefined) {
       return;
     }
-
+    setRecord(recordsList[selectedItem])
     api
-      .getAffiliateAffiliates(recordsList[selectedItem]["id"])
+      .getRecordAffiliates(recordsList[selectedItem]["id"])
       .then((data) => setAffiliates(data))
       .catch((error) => console.error(error));
-  }, [selectedItem, recordsList]);
-
-  useEffect(() => {
-    if (recordsList[selectedItem] === undefined) {
-      return;
-    }
-
     api
-      .getAffiliateBeneficiarys(recordsList[selectedItem]["id"])
+      .getRecordBeneficiarys(recordsList[selectedItem]["id"])
       .then((data) => setBeneficiarys(data))
       .catch((error) => console.error(error));
   }, [selectedItem, recordsList]);
 
-  if (selectedItem === -1) {
-    return (
-      <aside className="relations-widget">
-        <p className="empty-message">
-          Seleccione una historia para ver sus relaciones.
-        </p>
-      </aside>
-    );
-  }
-  return (
-    <aside className="relations-widget">
+  return selectedItem !== -1 ?
+    (<aside className="relations-widget">
       <p className="title-regular">Afiliados de esta persona</p>
       {affiliates.length > 0 ? (
-        affiliates.map((aff, index) => {
-          return <RelationCard key={index} record={aff} />;
+        affiliates.map((relation, index) => {
+          return <RelationAffiliateCard key={index} relation={relation} record={record}/>;
         })
       ) : (
         <span>Esta persona no tiene afiliados</span>
       )}
       <p className="title-regular">Beneficiarios de esta persona</p>
       {beneficiarys.length > 0 ? (
-        beneficiarys.map((aff, index) => {
-          return <RelationCard key={index} record={aff} />;
+        beneficiarys.map((relation, index) => {
+          return <RelationBeneficiaryCard key={index} relation={relation} record={record}/>;
         })
       ) : (
         <span>Esta persona no tiene beneficiarios</span>
       )}
     </aside>
-  );
+    ) :
+    (<aside className="relations-widget">
+        <p className="empty-message">
+          Seleccione una historia<br/>para ver sus relaciones.
+        </p>
+      </aside>
+    );
 }
 
-export function RelationCard({ record = {} }) {
+function RelationAffiliateCard({ relation, record}) {
   return (
     <div className="relation-card">
       {/* TODO hay que checar cuando falle el type ver que se hace porque sino se pone como affiliado */}
 
       <div
         style={
-          record["type"] === "beneficiary"
-            ? { backgroundColor: "var(--main-beneficiario)" }
-            : { backgroundColor: "var(--main-afiliado)" }
+          record['type'] === "beneficiary"?
+          { backgroundColor: "var(--main-beneficiario)" }:
+          { backgroundColor: "var(--main-affiliate)" }
         }
       ></div>
       <div>
         <p className="title-small">
-          {record["names"].trim() + " " + record["lastnames"].trim()}
+          {
+            (relation["names"] ? relation["names"].trim() : '')
+            + " " +
+            (relation["lastnames"] ? relation["lastnames"].trim() : '')
+          }
         </p>
-        <p className="title-small">{"V-" + record["document"]}</p>
-        <p className="paragraph-micro">
-          Lorem Ipsum Dolor Sit Amet es hija/hijo de Elian Enrique Sumalave
-          Urbina.
-          {/* esto lo deberia mandar la api */}
+        <p className="title-small">{
+          (relation['nationality'] ? relation['nationality'] :'') +
+          (relation["document"] ? relation["document"] : '')
+        }</p>
+        <p className="paragraph-micro">{
+          (record["names"] ? record["names"].trim() : '')
+          + ' es ' +
+          (relation["level_description"])
+          + ' de ' + 
+          (relation["names"] ? relation["names"].trim() : '')
+          }
+        </p>
+      </div>
+      <div>{icons.MenuVertical("24px")}</div>
+    </div>
+  );
+}
+function RelationBeneficiaryCard({ relation, record}) {
+  return (
+    <div className="relation-card">
+      {/* TODO hay que checar cuando falle el type ver que se hace porque sino se pone como affiliado */}
+
+      <div
+        style={ record['type'] === "beneficiary"?
+          { backgroundColor: "var(--main-beneficiario)" }:
+          { backgroundColor: "var(--main-affiliate)" }
+        }
+      ></div>
+      <div>
+        <p className="title-small">
+          {
+            (relation["names"] ? relation["names"].trim() : '')
+            + " " +
+            (relation["lastnames"] ? relation["lastnames"].trim() : '')
+          }
+        </p>
+        <p className="title-small">{
+          (relation['nationality'] ? relation['nationality'] :'') +
+          (relation["document"] ? relation["document"] : '')
+        }</p>
+        <p className="paragraph-micro">{
+          (relation["names"] ? relation["names"].trim() : '')
+          + ' es ' +
+          (relation["level_description"])
+          + ' de ' + 
+          (record["names"] ? record["names"].trim() : '')
+          }
         </p>
       </div>
       <div>{icons.MenuVertical("24px")}</div>

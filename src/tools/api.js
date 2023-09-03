@@ -1,55 +1,52 @@
 const API_URL = "http://localhost:8000/api/";
-const AFFILIATE_URL = "affiliate";
-const CITAS_URL = "citas";
-const CITASODON_URL = "citasodon";
-const RECORDS_URL = "records";
-const REPOSOS_URL = "reposos";
-const AFFILIATECUIDOS_URL = "affiliate_cuidos";
-const AFFILIATEREPOSOS_URL = "affiliate_reposos";
-const RELATION_AFFILIATES_URL = "affiliate_affiliates/";
-const RELATION_BENEFICIARYS_URL = "affiliate_beneficiarys/";
+const RECORD = "record";
+const RECORD_AFFILIATES = "record_affiliates";
+const RECORD_BENEFICIARYS = "record_beneficiarys";
+const CREATE_AFFILIATE = "create_affiliate";
+const CREATE_BENEFICIARY = "create_beneficiary";
 
-export async function getAffiliates(id = "") {
+const CITAS = "citas";
+const CITASODON = "citasodon";
+
+const REPOSOS = "reposos";
+const SEARCH_REPOSOS = "search_reposos";
+const CUIDOS = "cuidos";
+const SEARCH_CUIDOS = "search_cuidos";
+
+
+export async function getRecords(id = "") {
   if (id !== "") {
     id = "/" + id;
   }
-  return await fetch(API_URL + AFFILIATE_URL + id);
-  // .then((response) => response.json())
-  // .then((json) => {
-  //   return json
-  // })
-  // .catch((error)=>{
-  //   throw new Error(error)
-  // })
+  return await fetch(API_URL + RECORD + id);
 }
 
-export async function getAffiliateAffiliates(id) {
+export async function getRecordAffiliates(id) {
   if (!id) {
-    // console.log(id)
     throw new Error("An id is needed to get relations");
   }
 
-  return await fetch(API_URL + RELATION_AFFILIATES_URL + id)
+  return await fetch(API_URL + RECORD_AFFILIATES + "/" + id)
     .then((response) => response.json())
     .then((json) => {
       return json;
     });
 }
 
-export async function getAffiliateBeneficiarys(id) {
+export async function getRecordBeneficiarys(id) {
   if (!id) {
     // console.log(id)
     throw new Error("An id is needed to get relations");
   }
 
-  return await fetch(API_URL + RELATION_BENEFICIARYS_URL + id)
+  return await fetch(API_URL + RECORD_BENEFICIARYS + "/" + id)
     .then((response) => response.json())
     .then((json) => {
       return json;
     });
 }
 
-export function putAffiliate(id, data) {
+export function putRecord(id, data) {
   // console.log(data)
   if (!id.match("^[\\w]{24}$")) {
     throw new Error(`invalid id (${id}) at put affiliate`);
@@ -57,7 +54,7 @@ export function putAffiliate(id, data) {
   if (data === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + AFFILIATE_URL + "/" + id, {
+  return fetch(API_URL + RECORD + "/" + id, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -71,7 +68,7 @@ export function postAffiliate(data) {
   if (data === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + AFFILIATE_URL, {
+  return fetch(API_URL + CREATE_AFFILIATE, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -80,13 +77,26 @@ export function postAffiliate(data) {
     body: JSON.stringify(data),
   });
 }
-
-export function deleteAffiliate(id) {
+export function postBeneficiary(data) {
+  // console.log(data)
+  if (data === undefined) {
+    throw new Error("no data received");
+  }
+  return fetch(API_URL + CREATE_BENEFICIARY, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+export function deleteRecord(id) {
   // console.log(data)
   if (id && !id.match("^[\\w]{24}$")) {
     throw new Error(`invalid id (${id}) at put affiliate`);
   }
-  return fetch(API_URL + AFFILIATE_URL + "/" + id, {
+  return fetch(API_URL + RECORD + "/" + id, {
     method: "DELETE",
     headers: {
       Accept: "application/json",
@@ -95,45 +105,48 @@ export function deleteAffiliate(id) {
   });
 }
 
-export async function getRecords(id = "") {
-  if (id !== "") {
-    id = "/" + id;
-  }
-  return await fetch(API_URL + RECORDS_URL + id);
-  // .then((response) => response.json())
-  // .then((json) => {
-  //   return json
-  // })
-  // .catch((error)=>{
-  //   throw new Error(error)
-  // })
-}
+// export async function getRecords(id = "") {
+//   if (id !== "") {
+//     id = "/" + id;
+//   }
+//   return await fetch(API_URL + RECORDS_URL + id);
+//   // .then((response) => response.json())
+//   // .then((json) => {
+//   //   return json
+//   // })
+//   // .catch((error)=>{
+//   //   throw new Error(error)
+//   // })
+// }
 
 export async function getCitas(citaId) {
-  return await fetch(API_URL + CITAS_URL + "/" + citaId);
+  return await fetch(API_URL + CITAS + "/" + citaId);
 }
-
 export async function getCitasOdon(citaId) {
-  return await fetch(API_URL + CITASODON_URL + "/" + citaId);
+  return await fetch(API_URL + CITASODON + "/" + citaId);
 }
 
 export async function getReposos(id = "") {
   if (id !== "") {
     id = "/" + id;
   }
-  return await fetch(API_URL + REPOSOS_URL + id);
+  return await fetch(API_URL + REPOSOS + id);
 }
-
-export async function getAffiliateReposos(record_id = "") {
+export async function searchReposos(record_id = "") {
   if (record_id !== "") {
     record_id = "/" + record_id;
   }
-  return await fetch(API_URL + AFFILIATEREPOSOS_URL + record_id);
+  return await fetch(API_URL + SEARCH_REPOSOS + record_id);
 }
-
-export async function getAffiliateCuidos(record_id = "") {
+export async function getCuidos(id = "") {
+  if (id !== "") {
+    id = "/" + id;
+  }
+  return await fetch(API_URL + CUIDOS + id);
+}
+export async function searchCuidos(record_id = "") {
   if (record_id !== "") {
     record_id = "/" + record_id;
   }
-  return await fetch(API_URL + AFFILIATECUIDOS_URL + record_id);
+  return await fetch(API_URL + SEARCH_CUIDOS + record_id);
 }

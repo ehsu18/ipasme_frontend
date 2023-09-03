@@ -2,10 +2,11 @@ import {
   getCitas,
   getCitasOdon,
   getRecords,
-  putAffiliate,
-  getAffiliateReposos,
-  getAffiliateCuidos,
-  deleteAffiliate,
+  deleteRecord,
+  putRecord,
+  searchReposos,
+  searchCuidos,
+
 } from "../tools/api";
 import { dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
@@ -301,7 +302,7 @@ export function RecordDetailsPage() {
                   }
 
                   console.log("Borrando historia...");
-                  deleteAffiliate(recordData["id"])
+                  deleteRecord(recordData["id"])
                     .then((response) => response.json())
                     .then((json) => {
                       if (json["result"] === "ok") {
@@ -420,7 +421,7 @@ function RecordDetailsSection({
               }
 
               // si hay cambios
-              putAffiliate(recordData["id"], { [name]: changes })
+              putRecord(recordData["id"], { [name]: changes })
                 .then((response) => {
                   return response.json();
                 })
@@ -473,7 +474,7 @@ function RecordDetailsDataContainer({
         }
         type="text" // TODO cambie esto de label a 'text' porque no entendi por que lo habia hecho asi
         name={name}
-        placeholder="indefinido"
+        placeholder="--"
         value={data[name] || ""} // TODO esto pasa a cada rato, deberia hacerse el or una sola vez al cargar, podria ser sobreescribir el json original
         onChange={(e) => {
           setData({
@@ -783,7 +784,7 @@ function RecordDetailsRepososTable({
     if (recordId === undefined) {
       return;
     }
-    getAffiliateReposos(recordId)
+    searchReposos(recordId)
       .then((response) => response.json())
       .then((data) => {
         setData(data);
@@ -865,7 +866,7 @@ function RecordDetailsCuidosTable({
     if (recordId === undefined) {
       return;
     }
-    getAffiliateCuidos(recordId)
+    searchCuidos(recordId)
       .then((response) => response.json())
       .then((data) => {
         setData(data);

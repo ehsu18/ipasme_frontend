@@ -8,3 +8,7 @@ TODO    navbar deberia iniciar mostrando en que pantalla estamos
 TODO    MANEJAR EL 404
 
 TODO    cambiar el sistema a trabajar solo con record y no affiliate
+
+TODO    creatingrecordpage no maneja el error 400
+
+TODO    falta estado civil en crear historias
