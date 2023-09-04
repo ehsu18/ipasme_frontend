@@ -1,13 +1,9 @@
-TODO    el boton de cerrar sesion no tiene el color de letra adecuado
-
 TODO    los elementos de la lista de historias deben crecer verticalmente
         si no cabe el texto hasta cierto limite
         
 TODO    navbar deberia iniciar mostrando en que pantalla estamos
 
 TODO    MANEJAR EL 404
-
-TODO    cambiar el sistema a trabajar solo con record y no affiliate
 
 TODO    creatingrecordpage no maneja el error 400
 
@@ -16,7 +12,7 @@ TODO    falta estado civil en crear historias
 TODO    al borrar una historia se debe redirigir a la lista
 
 TODO    opciones no debe ser quien llene el nabvar de detalles sino
-        uno que sea estatico
+        uno que sea estatico en tabs de detalles de historia
 
 TODO    los componentes option deben mostrar las opciones completas
 
@@ -25,3 +21,16 @@ TODO    falta poner los iconos en createrecord
 TODO    hay que validar y mostrar campos obligatorios en la parte de recorddetails
 
 TODO    hay que quitar los cuadritos de la lista de historias
+
+TODO    poner "relacion del beneficiario al afiliado"
+
+TODO    a;adir la seccion beneficiarios a los detalles de historia
+
+TODO    al crear una historia se deberia poder guardar y abrir detalles de una vez
+
+TODO    manejar las ubicaciones de las carpetas
+
+TODO    Las opciones en navbar lateral podrian ser mas altas y  
+        tener menos separacion para que sean mas clickables
+
+TODO    manejar los estados de todos los componentes genericos (click, hover, outline)(button, input, etc)

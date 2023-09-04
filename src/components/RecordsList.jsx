@@ -200,24 +200,28 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
 }
 
 export function RelationWidget({ selectedItem, recordsList }) {
-  // TODO adaptar esto para poderlo utilizar en otras paginas y componentes
 
   let [affiliates, setAffiliates] = useState([]);
   let [beneficiarys, setBeneficiarys] = useState([]);
   let [record, setRecord] = useState(null)
 
   useEffect(() => {
+
+    setAffiliates([])
+    setBeneficiarys([])
     if (recordsList[selectedItem] === undefined) {
       return;
     }
     setRecord(recordsList[selectedItem])
     api
       .getRecordAffiliates(recordsList[selectedItem]["id"])
-      .then((data) => setAffiliates(data))
+      .then(response=>response.json())
+      .then((json) => setAffiliates(json))
       .catch((error) => console.error(error));
     api
       .getRecordBeneficiarys(recordsList[selectedItem]["id"])
-      .then((data) => setBeneficiarys(data))
+      .then(response=>response.json())
+      .then((json) => setBeneficiarys(json))
       .catch((error) => console.error(error));
   }, [selectedItem, recordsList]);
 
@@ -226,18 +230,18 @@ export function RelationWidget({ selectedItem, recordsList }) {
       <p className="title-regular">Afiliados de esta persona</p>
       {affiliates.length > 0 ? (
         affiliates.map((relation, index) => {
-          return <RelationAffiliateCard key={index} relation={relation} record={record}/>;
+          return <RelationBeneficiaryCard key={index} relation={relation} record={record}/>;
         })
       ) : (
-        <span>Esta persona no tiene afiliados</span>
+        <span style={{height:'74.45px'}} className="micro-italic">Esta persona no tiene afiliados</span>
       )}
       <p className="title-regular">Beneficiarios de esta persona</p>
       {beneficiarys.length > 0 ? (
         beneficiarys.map((relation, index) => {
-          return <RelationBeneficiaryCard key={index} relation={relation} record={record}/>;
+          return <RelationAffiliateCard key={index} relation={relation} record={record}/>;
         })
       ) : (
-        <span>Esta persona no tiene beneficiarios</span>
+        <span style={{height:'74.45px'}} className="micro-italic">Esta persona no tiene beneficiarios</span>
       )}
     </aside>
     ) :
@@ -248,17 +252,14 @@ export function RelationWidget({ selectedItem, recordsList }) {
       </aside>
     );
 }
-
 function RelationAffiliateCard({ relation, record}) {
   return (
     <div className="relation-card">
-      {/* TODO hay que checar cuando falle el type ver que se hace porque sino se pone como affiliado */}
-
       <div
         style={
-          record['type'] === "beneficiary"?
-          { backgroundColor: "var(--main-beneficiario)" }:
-          { backgroundColor: "var(--main-affiliate)" }
+          relation['type'] === "beneficiary"? { backgroundColor: "var(--main-beneficiario)" }:
+          relation['type'] === "affiliate"? { backgroundColor: "var(--main-afiliado)" } :
+          { backgroundColor: "var(--medium" }
         }
       ></div>
       <div>
@@ -274,11 +275,11 @@ function RelationAffiliateCard({ relation, record}) {
           (relation["document"] ? relation["document"] : '')
         }</p>
         <p className="paragraph-micro">{
-          (record["names"] ? record["names"].trim() : '')
+          (relation["names"] ? relation["names"] : '')
           + ' es ' +
           (relation["level_description"])
           + ' de ' + 
-          (relation["names"] ? relation["names"].trim() : '')
+          (record['basic_info']["names"] ? record['basic_info']["names"] : '')
           }
         </p>
       </div>
@@ -289,12 +290,12 @@ function RelationAffiliateCard({ relation, record}) {
 function RelationBeneficiaryCard({ relation, record}) {
   return (
     <div className="relation-card">
-      {/* TODO hay que checar cuando falle el type ver que se hace porque sino se pone como affiliado */}
 
       <div
-        style={ record['type'] === "beneficiary"?
-          { backgroundColor: "var(--main-beneficiario)" }:
-          { backgroundColor: "var(--main-affiliate)" }
+        style={
+          relation['type'] === "beneficiary"? { backgroundColor: "var(--main-beneficiario)" }:
+          relation['type'] === "affiliate"? { backgroundColor: "var(--main-afiliado)" } :
+          { backgroundColor: "var(--medium" }
         }
       ></div>
       <div>
@@ -310,11 +311,11 @@ function RelationBeneficiaryCard({ relation, record}) {
           (relation["document"] ? relation["document"] : '')
         }</p>
         <p className="paragraph-micro">{
-          (relation["names"] ? relation["names"].trim() : '')
+          (record['basic_info']["names"] ? record['basic_info']["names"].trim() : '')
           + ' es ' +
           (relation["level_description"])
           + ' de ' + 
-          (record["names"] ? record["names"].trim() : '')
+          (relation["names"] ? relation["names"] : '')
           }
         </p>
       </div>

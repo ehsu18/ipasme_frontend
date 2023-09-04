@@ -28,10 +28,6 @@ export async function getRecordAffiliates(id) {
   }
 
   return await fetch(API_URL + RECORD_AFFILIATES + "/" + id)
-    .then((response) => response.json())
-    .then((json) => {
-      return json;
-    });
 }
 
 export async function getRecordBeneficiarys(id) {
@@ -41,10 +37,6 @@ export async function getRecordBeneficiarys(id) {
   }
 
   return await fetch(API_URL + RECORD_BENEFICIARYS + "/" + id)
-    .then((response) => response.json())
-    .then((json) => {
-      return json;
-    });
 }
 
 export function putRecord(id, data) {
