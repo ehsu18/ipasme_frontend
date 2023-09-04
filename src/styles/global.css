@@ -31,6 +31,8 @@
   --white: #ffffff;
   --back-lightblue: #f8fafb;
   --back-selected: #f2f9fc;
+
+  color: var(--dark)
 }
 
 a {
@@ -130,7 +132,7 @@ a {
   background-color: var(--white);
 }
 .button-big.secondary span {
-  color: var(--medium);
+  color: var(--dark);
 }
 .button-big.secondary svg path {
   stroke: var(--main-color);

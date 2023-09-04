@@ -4,6 +4,7 @@ const RECORD_AFFILIATES = "record_affiliates";
 const RECORD_BENEFICIARYS = "record_beneficiarys";
 const CREATE_AFFILIATE = "create_affiliate";
 const CREATE_BENEFICIARY = "create_beneficiary";
+const FILTER_AFFILIATES = "filter_affiliates";
 
 const CITAS = "citas";
 const CITASODON = "citasodon";
@@ -77,18 +78,18 @@ export function postAffiliate(data) {
     body: JSON.stringify(data),
   });
 }
-export function postBeneficiary(data) {
+export function postBeneficiary(data, relationData) {
   // console.log(data)
   if (data === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + CREATE_BENEFICIARY, {
+  return fetch(API_URL + CREATE_BENEFICIARY + '/' + relationData['affiliate'], {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({'record_data': data, 'relation_data':relationData}),
   });
 }
 export function deleteRecord(id) {
@@ -103,6 +104,10 @@ export function deleteRecord(id) {
       "Content-Type": "application/json",
     }
   });
+}
+
+export function filterAffiliates(text=''){
+  return fetch(API_URL + FILTER_AFFILIATES + '/' + text)
 }
 
 // export async function getRecords(id = "") {

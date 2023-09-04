@@ -14,7 +14,7 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
-import { CreatingRecordPage } from "./components/CreatingRecordPage";
+import { CreatingAffiliatePage, CreatingBeneficiaryPage } from "./components/CreatingRecordPage";
 import { RecordDetailsPage } from "./components/RecordDetailsPage";
 // TODO revisar si es mejor importar los css asi o en sus respectivas paginas
 
@@ -27,7 +27,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/record_details/:id" element={<RecordDetailsPage />} />
         <Route path="/newrecord" element={<NewRecordPage />}/>
-        <Route path="/creating_record/affiliate" element={<CreatingRecordPage />}/>
+        <Route path="/creating_record/affiliate" element={<CreatingAffiliatePage  />}/>
+        <Route path="/creating_record/beneficiary" element={<CreatingBeneficiaryPage />}/>
       </Routes>
     </main>
   );

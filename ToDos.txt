@@ -12,3 +12,16 @@ TODO    cambiar el sistema a trabajar solo con record y no affiliate
 TODO    creatingrecordpage no maneja el error 400
 
 TODO    falta estado civil en crear historias
+
+TODO    al borrar una historia se debe redirigir a la lista
+
+TODO    opciones no debe ser quien llene el nabvar de detalles sino
+        uno que sea estatico
+
+TODO    los componentes option deben mostrar las opciones completas
+
+TODO    falta poner los iconos en createrecord
+
+TODO    hay que validar y mostrar campos obligatorios en la parte de recorddetails
+
+TODO    hay que quitar los cuadritos de la lista de historias
