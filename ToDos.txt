@@ -42,3 +42,5 @@ TODO    mostrar level description en el formulario de crear beneficiario
 TODO    limpiar los espacios en los nombres y eso
 
 TODO    seria bueno un nuevo tipo de botonIcono
+
+TODO    que las tablas se recarguen automaticamente al editar

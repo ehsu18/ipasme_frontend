@@ -8,6 +8,8 @@ import {
   searchCuidos,
   getRecordBeneficiarys,
   putRecordBeneficiary,
+  filterRecords,
+  postRecordBeneficiary
 } from "../tools/api";
 import { calcAge, dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
@@ -1000,6 +1002,8 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
   let [beneficiarys, setBeneficiarys] = useState([]);
   let [openEditDialog, setOpenEditDialog] = useState(false);
   let [editingRelation, setEditingRelation] = useState({});
+  let [openCreateDialog, setOpenCreateDialog] = useState(false)
+  let [createData, setCreateData] = useState({})
 
   useEffect(() => {
     if (recordId === undefined) {
@@ -1079,6 +1083,7 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
           <BasicModal
             open={openEditDialog}
             handleClose={() => {
+              setEditingRelation({});
               setOpenEditDialog(false);
             }}
           >
@@ -1142,9 +1147,144 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
       <div className="flex-h recorddetails-section-info">
         <span className="micro-italic">{/* aqui puede ir un texto */}</span>
         <div className="flex-h gap12">
-          <ButtonBig text="Añadir" icon={icons.DocumentEdit} type="secondary" />
+          <ButtonBig text="Añadir" icon={icons.DocumentEdit} type="secondary" action={()=>{
+            setOpenCreateDialog(true)
+          }}/>
         </div>
       </div>
+      <BasicModal 
+        open={openCreateDialog}
+        handleClose={()=>{
+          setCreateData({})
+          setOpenCreateDialog(false)
+        }}
+      >
+        <div className="flex-v gap24">
+          <RecordDetailsSearchContainer 
+            label="Buscar historia"
+            name="record"
+            data={createData}
+            setData={setCreateData}
+          />
+          <RecordDetailsOptionsContainer
+            label="Relacion"
+            name="level"
+            options={[2, 3, 4, 5]}
+            data={createData}
+            setData={setCreateData}
+            sectionEditingStatus={true}
+          />
+          <div className="flex-h gap12">
+            <ButtonBig text="Cancelar" icon={icons.Cross} action={()=>{
+          setCreateData({})
+          setOpenCreateDialog(false)
+        }} />
+            <ButtonBig text="Guardar" icon={icons.User1} action={()=>{
+              if(createData.record && createData.level && window.confirm('¿Seguro que desea guardar esta relación?')){
+                createData.level = parseInt(createData.level)
+                postRecordBeneficiary(recordId, createData)
+                .then(response=>response.json())
+                .then(json=>{
+                  if(json['result'] === 'ok') {
+                    alert('Registrado con exito')
+                  } else if (json['error']){
+                    throw new Error(json['error'])
+                  } else {
+                    throw new Error()
+                  }
+                })
+                .catch(error=>{
+                  alert('Ocurrió un error.')
+                  console.log(error)
+                })}
+                setCreateData({})
+          setOpenCreateDialog(false)
+            }}/>
+          </div>
+        </div>
+      </BasicModal>
     </section>
+  );
+}
+
+function RecordDetailsSearchContainer({
+  label = "",
+  name = "",
+  data = {},
+  setData = () => {},
+}) {
+  let [options, setOptions] = useState([]);
+  let [text, setText] = useState('')
+
+  return (
+    <div
+      className="recorddetails-section-datacontainer"
+      style={{position: "relative"}}
+    >
+      <span className="micro-italic">{label}</span>
+      <input
+
+        className="paragraph-regular entry-1-active "
+        type="text"
+        name={name}
+        value={text}
+        onChange={(e) => {
+          filterRecords(e.target.value)
+            .then((response) => response.json())
+            .then((json) => {
+              setOptions(json);
+            })
+            .catch((error) => {
+              setOptions([]);
+            });
+          setText(e.target.value); // TODO ver si se puede quitar
+          setData({
+            ...data,
+            [name]: null, // TODO esto creo que no ocurre en la otra pagina y se puede quedar ahi el id sin querer
+          });
+        }}
+      />
+      {Array.isArray(options) && options.length > 0 ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            position: "absolute",
+            top: "52.5px",
+            border: "solid 1px var(--border)",
+            borderRadius: "0px 0px 12px 12px",
+            width: "100%",
+            backgroundColor: "var(--white)",
+          }}
+        >
+          {options.map((opt, index) => {
+            let innerText = opt.nationality+ opt.document + " " + opt.names + ' ' + opt.lastnames;
+            return (
+              <span
+                style={{ width: "100%", maxWidth: "100%", padding: "8px 4px" }}
+                key={index}
+                ind={index}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "var(--gray)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = null;
+                }}
+                onClick={(e) => {
+                  setData({
+                    ...data,
+                    [name]: opt.id,
+                  });
+                  setText(innerText);
+                  setOptions([]);
+                }}
+              >
+                {innerText}
+              </span>
+            );
+          })}
+        </div>
+      ) : null}
+    </div>
   );
 }

@@ -5,6 +5,7 @@ const RECORD_BENEFICIARYS = "record_beneficiarys";
 const CREATE_AFFILIATE = "create_affiliate";
 const CREATE_BENEFICIARY = "create_beneficiary";
 const FILTER_AFFILIATES = "filter_affiliates";
+const FILTER_RECORDS = "filter_records"; 
 
 const CITAS = "citas";
 const CITASODON = "citasodon";
@@ -41,6 +42,16 @@ export async function getRecordBeneficiarys(id) {
 export function putRecordBeneficiary(id, data){
   return fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
     method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+}
+export function postRecordBeneficiary(id, data){
+  return fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
+    method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -110,7 +121,9 @@ export function deleteRecord(id) {
 export function filterAffiliates(text=''){
   return fetch(API_URL + FILTER_AFFILIATES + '/' + text)
 }
-
+export function filterRecords(text=''){
+  return fetch(API_URL + FILTER_RECORDS + '/' + text)
+}
 // export async function getRecords(id = "") {
 //   if (id !== "") {
 //     id = "/" + id;
