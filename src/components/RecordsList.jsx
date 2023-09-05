@@ -2,6 +2,7 @@ import { ButtonBig, ButtonSmall, PersonTypeTag, DualSelector } from "./Buttons";
 import * as icons from "./Icons";
 import { useState, useEffect } from "react";
 import * as api from "../tools/api";
+import { calcAge } from "../tools/utilities";
 
 // TODO estilo del componente "cargando"
 // TODO el cuadrito de seleccion debe conservar su tama;o
@@ -126,18 +127,7 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
   // let [selected, setSelected] = useState(false);
   // console.log(recordData)
 
-  function calcAge(date) {
-    try {
-      let dob = new Date(date);
-      let month_diff = Date.now() - dob.getTime();
-      let age_d = new Date(month_diff);
-      let year = age_d.getUTCFullYear();
-
-      return Math.abs(year - 1970);
-    } catch {
-      return "";
-    }
-  }
+  
 
   try {
     return (

@@ -18,3 +18,16 @@ export function dateToString(date){
     
     return `${mes.slice(0,3)} ${data[2]}, ${data[0]}`
 }
+
+export function calcAge(date) {
+    try {
+      let dob = new Date(date);
+      let month_diff = Date.now() - dob.getTime();
+      let age_d = new Date(month_diff);
+      let year = age_d.getUTCFullYear();
+
+      return Math.abs(year - 1970);
+    } catch {
+      return "";
+    }
+  }

@@ -34,3 +34,11 @@ TODO    Las opciones en navbar lateral podrian ser mas altas y
         tener menos separacion para que sean mas clickables
 
 TODO    manejar los estados de todos los componentes genericos (click, hover, outline)(button, input, etc)
+
+TODO    formatear los textos necesarios(nombres, apellidos, etc)
+
+TODO    mostrar level description en el formulario de crear beneficiario
+
+TODO    limpiar los espacios en los nombres y eso
+
+TODO    seria bueno un nuevo tipo de botonIcono

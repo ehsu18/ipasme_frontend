@@ -6,11 +6,12 @@ import {
   putRecord,
   searchReposos,
   searchCuidos,
+  getRecordBeneficiarys
 
 } from "../tools/api";
-import { dateToString } from "../tools/utilities";
+import { calcAge, dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
-import { ButtonBig, PersonTypeTag } from "./Buttons";
+import { ButtonBig, ButtonSmall, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
 import React, { useEffect, useState } from "react";
 
@@ -120,7 +121,11 @@ export function RecordDetailsPage() {
             <TableSelectorOption name="basic_tab" label="Datos personales" />
             <TableSelectorOption name="medic_tab" label="Datos médicos" />
             <TableSelectorOption name="odon_tab" label="Datos odontológicos" />
-            <TableSelectorOption name="reposos_tab" label="Reposos y cuidos" />
+            
+            {recordData['type'] === 'affiliate' ? <>
+              <TableSelectorOption name="reposos_tab" label="Reposos y cuidos" focusedTab={focusedTab} setFocusedTab={setFocusedTab}/>
+              <TableSelectorOption name="beneficiarys_tab" label="Beneficiarios" focusedTab={focusedTab} setFocusedTab={setFocusedTab}/>
+            </> : <></>}
             <TableSelectorOption name="options_tab" label="Opciones" />
           </TabSelector>
 
@@ -250,8 +255,9 @@ export function RecordDetailsPage() {
             <CitasOdonTable recordId={recordData.id} />
           </TabContainer>
 
+          { recordData['type'] === 'affiliate' ?
+          <>
           <TabContainer name="reposos_tab" focusedTab={focusedTab}>
-            {/* solo para afiliados */}
             <RecordDetailsRepososTable
               title="Record de reposos"
               name="reposos"
@@ -266,6 +272,10 @@ export function RecordDetailsPage() {
             />
           </TabContainer>
 
+          <TabContainer name='beneficiarys_tab' focusedTab={focusedTab}>
+              <BeneficiarysTable recordId={recordData['id']} />
+          </TabContainer></>
+          : null}
           <TabContainer name="options_tab" focusedTab={focusedTab}>
             <section className="gap48 flex-h pad24">
               <div className="flex-v gap4">
@@ -967,4 +977,75 @@ function TabContainer({name, focusedTab, children}) {
       {children}
     </div>
   );
+}
+
+function BeneficiarysTable({recordId, icon, title="Beneficiarios"}){
+  let [beneficiarys, setBeneficiarys] = useState([])
+
+  useEffect(()=>{
+    if(recordId==undefined){
+      setBeneficiarys([])
+      return
+    }
+
+    getRecordBeneficiarys(recordId)
+    .then(response=>response.json())
+    .then(json=>{setBeneficiarys(json)})
+    .catch(json=>{setBeneficiarys([])})
+
+  } ,[recordId])
+
+  return (
+    <section className="recorddetails-section">
+      <header className="felx-h">
+        {icon ? icon(24) : icons.User1(24)}
+        <span className="title-regular">{title}</span>
+      </header>
+
+      {Array.isArray(beneficiarys) && beneficiarys.length > 0 ? (
+        <table
+        className="details-table"
+        style={{ gridColumn: "span 2 / auto" }}
+        >
+        
+          <thead>
+            <tr className="details-table-headerrow">
+              <th>Cédula</th>
+              <th>Nombre</th>
+              {/* <th>Edad</th> */}
+              <th>Tipo</th>
+              <th>Relación</th>
+              <th>Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+          {beneficiarys.map((row, index) => {
+            return <tr key={index}>
+              <td className="title-regular">{row.nationality + row.document}</td>
+              <td className="paragraph-regular">{row.names + ' ' + row.lastnames}</td>
+              {/* <td>{calcAge(row.dateofbirth)}</td> */}
+              <td><PersonTypeTag type={row.type}/></td>
+              <td>{row.level_description}</td>
+              <td className="flex-h gap12"><ButtonSmall type="secondary" text="Ver" action={()=>{
+                window.location.href = `/record_details/${row.id}`
+              }}/><ButtonSmall type="secondary" text="Editar" /></td>
+            </tr>
+          })}
+          </tbody>
+        
+        </table>
+      )
+      : (
+        <span>Vac&iacute;o</span>
+      )}
+
+
+      <div className="flex-h recorddetails-section-info">
+        <span className="micro-italic">{/* aqui puede ir un texto */}</span>
+        <div className="flex-h gap12">
+          <ButtonBig text="Añadir" icon={icons.DocumentEdit} type="secondary" />
+        </div>
+      </div>
+    </section>
+  )
 }
