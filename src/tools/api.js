@@ -38,7 +38,16 @@ export async function getRecordBeneficiarys(id) {
 
   return await fetch(API_URL + RECORD_BENEFICIARYS + "/" + id)
 }
-
+export function putRecordBeneficiary(id, data){
+  return fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+}
 export function putRecord(id, data) {
   // console.log(data)
   if (!id.match("^[\\w]{24}$")) {

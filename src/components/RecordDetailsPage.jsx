@@ -6,14 +6,15 @@ import {
   putRecord,
   searchReposos,
   searchCuidos,
-  getRecordBeneficiarys
-
+  getRecordBeneficiarys,
+  putRecordBeneficiary,
 } from "../tools/api";
 import { calcAge, dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
 import { ButtonBig, ButtonSmall, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
 import React, { useEffect, useState } from "react";
+import BasicModal from "./Modal";
 
 // TODO notificaciones -> https://www.npmjs.com/package/react-notifications
 
@@ -43,7 +44,7 @@ import React, { useEffect, useState } from "react";
 export function RecordDetailsPage() {
   let { id } = useParams();
   let [recordData, setRecordData] = useState({});
-  let [focusedTab, setFocusedTab] = useState('basic_tab')
+  let [focusedTab, setFocusedTab] = useState("basic_tab");
 
   useEffect(() => {
     getRecords(id)
@@ -121,11 +122,25 @@ export function RecordDetailsPage() {
             <TableSelectorOption name="basic_tab" label="Datos personales" />
             <TableSelectorOption name="medic_tab" label="Datos médicos" />
             <TableSelectorOption name="odon_tab" label="Datos odontológicos" />
-            
-            {recordData['type'] === 'affiliate' ? <>
-              <TableSelectorOption name="reposos_tab" label="Reposos y cuidos" focusedTab={focusedTab} setFocusedTab={setFocusedTab}/>
-              <TableSelectorOption name="beneficiarys_tab" label="Beneficiarios" focusedTab={focusedTab} setFocusedTab={setFocusedTab}/>
-            </> : <></>}
+
+            {recordData["type"] === "affiliate" ? (
+              <>
+                <TableSelectorOption
+                  name="reposos_tab"
+                  label="Reposos y cuidos"
+                  focusedTab={focusedTab}
+                  setFocusedTab={setFocusedTab}
+                />
+                <TableSelectorOption
+                  name="beneficiarys_tab"
+                  label="Beneficiarios"
+                  focusedTab={focusedTab}
+                  setFocusedTab={setFocusedTab}
+                />
+              </>
+            ) : (
+              <></>
+            )}
             <TableSelectorOption name="options_tab" label="Opciones" />
           </TabSelector>
 
@@ -255,27 +270,28 @@ export function RecordDetailsPage() {
             <CitasOdonTable recordId={recordData.id} />
           </TabContainer>
 
-          { recordData['type'] === 'affiliate' ?
-          <>
-          <TabContainer name="reposos_tab" focusedTab={focusedTab}>
-            <RecordDetailsRepososTable
-              title="Record de reposos"
-              name="reposos"
-              icon={icons.CalendarUser}
-              recordId={recordData.id}
-            />
-            <RecordDetailsCuidosTable
-              title="Record de cuidos"
-              name="cuidos"
-              icon={icons.CalendarUser}
-              recordId={recordData.id}
-            />
-          </TabContainer>
+          {recordData["type"] === "affiliate" ? (
+            <>
+              <TabContainer name="reposos_tab" focusedTab={focusedTab}>
+                <RecordDetailsRepososTable
+                  title="Record de reposos"
+                  name="reposos"
+                  icon={icons.CalendarUser}
+                  recordId={recordData.id}
+                />
+                <RecordDetailsCuidosTable
+                  title="Record de cuidos"
+                  name="cuidos"
+                  icon={icons.CalendarUser}
+                  recordId={recordData.id}
+                />
+              </TabContainer>
 
-          <TabContainer name='beneficiarys_tab' focusedTab={focusedTab}>
-              <BeneficiarysTable recordId={recordData['id']} />
-          </TabContainer></>
-          : null}
+              <TabContainer name="beneficiarys_tab" focusedTab={focusedTab}>
+                <BeneficiarysTable recordId={recordData["id"]} />
+              </TabContainer>
+            </>
+          ) : null}
           <TabContainer name="options_tab" focusedTab={focusedTab}>
             <section className="gap48 flex-h pad24">
               <div className="flex-v gap4">
@@ -937,7 +953,7 @@ function RecordDetailsCuidosTable({
   );
 }
 
-function TabSelector({focusedTab, setFocusedTab, children}) {
+function TabSelector({ focusedTab, setFocusedTab, children }) {
   // TODO if children ...
   return (
     <nav className="flex-h recorddetails-nav">
@@ -951,12 +967,14 @@ function TabSelector({focusedTab, setFocusedTab, children}) {
   );
 }
 
-function TableSelectorOption({focusedTab, setFocusedTab, name, label}) {
+function TableSelectorOption({ focusedTab, setFocusedTab, name, label }) {
   return (
     <div
       className={
         "title-small " +
-        (focusedTab === name ? "recorddetails-tab-selected" : "recorddetails-tab")
+        (focusedTab === name
+          ? "recorddetails-tab-selected"
+          : "recorddetails-tab")
       }
       onClick={(event) => {
         setFocusedTab(name);
@@ -967,8 +985,7 @@ function TableSelectorOption({focusedTab, setFocusedTab, name, label}) {
   );
 }
 
-function TabContainer({name, focusedTab, children}) {
-
+function TabContainer({ name, focusedTab, children }) {
   return (
     <div
       className="recorddetails-tab-container"
@@ -979,21 +996,26 @@ function TabContainer({name, focusedTab, children}) {
   );
 }
 
-function BeneficiarysTable({recordId, icon, title="Beneficiarios"}){
-  let [beneficiarys, setBeneficiarys] = useState([])
+function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
+  let [beneficiarys, setBeneficiarys] = useState([]);
+  let [openEditDialog, setOpenEditDialog] = useState(false);
+  let [editingRelation, setEditingRelation] = useState({});
 
-  useEffect(()=>{
-    if(recordId==undefined){
-      setBeneficiarys([])
-      return
+  useEffect(() => {
+    if (recordId === undefined) {
+      setBeneficiarys([]);
+      return;
     }
 
     getRecordBeneficiarys(recordId)
-    .then(response=>response.json())
-    .then(json=>{setBeneficiarys(json)})
-    .catch(json=>{setBeneficiarys([])})
-
-  } ,[recordId])
+      .then((response) => response.json())
+      .then((json) => {
+        setBeneficiarys(json);
+      })
+      .catch((json) => {
+        setBeneficiarys([]);
+      });
+  }, [recordId]);
 
   return (
     <section className="recorddetails-section">
@@ -1003,42 +1025,119 @@ function BeneficiarysTable({recordId, icon, title="Beneficiarios"}){
       </header>
 
       {Array.isArray(beneficiarys) && beneficiarys.length > 0 ? (
-        <table
-        className="details-table"
-        style={{ gridColumn: "span 2 / auto" }}
-        >
-        
-          <thead>
-            <tr className="details-table-headerrow">
-              <th>Cédula</th>
-              <th>Nombre</th>
-              {/* <th>Edad</th> */}
-              <th>Tipo</th>
-              <th>Relación</th>
-              <th>Opciones</th>
-            </tr>
-          </thead>
-          <tbody>
-          {beneficiarys.map((row, index) => {
-            return <tr key={index}>
-              <td className="title-regular">{row.nationality + row.document}</td>
-              <td className="paragraph-regular">{row.names + ' ' + row.lastnames}</td>
-              {/* <td>{calcAge(row.dateofbirth)}</td> */}
-              <td><PersonTypeTag type={row.type}/></td>
-              <td>{row.level_description}</td>
-              <td className="flex-h gap12"><ButtonSmall type="secondary" text="Ver" action={()=>{
-                window.location.href = `/record_details/${row.id}`
-              }}/><ButtonSmall type="secondary" text="Editar" /></td>
-            </tr>
-          })}
-          </tbody>
-        
-        </table>
-      )
-      : (
+        <>
+          <table
+            className="details-table"
+            style={{ gridColumn: "span 2 / auto" }}
+          >
+            <thead>
+              <tr className="details-table-headerrow">
+                <th>Cédula</th>
+                <th>Nombre</th>
+                {/* <th>Edad</th> */}
+                <th>Tipo</th>
+                <th>Relación</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {beneficiarys.map((row, index) => {
+                return (
+                  <tr key={index}>
+                    <td className="title-regular">
+                      {row.nationality + row.document}
+                    </td>
+                    <td className="paragraph-regular">
+                      {row.names + " " + row.lastnames}
+                    </td>
+                    {/* <td>{calcAge(row.dateofbirth)}</td> */}
+                    <td>
+                      <PersonTypeTag type={row.type} />
+                    </td>
+                    <td>{row.level_description}</td>
+                    <td className="flex-h gap12">
+                      <ButtonSmall
+                        type="secondary"
+                        text="Ver"
+                        action={() => {
+                          window.location.href = `/record_details/${row.id}`;
+                        }}
+                      />
+                      <ButtonSmall type="secondary" text="Editar" action={()=>{
+                        setEditingRelation({
+                          'record' : row.record,
+                          'level': row.level_code
+                        })
+                        setOpenEditDialog(true)
+                      }}/>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <BasicModal
+            open={openEditDialog}
+            handleClose={() => {
+              setOpenEditDialog(false);
+            }}
+          >
+            <div className="flex-v gap24">
+              <RecordDetailsOptionsContainer
+                label="Relacion"
+                name="level"
+                options={[2, 3, 4, 5]}
+                data={editingRelation}
+                setData={setEditingRelation}
+                sectionEditingStatus={true}
+              />
+              
+              <div className="flex-h gap12">
+                <ButtonBig
+                text="Guardar cambios"
+                icon={icons.Save}
+                action={() => {
+                  if (
+                    editingRelation.record &&
+                    window.confirm("¿Desea guardar los cambios?")
+                  ) {
+                    editingRelation.level = parseInt(editingRelation.level)
+                    putRecordBeneficiary(recordId, editingRelation)
+                      .then((response) => response.json())
+                      .then((json) => {
+                        if (json["result"] === "ok") {
+                          alert("Editado con éxito.");
+                        } else if (json["error"]) {
+                          throw new Error(json["error"]);
+                        }
+                      })
+                      .catch((error) => {
+                        alert("Ocurrió un error.");
+                        console.log(error);
+                      });
+                  }
+                  setOpenEditDialog(false);
+                  setEditingRelation({});
+                }}
+              />
+              <ButtonBig
+                text="Cancelar"
+                icon={icons.Cross}
+                type="secondary"
+                action={() => {
+                  setOpenEditDialog(false);
+                  setEditingRelation({});
+                }}
+              />
+              </div>
+              
+            </div>
+            
+          </BasicModal>
+        </>
+      ) : (
         <span>Vac&iacute;o</span>
       )}
-
 
       <div className="flex-h recorddetails-section-info">
         <span className="micro-italic">{/* aqui puede ir un texto */}</span>
@@ -1047,5 +1146,5 @@ function BeneficiarysTable({recordId, icon, title="Beneficiarios"}){
         </div>
       </div>
     </section>
-  )
+  );
 }
