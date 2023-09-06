@@ -44,3 +44,7 @@ TODO    limpiar los espacios en los nombres y eso
 TODO    seria bueno un nuevo tipo de botonIcono
 
 TODO    que las tablas se recarguen automaticamente al editar
+
+TODO    poner una tabla readonly de afiliados en los detalles de historia
+
+TODO    distribuir mejor el espacio de las tablas

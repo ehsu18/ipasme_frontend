@@ -9,7 +9,8 @@ import {
   getRecordBeneficiarys,
   putRecordBeneficiary,
   filterRecords,
-  postRecordBeneficiary
+  postRecordBeneficiary,
+  deleteRecordBeneficiary
 } from "../tools/api";
 import { calcAge, dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
@@ -1074,6 +1075,41 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
                         })
                         setOpenEditDialog(true)
                       }}/>
+                      <ButtonSmall
+                        type="danger"
+                        text="Eliminar"
+                        action={() => {
+                          if(window.confirm("¿Desea eliminar esta relación?")){
+                            //eliminar
+                            let beneficiaryId =  row.record
+                            deleteRecordBeneficiary(recordId, beneficiaryId)
+                            .then(response=>response.json())
+                            .then(json=>{
+                              if(json['result']==='ok'){
+                                alert("Se eliminó la relación exitosamente")
+                              } else if (json['error']==='not in the beneficiarys list'){
+                                throw new Error('La API indica que el beneficiario no perteneca al Afiliado')
+                              } else if (json['error']==='unique affiliate'){
+                                alert("No se puede borrar la relación porque el beneficiario no posee más afiliados, debe borrar el beneficiario o beneficiarlo con otro afiliado")
+                              }else {
+                                throw new Error()
+                              }
+                            })
+                            .catch(error=>{
+                              alert('Ocurrió un error')
+                              console.log(error)
+                            })
+
+                            // si dice ok, bueno
+
+                            // si dice 'unique affiliate of beneficiary'
+                            // debera eliminar la historia manualmente
+                            // debido a que los beneficiarios requieren
+                            // al menos un afiliado, al eliminar esta relacion,
+                            // dicho beneficiario quedara sin afiliado
+                          }
+                        }}
+                      />
                     </td>
                   </tr>
                 );

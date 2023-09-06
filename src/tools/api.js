@@ -59,6 +59,16 @@ export function postRecordBeneficiary(id, data){
     body: JSON.stringify(data),
   })
 }
+export function deleteRecordBeneficiary(id, beneficiaryId){
+  return fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({'beneficiary':beneficiaryId}),
+  })
+}
 export function putRecord(id, data) {
   // console.log(data)
   if (!id.match("^[\\w]{24}$")) {
