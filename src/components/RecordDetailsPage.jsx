@@ -720,6 +720,9 @@ function CitasTable({ recordId }) {
           text="Añadir cita"
           icon={icons.DocumentEdit}
           type="secondary"
+          action={()=>{
+            window.location.href = "/add_cita/" + recordId
+          }}
         />
       </div>
     </section>

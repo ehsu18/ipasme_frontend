@@ -151,6 +151,19 @@ export function filterRecords(text=''){
 export async function getCitas(citaId) {
   return await fetch(API_URL + CITAS + "/" + citaId);
 }
+export function postCita(citaData){
+  if (citaData === undefined) {
+    throw new Error("no data received");
+  }
+  return fetch(API_URL + CITAS, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(citaData),
+  });
+}
 export async function getCitasOdon(citaId) {
   return await fetch(API_URL + CITASODON + "/" + citaId);
 }
