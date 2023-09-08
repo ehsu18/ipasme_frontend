@@ -693,7 +693,7 @@ function CitasTable({ recordId }) {
                 return (
                   <tr key={index} className="details-table-row">
                     <td>
-                      {dateToString(cita.fecha.split("T")[0]) || "No indica"}
+                      {cita.fecha ? dateToString(cita.fecha.split("T")[0]) : "No indica"}
                     </td>
                     <td>{cita.area || "No indica"}</td>
                     <td>{cita.diagnose || "No indica"}</td>
@@ -772,7 +772,7 @@ function CitasOdonTable({ recordId }) {
                   <tr key={index} className="details-table-row">
                     {/* <td className="selector-container">selector</td> */}
                     <td>
-                      {dateToString(cita.fecha.split("T")[0]) || "No indica"}
+                      {cita.fecha ? dateToString(cita.fecha.split("T")[0]) : "No indica"}
                     </td>
                     <td>{cita.diagnose || "No indica"}</td>
                     <td className="vermas title-small">

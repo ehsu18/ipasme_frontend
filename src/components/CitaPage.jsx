@@ -77,6 +77,7 @@ export function AddCitaPage() {
             <TextInput label="Peso" name="peso" />
           </DataSection>
           <DataSection title="Consulta" data={citaData} setData={setCitaData}>
+            <DateInput label="Fecha" name="fecha" />
             <TextInput label="Área médica" name="area" />
             <TextInput label="Primera Cita" name="first_cita" />
             <TextInput label="Exámenes de laboratorio" name="estudio_lab" />
@@ -121,6 +122,7 @@ export function AddCitaPage() {
 
                 let validations = {
                   area: TXT_REGX,
+                  fecha: DATE_REGX
                 };
 
                 for (let keyword in validations) {
