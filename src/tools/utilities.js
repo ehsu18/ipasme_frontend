@@ -11,7 +11,7 @@ export function dateToString(date){
     const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     let mes;
     try{
-        mes = meses[parseInt(data[1])]
+        mes = meses[parseInt(data[1])-1]
     } catch {
         throw new Error(`${data[1]} is not a valid month`)
     }

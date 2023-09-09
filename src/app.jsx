@@ -31,6 +31,7 @@ function App() {
         <Route path="/creating_record/affiliate" element={<CreatingAffiliatePage  />}/>
         <Route path="/creating_record/beneficiary" element={<CreatingBeneficiaryPage />}/>
         <Route path="/add_cita/:id" element={<AddCitaPage/>}/>
+        <Route path="/edit_cita/:id" element={<EditCitaPage/>}/>
       </Routes>
     </main>
   );

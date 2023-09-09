@@ -1,5 +1,5 @@
 import {
-  getCitas,
+  getRecordCitas,
   getCitasOdon,
   getRecords,
   deleteRecord,
@@ -655,7 +655,7 @@ function CitasTable({ recordId }) {
       return;
     }
 
-    getCitas(recordId)
+    getRecordCitas(recordId)
       .then((response) => response.json())
       .then((json) => {
         setCitas(json);
@@ -698,7 +698,7 @@ function CitasTable({ recordId }) {
                     <td>{cita.area || "No indica"}</td>
                     <td>{cita.diagnose || "No indica"}</td>
                     <td className="vermas title-small">
-                      <a href={"/citas/" + cita.id}>
+                      <a href={"/edit_cita/" + cita.id}>
                         {icons.EyeOpen(16)} Ver más
                       </a>
                     </td>

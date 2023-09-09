@@ -8,6 +8,7 @@ const FILTER_AFFILIATES = "filter_affiliates";
 const FILTER_RECORDS = "filter_records"; 
 
 const CITAS = "citas";
+const RECORD_CITAS = "record_citas";
 const CITASODON = "citasodon";
 
 const REPOSOS = "reposos";
@@ -148,7 +149,10 @@ export function filterRecords(text=''){
 //   // })
 // }
 
-export async function getCitas(citaId) {
+export async function getRecordCitas(recordId) {
+  return await fetch(API_URL + RECORD_CITAS + "/" + recordId);
+}
+export async function getCita(citaId) {
   return await fetch(API_URL + CITAS + "/" + citaId);
 }
 export function postCita(citaData){
@@ -157,6 +161,19 @@ export function postCita(citaData){
   }
   return fetch(API_URL + CITAS, {
     method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(citaData),
+  });
+}
+export function putCita(citaId, citaData){
+  if (citaData === undefined) {
+    throw new Error("no data received");
+  }
+  return fetch(API_URL + CITAS + '/' + citaId, {
+    method: "PUT",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",

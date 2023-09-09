@@ -2,10 +2,18 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import React from "react";
 import * as icons from "./Icons";
-import { filterAffiliates, getRecords, postCita } from "../tools/api";
+import { filterAffiliates, getRecords, postCita, putCita, getCita} from "../tools/api";
 import { ButtonBig, PersonTypeTag } from "./Buttons";
 import { calcAge } from "../tools/utilities";
-import { object } from "prop-types";
+
+function convertDate(date) {
+  try {
+    return date.split("T")[0];
+  } catch {
+    return "";
+  }
+}
+
 
 export function AddCitaPage() {
   let { id } = useParams();
@@ -149,6 +157,7 @@ export function AddCitaPage() {
                     msg.textContent =
                       "Por favor llene este campo correctamente";
                     alert("Hay campos que no se llenaron correctamente");
+                    return;
                   }
                 }
 
@@ -187,9 +196,218 @@ export function AddCitaPage() {
 }
 
 // TODO hay que hacer un componente checkbox y checkbox list
-// export function EditCitaPage(){
+export function EditCitaPage(){
+  let { id } = useParams();
+  let [initialData, setInitialData] = useState({});
+  let [citaData, setCitaData] = useState({});
+  let [recordData, setRecordData] = useState({})
 
-// }
+  useEffect(() => {
+    getCita(id)
+      .then((response) => response.json())
+      .then((json) => {
+        setCitaData(json);
+        setInitialData(json);
+
+        if (json.record_id){
+          getRecords(json.record_id)
+          .then(response=>response.json())
+          .then(record_json=>{
+            setRecordData(record_json)
+          })
+          .catch(error=>{setRecordData(false)})
+        }
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }, [id]);
+
+  return (
+    <main className="main-container">
+      <header className="content-header">
+        <p className="title-big">Editando Cita</p>
+
+        <div className="flex-h gap24">
+          <ButtonBig
+            type="secondary"
+            text="Obtener ayuda"
+            icon={icons.QuestionCircle}
+          />
+        </div>
+      </header>
+      <div className="floatingcontainer-parent scroll flex-h flex-center-h">
+        <div className="common-container flex-v">
+          { recordData.basic_info ?
+            
+            <div className="gap12 recorddetails-section">
+              <div className="flex-h gap12">
+                <span className="title-big" style={{ gridColumn: "span 2" }}>
+                  {recordData.basic_info.names +
+                    " " +
+                    recordData.basic_info.lastnames}
+                </span>
+                <PersonTypeTag type={recordData.type} />
+              </div>
+
+              <span
+                className="title-regular"
+                style={{ gridColumn: "span 2" }}
+              >
+                {recordData.basic_info.nationality +
+                  "-" +
+                  recordData.basic_info.document}
+              </span>
+              <span className="text-regular" style={{ gridColumn: "span 2" }}>
+                {calcAge(recordData.basic_info.dateofbirth) +
+                  " años - Sexo: " +
+                  recordData.basic_info.gender}
+              </span>
+            </div>
+          
+          : <DataSection
+            title="Datos personales"
+            data={citaData}
+            setData={setCitaData}
+          >
+            <TextInput label="Nombres" name="names" />
+            <TextInput label="Apellidos" name="lastnames" />
+            <NumberInput label="Edad" name="age" />
+            <TextInput label="Cédula" name="document" />
+            <TextInput label="Telefono" name="phone" />
+            <OptionsInput label="Sexo/Género" name="gender" options={['M', 'F']} />
+            <OptionsInput label="Tipo" name="tipo" options={['Affiliado', 'Beneficiario', 'Comunidad']} />
+            <OptionsInput label="Cargo" name="cargo" options={['Docente','Administrativo','Obrero','Jubilado']} />
+          </DataSection>
+          }
+          <DataSection
+            title="Datos médicos"
+            data={citaData}
+            setData={setCitaData}
+          >
+            <TextInput label="Tensión arterial" name="tension_arterial" />
+            <TextInput label="Peso" name="peso" />
+          </DataSection>
+          <DataSection title="Consulta" data={citaData} setData={setCitaData}>
+            <DateInput label="Fecha" name="fecha" />
+            <TextInput label="Área médica" name="area" />
+            <TextInput label="Primera Cita" name="first_cita" />
+            <TextInput label="Exámenes de laboratorio" name="estudio_lab" />
+            <TextInput label="Rayos X" name="estudio_rx" />
+            <TextInput label="Ecograía" name="estudio_eco" />
+            <NumberInput label="Días de reposo" name="reposo" />
+            <TextInput label="Referido" name="ref" />
+            <TextInput label="Diagnóstico" name="diagnose" doubleColumn />
+          </DataSection>
+          <div className="flex-h flex-center-h gap24 pad24">
+            <ButtonBig
+              type="danger"
+              text="Cancelar"
+              icon={icons.DocumentCross}
+              action={() => {
+                if (Object.keys(citaData) !== 0 &&
+                  window.confirm(
+                    "¿Está seguro de querer cancelar? se limpiarán los campos y perderá lo que haya escrito."
+                  )
+                ) {
+                  setCitaData({});
+                  window.history.go(-1);
+                }
+              }}
+            />
+            <ButtonBig
+              type="good"
+              text="Guardar"
+              icon={icons.DocumentAdd}
+              action={(e) => {
+                if (Object.keys(citaData) === 0) {
+                  alert("Llene los datos primero");
+                }
+
+                let changes = {}
+                for (let key in citaData){
+                  if (citaData[key] !== initialData[key]){
+                    changes[key] =citaData[key]
+                  }
+                }
+
+                if(Object.keys(changes).length === 0){
+                  alert('No hay cambios que guardar')
+                  return
+                }
+
+                if(citaData.fecha){
+                  citaData.fecha = convertDate(citaData.fecha);
+                }
+
+                // TODO esto se puede llevar a utilities
+                const TXT_REGX = /^\w/;
+                const NUM_REGX = /^\d+$/;
+                const NATIONALITY_REGX = /^[V||E]$/; //puede expandirse
+                const DATE_REGX = /^\d{4}-\d{2}-\d{2}$/;
+                const JOBSTAT_REGX = /^$/; // TODO terminar este regx
+                const GENDER_REGX = /^[M||F]$/;
+
+                let validations = {
+                  area: TXT_REGX,
+                  fecha: DATE_REGX
+                };
+
+                for (let keyword in validations) {
+                  const input = document.getElementsByName(keyword)[0];
+                  const container = input.parentElement;
+                  const msg =
+                    container.getElementsByClassName("fielderror-msg")[0];
+                  if (citaData[keyword] === undefined) {
+                    // field requerido
+                    input.classList.add("entry-1-errorstatus");
+                    msg.style.display = "block";
+                    msg.textContent = "Por favor llene este campo";
+                    alert("Hay campos que no se llenaron");
+                    return;
+                  } else if (validations[keyword].test(citaData[keyword])) {
+                    //todo bien
+                    input.classList.remove("entry-1-errorstatus");
+                    msg.style.display = "none";
+                    msg.textContent = null;
+                  } else {
+                    // existe pero no es valido
+                    input.classList.add("entry-1-errorstatus");
+                    msg.style.display = "block";
+                    msg.textContent =
+                      "Por favor llene este campo correctamente";
+                    alert("Hay campos que no se llenaron correctamente");
+                    return;
+                  }
+                }
+
+
+                putCita(citaData.id , changes)
+                  .then((response) => response.json())
+                  .then((json) => {
+                    // console.log(json);
+                    if (json["result"] === "ok") {
+                      console.log("Cambios guardados");
+                      alert("Cambios guardados con éxito.");
+                      window.history.go(-1);
+                    } else if (json["error"]) {
+                      throw new Error(json["error"]);
+                    }
+                  })
+                  .catch((error) => {
+                    alert(
+                      "Ocurrió un error tratando de registrar la historia."
+                    );
+                    console.log(error.msg);
+                  });
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
 
 function DataSection({
   title,
@@ -462,7 +680,7 @@ function DateInput({
 }) {
   // let [state, setState] = useState();
   // TODO los valores indefinidos se deben representar con el placeholder
-
+ 
   return (
     <div
       className="recorddetails-section-datacontainer"
@@ -473,7 +691,7 @@ function DateInput({
         className={"paragraph-regular entry-1-active "}
         type="date"
         name={name}
-        value={data[name] || ""}
+        value={data[name] ? convertDate(data[name]) : ""}
         onChange={(e) =>
           setData({
             ...data,
