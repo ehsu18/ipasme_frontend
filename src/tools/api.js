@@ -18,6 +18,9 @@ const CUIDOS = "cuidos";
 const SEARCH_CUIDOS = "search_cuidos";
 
 
+// TODO faltan algunas validaciones
+// TODO si sobra tiempo se puede pasar a un modelo orientado a objetos
+
 export async function getRecords(id = "") {
   if (id !== "") {
     id = "/" + id;
@@ -182,6 +185,12 @@ export function putCita(citaId, citaData){
     body: JSON.stringify(citaData),
   });
 }
+export function deleteCita(citaId){
+  return fetch(API_URL + CITAS + '/' + citaId, {
+    method: "DELETE"
+  });
+}
+
 export async function getRecordCitasodon(recordId) {
   return await fetch(API_URL + RECORD_CITASODON + "/" + recordId);
 }
@@ -214,6 +223,12 @@ export function putCitaodon(citaodonId, citaodonData){
     body: JSON.stringify(citaodonData),
   });
 }
+export function deleteCitaodon(citaodonId){
+  return fetch(API_URL + CITASODON + '/' + citaodonId, {
+    method: "DELETE"
+  });
+}
+
 
 
 export async function getReposos(id = "") {

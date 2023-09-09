@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import React from "react";
 import * as icons from "./Icons";
-import { filterAffiliates, getRecords, postCita, putCita, getCita, postCitaodon, getCitaodon, putCitaodon} from "../tools/api";
+import { filterAffiliates, getRecords, postCita, putCita, getCita, postCitaodon, getCitaodon, putCitaodon, deleteCita, deleteCitaodon} from "../tools/api";
 import { ButtonBig, PersonTypeTag } from "./Buttons";
 import { calcAge } from "../tools/utilities";
 
@@ -300,6 +300,33 @@ export function EditCitaPage(){
             <TextInput label="Diagnóstico" name="diagnose" doubleColumn />
           </DataSection>
           <div className="flex-h flex-center-h gap24 pad24">
+          <ButtonBig
+              type="danger"
+              text="Eliminar"
+              icon={icons.DocumentCross}
+              action={() => {
+                if (Object.keys(citaData) !== 0 &&
+                  window.confirm(
+                    "¿Está seguro de querer ELIMINAR esta cita? no hay vuelta atrás para este cambio."
+                  )
+                ) {
+                  deleteCita(id)
+                  .then(response=>response.json())
+                  .then(json=>{
+                    if(json['result'] === 'ok'){
+                      alert('Cita eliminada.')
+                      window.history.go(-1)
+                    } else {
+                      throw new Error(json['error'])
+                    }
+                  })
+                  .catch(error=>{
+                    alert('Ocurrió un error, no se pudo comprobar la eliminación')
+                    console.error(error)
+                  })
+                }
+              }}
+            />
             <ButtonBig
               type="danger"
               text="Cancelar"
@@ -605,7 +632,7 @@ export function EditCitaodonPage(){
   return (
     <main className="main-container">
       <header className="content-header">
-        <p className="title-big">Editando Cita</p>
+        <p className="title-big">Editando Cita Odontológica</p>
 
         <div className="flex-h gap24">
           <ButtonBig
@@ -667,6 +694,33 @@ export function EditCitaodonPage(){
             <TextInput label="Diagnóstico" name="diagnose" doubleColumn />
           </DataSection>
           <div className="flex-h flex-center-h gap24 pad24">
+            <ButtonBig
+              type="danger"
+              text="Eliminar"
+              icon={icons.DocumentCross}
+              action={() => {
+                if (Object.keys(citaData) !== 0 &&
+                  window.confirm(
+                    "¿Está seguro de querer ELIMINAR esta cita? no hay vuelta atrás para este cambio."
+                  )
+                ) {
+                  deleteCitaodon(id)
+                  .then(response=>response.json())
+                  .then(json=>{
+                    if(json['result'] === 'ok'){
+                      alert('Cita eliminada.')
+                      window.history.go(-1)
+                    } else {
+                      throw new Error(json['error'])
+                    }
+                  })
+                  .catch(error=>{
+                    alert('Ocurrió un error, no se pudo comprobar la eliminación')
+                    console.error(error)
+                  })
+                }
+              }}
+            />
             <ButtonBig
               type="danger"
               text="Cancelar"
