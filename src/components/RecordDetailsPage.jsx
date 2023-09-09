@@ -1,16 +1,30 @@
 import {
-  getRecordCitas,
-  getCitasOdon,
   getRecords,
-  deleteRecord,
   putRecord,
-  searchReposos,
-  searchCuidos,
+  deleteRecord,
+  postAffiliate,
+  postBeneficiary,
+
+  filterRecords,
+
   getRecordBeneficiarys,
   putRecordBeneficiary,
-  filterRecords,
   postRecordBeneficiary,
-  deleteRecordBeneficiary
+  deleteRecordBeneficiary,
+
+  getRecordCitas,
+  getCita,
+  postCita,
+  putCita,
+
+  getRecordCitasodon,
+  getCitaodon,
+  postCitaodon,
+  putCitaodon,
+
+  searchReposos,
+  searchCuidos,
+  
 } from "../tools/api";
 import { calcAge, dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
@@ -736,7 +750,7 @@ function CitasOdonTable({ recordId }) {
     if (recordId === undefined) {
       return;
     }
-    getCitasOdon(recordId)
+    getRecordCitasodon(recordId)
       .then((response) => response.json())
       .then((json) => {
         setCitas(json);
@@ -776,7 +790,7 @@ function CitasOdonTable({ recordId }) {
                     </td>
                     <td>{cita.diagnose || "No indica"}</td>
                     <td className="vermas title-small">
-                      <a href={"/citasodon/" + cita.id}>
+                      <a href={"/edit_citaodon/" + cita.id}>
                         {icons.EyeOpen(16)} Ver más
                       </a>
                     </td>
@@ -798,6 +812,9 @@ function CitasOdonTable({ recordId }) {
           text="Añadir cita"
           icon={icons.DocumentEdit}
           type="secondary"
+          action={()=>{
+            window.location.href = `/add_citaodon/${recordId}`
+          }}
         />
       </div>
     </section>

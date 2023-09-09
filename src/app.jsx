@@ -14,7 +14,7 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
-import { AddCitaPage, EditCitaPage} from './components/CitaPage';
+import { AddCitaPage, EditCitaPage, AddCitaodonPage, EditCitaodonPage} from './components/CitaPage';
 import { CreatingAffiliatePage, CreatingBeneficiaryPage } from "./components/CreatingRecordPage";
 import { RecordDetailsPage } from "./components/RecordDetailsPage";
 // TODO revisar si es mejor importar los css asi o en sus respectivas paginas
@@ -32,6 +32,8 @@ function App() {
         <Route path="/creating_record/beneficiary" element={<CreatingBeneficiaryPage />}/>
         <Route path="/add_cita/:id" element={<AddCitaPage/>}/>
         <Route path="/edit_cita/:id" element={<EditCitaPage/>}/>
+        <Route path="/add_citaodon/:id" element={<AddCitaodonPage/>}/>
+        <Route path="/edit_citaodon/:id" element={<EditCitaodonPage/>}/>
       </Routes>
     </main>
   );

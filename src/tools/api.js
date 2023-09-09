@@ -10,6 +10,7 @@ const FILTER_RECORDS = "filter_records";
 const CITAS = "citas";
 const RECORD_CITAS = "record_citas";
 const CITASODON = "citasodon";
+const RECORD_CITASODON = "record_citasodon";
 
 const REPOSOS = "reposos";
 const SEARCH_REPOSOS = "search_reposos";
@@ -181,9 +182,39 @@ export function putCita(citaId, citaData){
     body: JSON.stringify(citaData),
   });
 }
-export async function getCitasOdon(citaId) {
-  return await fetch(API_URL + CITASODON + "/" + citaId);
+export async function getRecordCitasodon(recordId) {
+  return await fetch(API_URL + RECORD_CITASODON + "/" + recordId);
 }
+export async function getCitaodon(citaodonId) {
+  return await fetch(API_URL + CITASODON + "/" + citaodonId);
+}
+export function postCitaodon(citaodonData){
+  if (citaodonData === undefined) {
+    throw new Error("no data received");
+  }
+  return fetch(API_URL + CITASODON, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(citaodonData),
+  });
+}
+export function putCitaodon(citaodonId, citaodonData){
+  if (citaodonData === undefined) {
+    throw new Error("no data received");
+  }
+  return fetch(API_URL + CITASODON + '/' + citaodonId, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(citaodonData),
+  });
+}
+
 
 export async function getReposos(id = "") {
   if (id !== "") {
