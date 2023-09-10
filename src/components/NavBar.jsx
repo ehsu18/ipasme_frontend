@@ -19,7 +19,7 @@ function NavBar() {
       <ul>
         <li className="micro-italic">Navegar</li>
         <TabOption id={1} selected={selected} setSelected={setSelected} link="/" text="Inicio" icon={icons.Home1} />
-        <TabOption id={2} selected={selected} setSelected={setSelected} link="/notifications" text="Notificaciones" icon={icons.Bell} />
+        {/* <TabOption id={2} selected={selected} setSelected={setSelected} link="/notifications" text="Notificaciones" icon={icons.Bell} /> */}
         <TabOption id={3} selected={selected} setSelected={setSelected} link="/viewrecords" text="Ver Historias" icon={icons.DocumentFilled} />
         <TabOption id={4} selected={selected} setSelected={setSelected} link="/newrecord" text="Crear Historia" icon={icons.DocumentPlus} />
         <TabOption id={5} selected={selected} setSelected={setSelected} link="/stats" text="Estad&iacute;sticas" icon={icons.Stats} />

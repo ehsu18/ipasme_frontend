@@ -20,6 +20,7 @@ import { CreatingAffiliatePage, CreatingBeneficiaryPage } from "./components/Cre
 import { RecordDetailsPage } from "./components/RecordDetailsPage";
 import { AddReposoPage, EditReposoPage } from "./components/RepososPage";
 import { AddCuidoPage, EditCuidoPage } from "./components/CuidosPage";
+import { PageNotFound } from "./components/PageNotFound";
 // TODO revisar si es mejor importar los css asi o en sus respectivas paginas
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
         <Route path="/edit_reposo/:reposoId" element={<EditReposoPage/>}/>
         <Route path="/add_cuido/:affiliate_id" element={<AddCuidoPage/>}/>
         <Route path="/edit_cuido/:cuidoId" element={<EditCuidoPage/>}/>
+        <Route path="*" element={<PageNotFound/>}/>
       </Routes>
     </main>
   );
