@@ -16,15 +16,17 @@ export function ViewRecordsPage() {
 
   let [selectedItem, setSelectedItem] = useState(-1);
   let [recordsList, setRecords] = useState([]);
-  let [selectedListMode, setSelectedListMode] = useState("Todos");
+  let [selectedListMode, setSelectedListMode] = useState('todos');
 
   // TODO se debe hacer el useeffect para que se traiga la configuracion del selector desde la base de datos
   // TODO manejar errores de conexion, de lista vacia, etc
 
+
   useEffect(() => {
     api.getRecords()
       .then((response) => response.json())
-      .then((data) => setRecords(data))
+      .then((data) => {setRecords(data)
+      })
       .catch((error) => console.log(error));
   }, []);
 
@@ -43,8 +45,8 @@ export function ViewRecordsPage() {
             }}
           />
           <DualSelector
-            left="Todos"
-            right="Afiliados"
+            left="todos"
+            right="affiliates"
             selected={selectedListMode}
             setSelected={setSelectedListMode}
           />
@@ -70,6 +72,7 @@ export function ViewRecordsPage() {
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
           recordsList={recordsList}
+          selectedListMode={selectedListMode}
         />
 
         <RelationWidget selectedItem={selectedItem} recordsList={recordsList} />
@@ -78,7 +81,7 @@ export function ViewRecordsPage() {
   );
 }
 
-export function RecordsList({ selectedItem, setSelectedItem, recordsList }) {
+export function RecordsList({ selectedItem, setSelectedItem, recordsList, selectedListMode }) {
   console.log("cargando RecordsList\n", "recodsList: ", recordsList);
 
   return (
@@ -95,6 +98,10 @@ export function RecordsList({ selectedItem, setSelectedItem, recordsList }) {
 
       {Array.isArray(recordsList) && recordsList.length > 0 ? (
         recordsList.map((r, index) => {
+          if(selectedListMode==='affiliates' && r.type!=='affiliate'){
+            return
+          }
+
           try {
             return (
               <RecordsListItem
