@@ -9,6 +9,7 @@ import "./styles/records-list.css";
 import "./styles/NewRecordPage.css";
 import "./styles/record-details.css";
 import "./styles/creating_record.css";
+import "./styles/home-page.css"
 import {
   Routes,
   Route,

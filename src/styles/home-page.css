@@ -1,0 +1,9 @@
+.home-card.beneficiary svg path {
+    stroke: var(--main-beneficiario);
+}
+.home-card.affiliate svg path {
+    stroke: var(--main-afiliado);
+}
+.home-card.record svg path {
+    stroke: var(--main-color);
+}

@@ -317,3 +317,7 @@ export async function searchCuidos(record_id = "") {
   }
   return await fetch(API_URL + SEARCH_CUIDOS + record_id);
 }
+
+export function getRecordsCount(){
+  return fetch(API_URL + 'records_count')
+}
