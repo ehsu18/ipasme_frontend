@@ -24,11 +24,11 @@
 .navbar ul {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0px;
 }
 
 .navbar ul li {
-  padding-left: 24px;
+  padding-left: 0px;
 }
 .navbar ul svg {
   width: fit-content;
@@ -51,9 +51,10 @@
   gap: 8px;
   padding: 4px 0px;
   width: 230px;
-  height: 32px;
+  height: 48px;
   box-sizing: border-box;
   cursor: pointer;
+  padding-left: 24px;
 }
 
 .tab-option.selected {

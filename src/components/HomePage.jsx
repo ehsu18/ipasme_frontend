@@ -1,4 +1,4 @@
-import { DualSelector } from "./Buttons";
+import { SearchWidget } from "./Buttons";
 import { useEffect, useState } from "react";
 import homeGirl from "../assets/svg/home-girl.svg";
 import { filterRecords, getRecordsCount } from "../tools/api";
@@ -102,83 +102,7 @@ export function HomePage() {
   );
 }
 
-function SearchWidget({}) {
-  let [options, setOptions] = useState([]);
-  let [text, setText] = useState("");
 
-  return (
-    <div
-      className="flex-h"
-      style={{
-        position: "relative",
-        borderRadius: "4px",
-        border: "1px solid var(--border)",
-        white: "var(--white, #FFF)",
-        boxShadow: "0px 1px 6px 0px rgba(0, 0, 0, 0.12)",
-      }}
-    >
-      <input
-        className="paragraph-regular entry-1-active "
-        type="text"
-        value={text}
-        placeholder="Buscar"
-        onChange={(e) => {
-          filterRecords(e.target.value)
-            .then((response) => response.json())
-            .then((json) => {
-              setOptions(json);
-            })
-            .catch((error) => {
-              setOptions([]);
-            });
-          setText(e.target.value);
-        }}
-      />
-      {Array.isArray(options) && options.length > 0 ? (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            position: "absolute",
-            top: "34.5px",
-            border: "solid 1px var(--border)",
-            borderRadius: "0px 0px 12px 12px",
-            width: "100%",
-            backgroundColor: "var(--white)",
-          }}
-        >
-          {options.map((opt, index) => {
-            let innerText =
-              opt.nationality +
-              opt.document +
-              " " +
-              opt.names +
-              " " +
-              opt.lastnames;
-            return (
-              <span
-                style={{ width: "100%", maxWidth: "100%", padding: "8px 4px" }}
-                key={index}
-                ind={index}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = "var(--gray)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = null;
-                }}
-                onClick={(e) => {
-                  window.location.href = `/recod_details/${opt.id}`;
-                }}
-              >
-                {innerText}
-              </span>
-            );
-          })}
-        </div>
-      ) : null}
-    </div>
-  );
-}
 
 function RecordsCard({ color, text, number, icon, type }) {
   return (

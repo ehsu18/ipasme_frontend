@@ -209,6 +209,8 @@ a {
   align-items: center;
   gap: 4px;
   width: fit-content;
+  height: 22px;
+  max-height: 22px;
 }
 .persontype-tag span {
   color: var(--white);

@@ -1,4 +1,4 @@
-import { ButtonBig, ButtonSmall, PersonTypeTag, DualSelector } from "./Buttons";
+import { ButtonBig, ButtonSmall, PersonTypeTag, DualSelector, SearchWidget } from "./Buttons";
 import * as icons from "./Icons";
 import { useState, useEffect } from "react";
 import * as api from "../tools/api";
@@ -54,16 +54,11 @@ export function ViewRecordsPage() {
       </header>
 
       <div className="flex-h gap-auto recordslist-options">
-        <ButtonBig type="secondary" text="Buscar" icon={icons.Search} />
+        <SearchWidget/>
 
         <div className="flex-h gap12">
           <ButtonBig type="secondary" text="Filtrar" icon={icons.Filters1} />
           <ButtonBig type="secondary" text="Ordenar" icon={icons.Filters2} />
-          <ButtonBig
-            type="secondary"
-            text="M&aacute;s"
-            icon={icons.MenuVertical}
-          />
         </div>
       </div>
 
