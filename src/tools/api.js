@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000/api/";
+const API_URL = process.env.REACT_APP_DEV_APIURL;
 const RECORD = "record";
 const RECORD_AFFILIATES = "record_affiliates";
 const RECORD_BENEFICIARYS = "record_beneficiarys";
