@@ -92,7 +92,12 @@
 .details-table th {
   padding: 12px 0px;
   vertical-align: middle;
+  text-align: center;
   border-bottom: 1px solid var(--border);
+}
+.details-table tr td:first-child,
+.details-table tr th:first-child {
+  text-align: left;
 }
 .details-table tr:last-child td {
   border: none;

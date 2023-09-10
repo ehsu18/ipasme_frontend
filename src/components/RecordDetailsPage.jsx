@@ -26,7 +26,7 @@ import {
   searchCuidos,
   
 } from "../tools/api";
-import { calcAge, dateToString } from "../tools/utilities";
+import { calcAge, convertDate, dateToString } from "../tools/utilities";
 import { useParams } from "react-router-dom";
 import { ButtonBig, ButtonSmall, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
@@ -841,23 +841,6 @@ function RecordDetailsRepososTable({
       .catch((error) => {
         throw error;
       });
-    // console.log("section loading data", name);
-    // setData([
-    //   {
-    //     fecha_inicio: "2023-05-09",
-    //     fecha_fin:"2023-05-19",
-    //     dias:10,
-    //     area:'Medicina interna',
-    //     id:'adfasdfasdf'
-    //   },
-    //   {
-    //     fecha_inicio: "2023-05-09",
-    //     fecha_fin:"2023-05-19",
-    //     dias:10,
-    //     area:'Medicina interna',
-    //     id:'adfasdfasdf'
-    //   }
-    // ])
   }, [recordId, name]);
 
   return (
@@ -880,11 +863,11 @@ function RecordDetailsRepososTable({
           </tr>
           {data.map((row, index) => (
             <tr key={index} className="details-table-row">
-              <td>{row.fecha_inicio + " - " + row.fecha_fin}</td>
-              <td>{row.dias}</td>
+              <td>{dateToString(convertDate(row.fecha_inicio)) + " - " + dateToString(convertDate(row.fecha_fin))}</td>
+              <td>{row.dias || 'no indica'}</td>
               <td>{row.especialidad}</td>
               <td className="vermas title-small">
-                <a>{icons.EyeOpen(16)} Abrir</a>
+                <a href={`/edit_reposo/${row.id}`}>{icons.EyeOpen(16)} Abrir</a>
               </td>
             </tr>
           ))}
@@ -896,7 +879,9 @@ function RecordDetailsRepososTable({
       <div className="flex-h recorddetails-section-info">
         <span className="micro-italic">{/* aqui puede ir un texto */}</span>
         <div className="flex-h gap12">
-          <ButtonBig text="Añadir" icon={icons.DocumentEdit} type="secondary" />
+          <ButtonBig text="Añadir" icon={icons.DocumentEdit} type="secondary" action={()=>{
+            window.location.href = `/add_reposo/${recordId}`
+          }}/>
         </div>
       </div>
     </section>
@@ -948,15 +933,15 @@ function RecordDetailsCuidosTable({
           <tbody>
             {data.map((row, index) => (
               <tr key={index} className="details-table-row">
-                <td>{row.fecha_inicio + " - " + row.fecha_fin}</td>
-                <td>{row.dias}</td>
+                <td>{dateToString(convertDate(row.fecha_inicio)) + " - " + dateToString(convertDate(row.fecha_fin))}</td>
+                <td>{row.dias || 'no indica'}</td>
                 <td>
                   {row.beneficiary_name ||
                     row.beneficiary ||
                     row.beneficiary_id}
                 </td>
                 <td className="vermas title-small">
-                  <a>{icons.EyeOpen(16)} Abrir</a>
+                  <a href={`/edit_cuido/${row.id}`}>{icons.EyeOpen(16)} Abrir</a>
                 </td>
               </tr>
             ))}
@@ -969,7 +954,9 @@ function RecordDetailsCuidosTable({
       <div className="flex-h recorddetails-section-info">
         <span className="micro-italic">{/* aqui puede ir un texto */}</span>
         <div className="flex-h gap12">
-          <ButtonBig text="Añadir" icon={icons.DocumentEdit} type="secondary" />
+          <ButtonBig text="Añadir" icon={icons.DocumentEdit} type="secondary" action={()=>{
+            window.location.href = `/add_cuido/${recordId}`
+          }} />
         </div>
       </div>
     </section>

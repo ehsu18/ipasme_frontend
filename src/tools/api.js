@@ -230,12 +230,42 @@ export function deleteCitaodon(citaodonId){
 }
 
 
-
 export async function getReposos(id = "") {
   if (id !== "") {
     id = "/" + id;
   }
   return await fetch(API_URL + REPOSOS + id);
+}
+export function postReposo(data){
+  if (data === undefined) {
+    throw new Error("no data received");
+  }
+  return fetch(API_URL + REPOSOS, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+export function putReposo(reposoId ,data){
+  if (data === undefined) {
+    throw new Error("no data received");
+  }
+  return fetch(API_URL + REPOSOS + '/'+reposoId, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+export function deleteReposo(id){
+  return fetch(API_URL + REPOSOS + '/' + id, {
+    method: "DELETE"
+  });
 }
 export async function searchReposos(record_id = "") {
   if (record_id !== "") {
@@ -243,11 +273,43 @@ export async function searchReposos(record_id = "") {
   }
   return await fetch(API_URL + SEARCH_REPOSOS + record_id);
 }
+
 export async function getCuidos(id = "") {
   if (id !== "") {
     id = "/" + id;
   }
   return await fetch(API_URL + CUIDOS + id);
+}
+export function postCuido(data){
+  if (data === undefined) {
+    throw new Error("no data received");
+  }
+  return fetch(API_URL + CUIDOS, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+export function putCuido(cuidoId ,data){
+  if (data === undefined) {
+    throw new Error("no data received");
+  }
+  return fetch(API_URL + CUIDOS + '/'+cuidoId, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+export function deleteCuido(id){
+  return fetch(API_URL + CUIDOS + '/' + id, {
+    method: "DELETE"
+  });
 }
 export async function searchCuidos(record_id = "") {
   if (record_id !== "") {

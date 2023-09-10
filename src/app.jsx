@@ -17,6 +17,8 @@ import {
 import { AddCitaPage, EditCitaPage, AddCitaodonPage, EditCitaodonPage} from './components/CitaPage';
 import { CreatingAffiliatePage, CreatingBeneficiaryPage } from "./components/CreatingRecordPage";
 import { RecordDetailsPage } from "./components/RecordDetailsPage";
+import { AddReposoPage, EditReposoPage } from "./components/RepososPage";
+import { AddCuidoPage, EditCuidoPage } from "./components/CuidosPage";
 // TODO revisar si es mejor importar los css asi o en sus respectivas paginas
 
 function App() {
@@ -34,6 +36,10 @@ function App() {
         <Route path="/edit_cita/:id" element={<EditCitaPage/>}/>
         <Route path="/add_citaodon/:id" element={<AddCitaodonPage/>}/>
         <Route path="/edit_citaodon/:id" element={<EditCitaodonPage/>}/>
+        <Route path="/add_reposo/:affiliate_id" element={<AddReposoPage/>}/>
+        <Route path="/edit_reposo/:reposoId" element={<EditReposoPage/>}/>
+        <Route path="/add_cuido/:affiliate_id" element={<AddCuidoPage/>}/>
+        <Route path="/edit_cuido/:cuidoId" element={<EditCuidoPage/>}/>
       </Routes>
     </main>
   );

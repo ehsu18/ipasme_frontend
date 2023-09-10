@@ -16,6 +16,8 @@ function convertDate(date) {
 
 // TODO falta delete
 // TODO hay que hacer un componente checkbox y checkbox list
+// TODO hay que manejar la posibilidada de que no se cree la cita partiendo de una historia,
+// con lo que no se carga la seccion de nombre y eso
 
 export function AddCitaPage() {
   let { id } = useParams();
@@ -363,7 +365,7 @@ export function EditCitaPage(){
                   return
                 }
 
-                if(citaData.fecha){
+                if(citaData.fecha){ //TODO creo que esto no es buena idea
                   citaData.fecha = convertDate(citaData.fecha);
                 }
 
@@ -423,7 +425,7 @@ export function EditCitaPage(){
                   })
                   .catch((error) => {
                     alert(
-                      "Ocurrió un error tratando de registrar la historia."
+                      "Ocurrió un error tratando de registrar la cita."
                     );
                     console.log(error.msg);
                   });
@@ -699,6 +701,7 @@ export function EditCitaodonPage(){
               text="Eliminar"
               icon={icons.DocumentCross}
               action={() => {
+                // TODO por que se evaluan los keys
                 if (Object.keys(citaData) !== 0 &&
                   window.confirm(
                     "¿Está seguro de querer ELIMINAR esta cita? no hay vuelta atrás para este cambio."

@@ -50,3 +50,7 @@ TODO    poner una tabla readonly de afiliados en los detalles de historia
 TODO    distribuir mejor el espacio de las tablas
 
 TODO    aplicar los modos outline de los botones e implementarlos donde van
+
+TODO    no se por que al compilar la app, al crear una cita esta regresa automaticamente (eso es a porposito)
+        pero al ser "optimizado" automaticamente, no se recarga la pagina y por lo tanto no se actualizan las
+        tablas. Hay que hacer que se actualicen automaticamente o no se

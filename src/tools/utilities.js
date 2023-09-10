@@ -31,3 +31,12 @@ export function calcAge(date) {
       return "";
     }
   }
+
+export  function convertDate(date) {
+    try {
+      return date.split("T")[0];
+    } catch {
+      return "";
+    }
+  }
+  
