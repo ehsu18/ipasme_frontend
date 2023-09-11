@@ -10,6 +10,7 @@
 .recorddetails-header {
   padding: 24px;
   width: 100%;
+  min-height: 120px;
   justify-content: space-between;
 }
 .recorddetails-header .left {

@@ -4,29 +4,28 @@ import {
   deleteRecord,
   postAffiliate,
   postBeneficiary,
-
   filterRecords,
-
   getRecordBeneficiarys,
   putRecordBeneficiary,
   postRecordBeneficiary,
   deleteRecordBeneficiary,
-
   getRecordCitas,
   getCita,
   postCita,
   putCita,
-
   getRecordCitasodon,
   getCitaodon,
   postCitaodon,
   putCitaodon,
-
   searchReposos,
   searchCuidos,
-  
 } from "../tools/api";
-import { calcAge, convertDate, dateToString, titleCase } from "../tools/utilities";
+import {
+  calcAge,
+  convertDate,
+  dateToString,
+  titleCase,
+} from "../tools/utilities";
 import { useParams } from "react-router-dom";
 import { ButtonBig, ButtonSmall, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
@@ -113,30 +112,25 @@ export function RecordDetailsPage() {
                 <div className="title flex-h">
                   <span className="title-big">
                     {recordData.basic_info // TODO el titulo y la cedula se deben actualizar en tiempo real con las ediciones
-                      ? titleCase(recordData.basic_info.names +
-                        " " +
-                        recordData.basic_info.lastnames)
+                      ? titleCase(
+                          recordData.basic_info.names +
+                            " " +
+                            recordData.basic_info.lastnames
+                        )
                       : ""}
                   </span>
                   <PersonTypeTag type={recordData["type"]} />
                 </div>
                 <span className="title-regular">
-                  {recordData.basic_info ? recordData.basic_info.nationality + '-' : ''}
+                  {recordData.basic_info
+                    ? recordData.basic_info.nationality + "-"
+                    : ""}
                   {recordData.basic_info ? recordData.basic_info.document : ""}
                 </span>
               </div>
             </section>
 
-            <section className="right flex-v">
-              <div className=" flex-h" style={{ gap: "8px" }}>
-                <span className="title-regular">
-                  Ubicaci&oacute;n de la carpeta
-                </span>
-                {icons.Edit4(20)}
-              </div>
-              <p>Este texto es solo de ejemplo y no deberia verse</p>
-              {/* TODO hacer esto funcional */}
-            </section>
+            <FolderWidget data={recordData} setData={setRecordData} />
           </header>
 
           <TabSelector focusedTab={focusedTab} setFocusedTab={setFocusedTab}>
@@ -711,7 +705,9 @@ function CitasTable({ recordId }) {
                 return (
                   <tr key={index} className="details-table-row">
                     <td>
-                      {cita.fecha ? dateToString(cita.fecha.split("T")[0]) : "No indica"}
+                      {cita.fecha
+                        ? dateToString(cita.fecha.split("T")[0])
+                        : "No indica"}
                     </td>
                     <td>{cita.area || "No indica"}</td>
                     <td>{cita.diagnose || "No indica"}</td>
@@ -738,8 +734,8 @@ function CitasTable({ recordId }) {
           text="Añadir cita"
           icon={icons.DocumentEdit}
           type="secondary"
-          action={()=>{
-            window.location.href = "/add_cita/" + recordId
+          action={() => {
+            window.location.href = "/add_cita/" + recordId;
           }}
         />
       </div>
@@ -790,7 +786,9 @@ function CitasOdonTable({ recordId }) {
                   <tr key={index} className="details-table-row">
                     {/* <td className="selector-container">selector</td> */}
                     <td>
-                      {cita.fecha ? dateToString(cita.fecha.split("T")[0]) : "No indica"}
+                      {cita.fecha
+                        ? dateToString(cita.fecha.split("T")[0])
+                        : "No indica"}
                     </td>
                     <td>{cita.diagnose || "No indica"}</td>
                     <td className="vermas title-small">
@@ -816,8 +814,8 @@ function CitasOdonTable({ recordId }) {
           text="Añadir cita"
           icon={icons.DocumentEdit}
           type="secondary"
-          action={()=>{
-            window.location.href = `/add_citaodon/${recordId}`
+          action={() => {
+            window.location.href = `/add_citaodon/${recordId}`;
           }}
         />
       </div>
@@ -867,8 +865,12 @@ function RecordDetailsRepososTable({
           </tr>
           {data.map((row, index) => (
             <tr key={index} className="details-table-row">
-              <td>{dateToString(convertDate(row.fecha_inicio)) + " - " + dateToString(convertDate(row.fecha_fin))}</td>
-              <td>{row.dias || 'no indica'}</td>
+              <td>
+                {dateToString(convertDate(row.fecha_inicio)) +
+                  " - " +
+                  dateToString(convertDate(row.fecha_fin))}
+              </td>
+              <td>{row.dias || "no indica"}</td>
               <td>{row.especialidad}</td>
               <td className="vermas title-small">
                 <a href={`/edit_reposo/${row.id}`}>{icons.EyeOpen(16)} Abrir</a>
@@ -883,9 +885,14 @@ function RecordDetailsRepososTable({
       <div className="flex-h recorddetails-section-info">
         <span className="micro-italic">{/* aqui puede ir un texto */}</span>
         <div className="flex-h gap12">
-          <ButtonBig text="Añadir" icon={icons.DocumentEdit} type="secondary" action={()=>{
-            window.location.href = `/add_reposo/${recordId}`
-          }}/>
+          <ButtonBig
+            text="Añadir"
+            icon={icons.DocumentEdit}
+            type="secondary"
+            action={() => {
+              window.location.href = `/add_reposo/${recordId}`;
+            }}
+          />
         </div>
       </div>
     </section>
@@ -937,15 +944,21 @@ function RecordDetailsCuidosTable({
           <tbody>
             {data.map((row, index) => (
               <tr key={index} className="details-table-row">
-                <td>{dateToString(convertDate(row.fecha_inicio)) + " - " + dateToString(convertDate(row.fecha_fin))}</td>
-                <td>{row.dias || 'no indica'}</td>
+                <td>
+                  {dateToString(convertDate(row.fecha_inicio)) +
+                    " - " +
+                    dateToString(convertDate(row.fecha_fin))}
+                </td>
+                <td>{row.dias || "no indica"}</td>
                 <td>
                   {row.beneficiary_name ||
                     row.beneficiary ||
                     row.beneficiary_id}
                 </td>
                 <td className="vermas title-small">
-                  <a href={`/edit_cuido/${row.id}`}>{icons.EyeOpen(16)} Abrir</a>
+                  <a href={`/edit_cuido/${row.id}`}>
+                    {icons.EyeOpen(16)} Abrir
+                  </a>
                 </td>
               </tr>
             ))}
@@ -958,9 +971,14 @@ function RecordDetailsCuidosTable({
       <div className="flex-h recorddetails-section-info">
         <span className="micro-italic">{/* aqui puede ir un texto */}</span>
         <div className="flex-h gap12">
-          <ButtonBig text="Añadir" icon={icons.DocumentEdit} type="secondary" action={()=>{
-            window.location.href = `/add_cuido/${recordId}`
-          }} />
+          <ButtonBig
+            text="Añadir"
+            icon={icons.DocumentEdit}
+            type="secondary"
+            action={() => {
+              window.location.href = `/add_cuido/${recordId}`;
+            }}
+          />
         </div>
       </div>
     </section>
@@ -1014,8 +1032,8 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
   let [beneficiarys, setBeneficiarys] = useState([]);
   let [openEditDialog, setOpenEditDialog] = useState(false);
   let [editingRelation, setEditingRelation] = useState({});
-  let [openCreateDialog, setOpenCreateDialog] = useState(false)
-  let [createData, setCreateData] = useState({})
+  let [openCreateDialog, setOpenCreateDialog] = useState(false);
+  let [createData, setCreateData] = useState({});
 
   useEffect(() => {
     if (recordId === undefined) {
@@ -1079,37 +1097,52 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
                           window.location.href = `/record_details/${row.id}`;
                         }}
                       />
-                      <ButtonSmall type="secondary" text="Editar" action={()=>{
-                        setEditingRelation({
-                          'record' : row.record,
-                          'level': row.level_code
-                        })
-                        setOpenEditDialog(true)
-                      }}/>
+                      <ButtonSmall
+                        type="secondary"
+                        text="Editar"
+                        action={() => {
+                          setEditingRelation({
+                            record: row.record,
+                            level: row.level_code,
+                          });
+                          setOpenEditDialog(true);
+                        }}
+                      />
                       <ButtonSmall
                         type="danger"
                         text="Eliminar"
                         action={() => {
-                          if(window.confirm("¿Desea eliminar esta relación?")){
+                          if (
+                            window.confirm("¿Desea eliminar esta relación?")
+                          ) {
                             //eliminar
-                            let beneficiaryId =  row.record
+                            let beneficiaryId = row.record;
                             deleteRecordBeneficiary(recordId, beneficiaryId)
-                            .then(response=>response.json())
-                            .then(json=>{
-                              if(json['result']==='ok'){
-                                alert("Se eliminó la relación exitosamente")
-                              } else if (json['error']==='not in the beneficiarys list'){
-                                throw new Error('La API indica que el beneficiario no perteneca al Afiliado')
-                              } else if (json['error']==='unique affiliate'){
-                                alert("No se puede borrar la relación porque el beneficiario no posee más afiliados, debe borrar el beneficiario o beneficiarlo con otro afiliado")
-                              }else {
-                                throw new Error()
-                              }
-                            })
-                            .catch(error=>{
-                              alert('Ocurrió un error')
-                              console.log(error)
-                            })
+                              .then((response) => response.json())
+                              .then((json) => {
+                                if (json["result"] === "ok") {
+                                  alert("Se eliminó la relación exitosamente");
+                                } else if (
+                                  json["error"] ===
+                                  "not in the beneficiarys list"
+                                ) {
+                                  throw new Error(
+                                    "La API indica que el beneficiario no perteneca al Afiliado"
+                                  );
+                                } else if (
+                                  json["error"] === "unique affiliate"
+                                ) {
+                                  alert(
+                                    "No se puede borrar la relación porque el beneficiario no posee más afiliados, debe borrar el beneficiario o beneficiarlo con otro afiliado"
+                                  );
+                                } else {
+                                  throw new Error();
+                                }
+                              })
+                              .catch((error) => {
+                                alert("Ocurrió un error");
+                                console.log(error);
+                              });
 
                             // si dice ok, bueno
 
@@ -1143,48 +1176,46 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
                 setData={setEditingRelation}
                 sectionEditingStatus={true}
               />
-              
+
               <div className="flex-h gap12">
                 <ButtonBig
-                text="Guardar cambios"
-                icon={icons.Save}
-                action={() => {
-                  if (
-                    editingRelation.record &&
-                    window.confirm("¿Desea guardar los cambios?")
-                  ) {
-                    editingRelation.level = parseInt(editingRelation.level)
-                    putRecordBeneficiary(recordId, editingRelation)
-                      .then((response) => response.json())
-                      .then((json) => {
-                        if (json["result"] === "ok") {
-                          alert("Editado con éxito.");
-                        } else if (json["error"]) {
-                          throw new Error(json["error"]);
-                        }
-                      })
-                      .catch((error) => {
-                        alert("Ocurrió un error.");
-                        console.log(error);
-                      });
-                  }
-                  setOpenEditDialog(false);
-                  setEditingRelation({});
-                }}
-              />
-              <ButtonBig
-                text="Cancelar"
-                icon={icons.Cross}
-                type="secondary"
-                action={() => {
-                  setOpenEditDialog(false);
-                  setEditingRelation({});
-                }}
-              />
+                  text="Guardar cambios"
+                  icon={icons.Save}
+                  action={() => {
+                    if (
+                      editingRelation.record &&
+                      window.confirm("¿Desea guardar los cambios?")
+                    ) {
+                      editingRelation.level = parseInt(editingRelation.level);
+                      putRecordBeneficiary(recordId, editingRelation)
+                        .then((response) => response.json())
+                        .then((json) => {
+                          if (json["result"] === "ok") {
+                            alert("Editado con éxito.");
+                          } else if (json["error"]) {
+                            throw new Error(json["error"]);
+                          }
+                        })
+                        .catch((error) => {
+                          alert("Ocurrió un error.");
+                          console.log(error);
+                        });
+                    }
+                    setOpenEditDialog(false);
+                    setEditingRelation({});
+                  }}
+                />
+                <ButtonBig
+                  text="Cancelar"
+                  icon={icons.Cross}
+                  type="secondary"
+                  action={() => {
+                    setOpenEditDialog(false);
+                    setEditingRelation({});
+                  }}
+                />
               </div>
-              
             </div>
-            
           </BasicModal>
         </>
       ) : (
@@ -1194,20 +1225,25 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
       <div className="flex-h recorddetails-section-info">
         <span className="micro-italic">{/* aqui puede ir un texto */}</span>
         <div className="flex-h gap12">
-          <ButtonBig text="Añadir" icon={icons.DocumentEdit} type="secondary" action={()=>{
-            setOpenCreateDialog(true)
-          }}/>
+          <ButtonBig
+            text="Añadir"
+            icon={icons.DocumentEdit}
+            type="secondary"
+            action={() => {
+              setOpenCreateDialog(true);
+            }}
+          />
         </div>
       </div>
-      <BasicModal 
+      <BasicModal
         open={openCreateDialog}
-        handleClose={()=>{
-          setCreateData({})
-          setOpenCreateDialog(false)
+        handleClose={() => {
+          setCreateData({});
+          setOpenCreateDialog(false);
         }}
       >
         <div className="flex-v gap24">
-          <RecordDetailsSearchContainer 
+          <RecordDetailsSearchContainer
             label="Buscar historia"
             name="record"
             data={createData}
@@ -1222,31 +1258,44 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
             sectionEditingStatus={true}
           />
           <div className="flex-h gap12">
-            <ButtonBig text="Cancelar" icon={icons.Cross} action={()=>{
-          setCreateData({})
-          setOpenCreateDialog(false)
-        }} />
-            <ButtonBig text="Guardar" icon={icons.User1} action={()=>{
-              if(createData.record && createData.level && window.confirm('¿Seguro que desea guardar esta relación?')){
-                createData.level = parseInt(createData.level)
-                postRecordBeneficiary(recordId, createData)
-                .then(response=>response.json())
-                .then(json=>{
-                  if(json['result'] === 'ok') {
-                    alert('Registrado con exito')
-                  } else if (json['error']){
-                    throw new Error(json['error'])
-                  } else {
-                    throw new Error()
-                  }
-                })
-                .catch(error=>{
-                  alert('Ocurrió un error.')
-                  console.log(error)
-                })}
-                setCreateData({})
-          setOpenCreateDialog(false)
-            }}/>
+            <ButtonBig
+              text="Cancelar"
+              icon={icons.Cross}
+              action={() => {
+                setCreateData({});
+                setOpenCreateDialog(false);
+              }}
+            />
+            <ButtonBig
+              text="Guardar"
+              icon={icons.User1}
+              action={() => {
+                if (
+                  createData.record &&
+                  createData.level &&
+                  window.confirm("¿Seguro que desea guardar esta relación?")
+                ) {
+                  createData.level = parseInt(createData.level);
+                  postRecordBeneficiary(recordId, createData)
+                    .then((response) => response.json())
+                    .then((json) => {
+                      if (json["result"] === "ok") {
+                        alert("Registrado con exito");
+                      } else if (json["error"]) {
+                        throw new Error(json["error"]);
+                      } else {
+                        throw new Error();
+                      }
+                    })
+                    .catch((error) => {
+                      alert("Ocurrió un error.");
+                      console.log(error);
+                    });
+                }
+                setCreateData({});
+                setOpenCreateDialog(false);
+              }}
+            />
           </div>
         </div>
       </BasicModal>
@@ -1261,16 +1310,15 @@ function RecordDetailsSearchContainer({
   setData = () => {},
 }) {
   let [options, setOptions] = useState([]);
-  let [text, setText] = useState('')
+  let [text, setText] = useState("");
 
   return (
     <div
       className="recorddetails-section-datacontainer"
-      style={{position: "relative"}}
+      style={{ position: "relative" }}
     >
       <span className="micro-italic">{label}</span>
       <input
-
         className="paragraph-regular entry-1-active "
         type="text"
         name={name}
@@ -1305,7 +1353,13 @@ function RecordDetailsSearchContainer({
           }}
         >
           {options.map((opt, index) => {
-            let innerText = opt.nationality+ opt.document + " " + opt.names + ' ' + opt.lastnames;
+            let innerText =
+              opt.nationality +
+              opt.document +
+              " " +
+              opt.names +
+              " " +
+              opt.lastnames;
             return (
               <span
                 style={{ width: "100%", maxWidth: "100%", padding: "8px 4px" }}
@@ -1333,5 +1387,89 @@ function RecordDetailsSearchContainer({
         </div>
       ) : null}
     </div>
+  );
+}
+
+function FolderWidget({ data, setData }) {
+  let [modalOpen, setModalOpen] = useState(false);
+  let [text, setText] = useState('');
+
+  useEffect(()=>{
+    setText(data.basic_info ? data.basic_info.folder : '')
+  },[data])
+
+  return (
+    <section className="right flex-v">
+      <div className=" flex-h" style={{ gap: "8px" }}>
+        <span className="title-regular">Ubicaci&oacute;n de la carpeta</span>
+        <div
+          onClick={(e) => {
+            setModalOpen(true);
+          }}
+        >
+          {icons.Edit4(20)}
+        </div>
+      </div>
+      <p>{data.basic_info ? data.basic_info.folder : "No indica"}</p>
+      {/* TODO hacer esto funcional */}
+      <BasicModal
+        open={modalOpen}
+        handleClose={() => {
+          setModalOpen(false);
+        }}
+      >
+        <div className="flex-v gap8 flex-center-h">
+          <span className="title-regular">Ubicaci&oacute;n de la carpeta</span>
+          <input
+            type="text"
+            name="folder"
+            className="paragraph-regular"
+            style={{
+              height: "36px",
+              border: "1px solid var(--border)",
+              borderRadius: "4px",
+              padding: "0px 12px",
+            }}
+            value={text}
+            onChange={(e)=>{setText(e.target.value)}}
+          />
+          <div className="flex-h gap12">
+            <ButtonBig
+              text="Cancelar"
+              icon={icons.Cross}
+              type="danger"
+              action={(e) => {
+                setText('');
+                setModalOpen(false);
+              }}
+            />
+            <ButtonBig
+              text="Guardar"
+              icon={icons.Save}
+              type="main"
+              action={(e) => {
+                // TODO validad primero
+                putRecord(data.id, { folder:text })
+                  .then((response) => response.json())
+                  .then((json) => {
+                    if (json["result"]==='ok') {
+                      let obj = data;
+                      obj.basic_info["folder"] = text;
+                      setData(obj);
+                      alert('Guardado')
+                      setModalOpen(false);
+                    } else {
+                      throw new Error(json['error'])
+                    }
+                  })
+                  .catch((error) => {
+                    alert("Ocurrió un error");
+                  });
+              }}
+            />
+          </div>
+        </div>
+      </BasicModal>
+    </section>
   );
 }
