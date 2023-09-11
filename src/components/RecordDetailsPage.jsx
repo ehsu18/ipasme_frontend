@@ -58,6 +58,8 @@ import BasicModal from "./Modal";
 
 // TODO manejar reposos y cuidos vacios
 
+// TODO hay que validar para poder guardar los datos como en las otras paginas
+
 export function RecordDetailsPage() {
   let { id } = useParams();
   let [recordData, setRecordData] = useState({});

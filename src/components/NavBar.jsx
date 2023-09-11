@@ -1,7 +1,7 @@
 import logoIpasme from "../assets/png/logo-ipasme.png";
 import * as icons from "./Icons";
 import { ButtonBig } from "./Buttons";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
 function NavBar() {

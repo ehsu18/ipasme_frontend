@@ -3,6 +3,8 @@ import * as icons from "./Icons";
 import { useState, useEffect } from "react";
 import * as api from "../tools/api";
 import { calcAge } from "../tools/utilities";
+import { NavLink } from "react-router-dom";
+
 
 // TODO estilo del componente "cargando"
 // TODO el cuadrito de seleccion debe conservar su tama;o
@@ -82,7 +84,7 @@ export function RecordsList({ selectedItem, setSelectedItem, recordsList, select
   return (
     <div className="common-container recordslist">
       <div className="columns">
-        <div className="selection-box"></div>
+        {/* <div className="selection-box"></div> */}
         <span className="micro-italic">Número de cédula</span>
         <span className="micro-italic">Nombre</span>
         <span className="micro-italic">Edad</span>
@@ -141,7 +143,7 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
           setSelected(id);
         }}
       >
-        <div className="selection-box"></div>
+        {/* <div className="selection-box"></div> */}
         <span className="identification-text title-regular">
           {(recordData["basic_info"]["nationality"]
             ? recordData["basic_info"]["nationality"] + "-"
@@ -246,7 +248,8 @@ export function RelationWidget({ selectedItem, recordsList }) {
 }
 function RelationAffiliateCard({ relation, record}) {
   return (
-    <div className="relation-card">
+    <NavLink to={'/record_details/' + relation.record}>
+      <div className="relation-card">
       <div
         style={
           relation['type'] === "beneficiary"? { backgroundColor: "var(--main-beneficiario)" }:
@@ -275,12 +278,15 @@ function RelationAffiliateCard({ relation, record}) {
           }
         </p>
       </div>
-      <div>{icons.MenuVertical("24px")}</div>
+      {/* <div>{icons.MenuVertical("24px")}</div> */}
     </div>
+    </NavLink>
+    
   );
 }
 function RelationBeneficiaryCard({ relation, record}) {
   return (
+    <NavLink to={'/record_details/' + relation.record}>
     <div className="relation-card">
 
       <div
@@ -311,7 +317,7 @@ function RelationBeneficiaryCard({ relation, record}) {
           }
         </p>
       </div>
-      <div>{icons.MenuVertical("24px")}</div>
-    </div>
+      {/* <div>{icons.MenuVertical("24px")}</div> */}
+    </div></NavLink>
   );
 }
