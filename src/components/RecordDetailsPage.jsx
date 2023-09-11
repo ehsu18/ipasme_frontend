@@ -26,7 +26,7 @@ import {
   searchCuidos,
   
 } from "../tools/api";
-import { calcAge, convertDate, dateToString } from "../tools/utilities";
+import { calcAge, convertDate, dateToString, titleCase } from "../tools/utilities";
 import { useParams } from "react-router-dom";
 import { ButtonBig, ButtonSmall, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
@@ -95,6 +95,7 @@ export function RecordDetailsPage() {
         </div>
       </header>
       {/* TODO revisar si no era content-container */}
+      {/* TODO revisar el basic info una sola vez */}
       <div className="recorddetails-container floatingcontainer-parent scroll">
         <div className="recorddetails common-container flex-v">
           <header className="recorddetails-header flex-h">
@@ -112,14 +113,15 @@ export function RecordDetailsPage() {
                 <div className="title flex-h">
                   <span className="title-big">
                     {recordData.basic_info // TODO el titulo y la cedula se deben actualizar en tiempo real con las ediciones
-                      ? recordData.basic_info.names +
+                      ? titleCase(recordData.basic_info.names +
                         " " +
-                        recordData.basic_info.lastnames
+                        recordData.basic_info.lastnames)
                       : ""}
                   </span>
                   <PersonTypeTag type={recordData["type"]} />
                 </div>
                 <span className="title-regular">
+                  {recordData.basic_info ? recordData.basic_info.nationality + '-' : ''}
                   {recordData.basic_info ? recordData.basic_info.document : ""}
                 </span>
               </div>
@@ -1062,7 +1064,7 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
                       {row.nationality + row.document}
                     </td>
                     <td className="paragraph-regular">
-                      {row.names + " " + row.lastnames}
+                      {titleCase(row.names + " " + row.lastnames)}
                     </td>
                     {/* <td>{calcAge(row.dateofbirth)}</td> */}
                     <td>

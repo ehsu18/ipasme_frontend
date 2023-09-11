@@ -1,10 +1,15 @@
-import { ButtonBig, ButtonSmall, PersonTypeTag, DualSelector, SearchWidget } from "./Buttons";
+import {
+  ButtonBig,
+  ButtonSmall,
+  PersonTypeTag,
+  DualSelector,
+  SearchWidget,
+} from "./Buttons";
 import * as icons from "./Icons";
 import { useState, useEffect } from "react";
 import * as api from "../tools/api";
-import { calcAge } from "../tools/utilities";
+import { calcAge, titleCase } from "../tools/utilities";
 import { NavLink } from "react-router-dom";
-
 
 // TODO estilo del componente "cargando"
 // TODO el cuadrito de seleccion debe conservar su tama;o
@@ -18,16 +23,17 @@ export function ViewRecordsPage() {
 
   let [selectedItem, setSelectedItem] = useState(-1);
   let [recordsList, setRecords] = useState([]);
-  let [selectedListMode, setSelectedListMode] = useState('todos');
+  let [selectedListMode, setSelectedListMode] = useState("todos");
 
   // TODO se debe hacer el useeffect para que se traiga la configuracion del selector desde la base de datos
   // TODO manejar errores de conexion, de lista vacia, etc
 
-
   useEffect(() => {
-    api.getRecords()
+    api
+      .getRecords()
       .then((response) => response.json())
-      .then((data) => {setRecords(data)
+      .then((data) => {
+        setRecords(data);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -42,8 +48,8 @@ export function ViewRecordsPage() {
             type="main"
             text="Añadir historia"
             icon={icons.DocumentEdit}
-            action={()=>{
-              window.location.href = '/newrecord';
+            action={() => {
+              window.location.href = "/newrecord";
             }}
           />
           <DualSelector
@@ -56,7 +62,7 @@ export function ViewRecordsPage() {
       </header>
 
       <div className="flex-h gap-auto recordslist-options">
-        <SearchWidget/>
+        <SearchWidget />
 
         <div className="flex-h gap12">
           <ButtonBig type="secondary" text="Filtrar" icon={icons.Filters1} />
@@ -78,7 +84,12 @@ export function ViewRecordsPage() {
   );
 }
 
-export function RecordsList({ selectedItem, setSelectedItem, recordsList, selectedListMode }) {
+export function RecordsList({
+  selectedItem,
+  setSelectedItem,
+  recordsList,
+  selectedListMode,
+}) {
   console.log("cargando RecordsList\n", "recodsList: ", recordsList);
 
   return (
@@ -95,8 +106,8 @@ export function RecordsList({ selectedItem, setSelectedItem, recordsList, select
 
       {Array.isArray(recordsList) && recordsList.length > 0 ? (
         recordsList.map((r, index) => {
-          if(selectedListMode==='affiliates' && r.type!=='affiliate'){
-            return
+          if (selectedListMode === "affiliates" && r.type !== "affiliate") {
+            return;
           }
 
           try {
@@ -131,8 +142,6 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
   // let [selected, setSelected] = useState(false);
   // console.log(recordData)
 
-  
-
   try {
     return (
       <div
@@ -153,13 +162,15 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
               : "")}
         </span>
         <span className="name-text paragraph-regular">
-          {(recordData["basic_info"]["names"]
-            ? recordData["basic_info"]["names"].trim()
-            : "") +
-            " " +
-            (recordData["basic_info"]["lastnames"]
-              ? recordData["basic_info"]["lastnames"].trim()
-              : "")}
+          {titleCase(
+            (recordData["basic_info"]["names"]
+              ? recordData["basic_info"]["names"].trim()
+              : "") +
+              " " +
+              (recordData["basic_info"]["lastnames"]
+                ? recordData["basic_info"]["lastnames"].trim()
+                : "")
+          )}
         </span>
         <span className="age-text paragraph-regular">
           {calcAge(recordData["basic_info"]["dateofbirth"])}
@@ -194,130 +205,151 @@ export function RecordsListItem({ id, selected, setSelected, recordData }) {
 }
 
 export function RelationWidget({ selectedItem, recordsList }) {
-
   let [affiliates, setAffiliates] = useState([]);
   let [beneficiarys, setBeneficiarys] = useState([]);
-  let [record, setRecord] = useState(null)
+  let [record, setRecord] = useState(null);
 
   useEffect(() => {
-
-    setAffiliates([])
-    setBeneficiarys([])
+    setAffiliates([]);
+    setBeneficiarys([]);
     if (recordsList[selectedItem] === undefined) {
       return;
     }
-    setRecord(recordsList[selectedItem])
+    setRecord(recordsList[selectedItem]);
     api
       .getRecordAffiliates(recordsList[selectedItem]["id"])
-      .then(response=>response.json())
+      .then((response) => response.json())
       .then((json) => setAffiliates(json))
       .catch((error) => console.error(error));
     api
       .getRecordBeneficiarys(recordsList[selectedItem]["id"])
-      .then(response=>response.json())
+      .then((response) => response.json())
       .then((json) => setBeneficiarys(json))
       .catch((error) => console.error(error));
   }, [selectedItem, recordsList]);
 
-  return selectedItem !== -1 ?
-    (<aside className="relations-widget">
+  return selectedItem !== -1 ? (
+    <aside className="relations-widget">
       <p className="title-regular">Afiliados de esta persona</p>
       {affiliates.length > 0 ? (
         affiliates.map((relation, index) => {
-          return <RelationBeneficiaryCard key={index} relation={relation} record={record}/>;
+          return (
+            <RelationBeneficiaryCard
+              key={index}
+              relation={relation}
+              record={record}
+            />
+          );
         })
       ) : (
-        <span style={{height:'74.45px'}} className="micro-italic">Esta persona no tiene afiliados</span>
+        <span style={{ height: "74.45px" }} className="micro-italic">
+          Esta persona no tiene afiliados
+        </span>
       )}
       <p className="title-regular">Beneficiarios de esta persona</p>
       {beneficiarys.length > 0 ? (
         beneficiarys.map((relation, index) => {
-          return <RelationAffiliateCard key={index} relation={relation} record={record}/>;
+          return (
+            <RelationAffiliateCard
+              key={index}
+              relation={relation}
+              record={record}
+            />
+          );
         })
       ) : (
-        <span style={{height:'74.45px'}} className="micro-italic">Esta persona no tiene beneficiarios</span>
+        <span style={{ height: "74.45px" }} className="micro-italic">
+          Esta persona no tiene beneficiarios
+        </span>
       )}
     </aside>
-    ) :
-    (<aside className="relations-widget">
-        <p className="empty-message">
-          Seleccione una historia<br/>para ver sus relaciones.
-        </p>
-      </aside>
-    );
-}
-function RelationAffiliateCard({ relation, record}) {
-  return (
-    <NavLink to={'/record_details/' + relation.record}>
-      <div className="relation-card">
-      <div
-        style={
-          relation['type'] === "beneficiary"? { backgroundColor: "var(--main-beneficiario)" }:
-          relation['type'] === "affiliate"? { backgroundColor: "var(--main-afiliado)" } :
-          { backgroundColor: "var(--medium" }
-        }
-      ></div>
-      <div>
-        <p className="title-small">
-          {
-            (relation["names"] ? relation["names"].trim() : '')
-            + " " +
-            (relation["lastnames"] ? relation["lastnames"].trim() : '')
-          }
-        </p>
-        <p className="title-small">{
-          (relation['nationality'] ? relation['nationality'] :'') +
-          (relation["document"] ? relation["document"] : '')
-        }</p>
-        <p className="paragraph-micro">{
-          (relation["names"] ? relation["names"] : '')
-          + ' es ' +
-          (relation["level_description"])
-          + ' de ' + 
-          (record['basic_info']["names"] ? record['basic_info']["names"] : '')
-          }
-        </p>
-      </div>
-      {/* <div>{icons.MenuVertical("24px")}</div> */}
-    </div>
-    </NavLink>
-    
+  ) : (
+    <aside className="relations-widget">
+      <p className="empty-message">
+        Seleccione una historia
+        <br />
+        para ver sus relaciones.
+      </p>
+    </aside>
   );
 }
-function RelationBeneficiaryCard({ relation, record}) {
+function RelationAffiliateCard({ relation, record }) {
   return (
-    <NavLink to={'/record_details/' + relation.record}>
-    <div className="relation-card">
-
-      <div
-        style={
-          relation['type'] === "beneficiary"? { backgroundColor: "var(--main-beneficiario)" }:
-          relation['type'] === "affiliate"? { backgroundColor: "var(--main-afiliado)" } :
-          { backgroundColor: "var(--medium" }
-        }
-      ></div>
-      <div>
-        <p className="title-small">
-          {
-            (relation["names"] ? relation["names"].trim() : '')
-            + " " +
-            (relation["lastnames"] ? relation["lastnames"].trim() : '')
+    <NavLink to={"/record_details/" + relation.record}>
+      <div className="relation-card">
+        <div
+          style={
+            relation["type"] === "beneficiary"
+              ? { backgroundColor: "var(--main-beneficiario)" }
+              : relation["type"] === "affiliate"
+              ? { backgroundColor: "var(--main-afiliado)" }
+              : { backgroundColor: "var(--medium" }
           }
-        </p>
-        <p className="title-small">{
-          (relation['nationality'] ? relation['nationality'] :'') +
-          (relation["document"] ? relation["document"] : '')
-        }</p>
-        <p className="paragraph-micro">{
-          (record['basic_info']["names"] ? record['basic_info']["names"].trim() : '')
-          + ' es ' +
-          (relation["level_description"])
-          + ' de ' + 
-          (relation["names"] ? relation["names"] : '')
-          }
-        </p>
+        ></div>
+        <div>
+          <p className="title-small">
+            {titleCase(
+              (relation["names"] ? relation["names"].trim() : "") +
+                " " +
+                (relation["lastnames"] ? relation["lastnames"].trim() : "")
+            )}
+          </p>
+          <p className="title-small">
+            {(relation["nationality"] ? relation["nationality"] : "") +
+              (relation["document"] ? relation["document"] : "")}
+          </p>
+          <p className="paragraph-micro">
+            {(relation["names"] ? relation["names"] : "") +
+              " es " +
+              relation["level_description"] +
+              " de " +
+              (record["basic_info"]["names"]
+                ? record["basic_info"]["names"]
+                : "")}
+          </p>
+        </div>
+        {/* <div>{icons.MenuVertical("24px")}</div> */}
       </div>
-      {/* <div>{icons.MenuVertical("24px")}</div> */}
-    </div></NavLink>
+    </NavLink>
+  );
+}
+function RelationBeneficiaryCard({ relation, record }) {
+  return (
+    <NavLink to={"/record_details/" + relation.record}>
+      <div className="relation-card">
+        <div
+          style={
+            relation["type"] === "beneficiary"
+              ? { backgroundColor: "var(--main-beneficiario)" }
+              : relation["type"] === "affiliate"
+              ? { backgroundColor: "var(--main-afiliado)" }
+              : { backgroundColor: "var(--medium" }
+          }
+        ></div>
+        <div>
+          <p className="title-small">
+            {titleCase(
+              (relation["names"] ? relation["names"].trim() : "") +
+                " " +
+                (relation["lastnames"] ? relation["lastnames"].trim() : "")
+            )}
+          </p>
+          <p className="title-small">
+            {(relation["nationality"] ? relation["nationality"] : "") +
+              (relation["document"] ? relation["document"] : "")}
+          </p>
+          <p className="paragraph-micro">
+            {(record["basic_info"]["names"]
+              ? record["basic_info"]["names"].trim()
+              : "") +
+              " es " +
+              relation["level_description"] +
+              " de " +
+              (relation["names"] ? relation["names"] : "")}
+          </p>
+        </div>
+        {/* <div>{icons.MenuVertical("24px")}</div> */}
+      </div>
+    </NavLink>
   );
 }
