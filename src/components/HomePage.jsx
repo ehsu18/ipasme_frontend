@@ -4,6 +4,9 @@ import homeGirl from "../assets/svg/home-girl.svg";
 import { filterRecords, getRecordsCount } from "../tools/api";
 import * as icons from "./Icons";
 
+// TODO limitar el ancho de la pagina de inicio
+
+
 export function HomePage() {
   let [records, setRecords] = useState({});
   useEffect(()=>{

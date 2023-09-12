@@ -1085,11 +1085,14 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
                       {titleCase(row.names + " " + row.lastnames)}
                     </td>
                     {/* <td>{calcAge(row.dateofbirth)}</td> */}
-                    <td>
+                    <td style={{ display: "flex", justifyContent: "center" }}>
                       <PersonTypeTag type={row.type} />
                     </td>
                     <td>{row.level_description}</td>
-                    <td className="flex-h gap12">
+                    <td
+                      className="flex-h gap12"
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
                       <ButtonSmall
                         type="secondary"
                         text="Ver"
@@ -1392,11 +1395,11 @@ function RecordDetailsSearchContainer({
 
 function FolderWidget({ data, setData }) {
   let [modalOpen, setModalOpen] = useState(false);
-  let [text, setText] = useState('');
+  let [text, setText] = useState("");
 
-  useEffect(()=>{
-    setText(data.basic_info ? data.basic_info.folder : '')
-  },[data])
+  useEffect(() => {
+    setText(data.basic_info ? data.basic_info.folder : "");
+  }, [data]);
 
   return (
     <section className="right flex-v">
@@ -1431,7 +1434,9 @@ function FolderWidget({ data, setData }) {
               padding: "0px 12px",
             }}
             value={text}
-            onChange={(e)=>{setText(e.target.value)}}
+            onChange={(e) => {
+              setText(e.target.value);
+            }}
           />
           <div className="flex-h gap12">
             <ButtonBig
@@ -1439,7 +1444,7 @@ function FolderWidget({ data, setData }) {
               icon={icons.Cross}
               type="danger"
               action={(e) => {
-                setText('');
+                setText("");
                 setModalOpen(false);
               }}
             />
@@ -1449,17 +1454,17 @@ function FolderWidget({ data, setData }) {
               type="main"
               action={(e) => {
                 // TODO validad primero
-                putRecord(data.id, { folder:text })
+                putRecord(data.id, { folder: text })
                   .then((response) => response.json())
                   .then((json) => {
-                    if (json["result"]==='ok') {
+                    if (json["result"] === "ok") {
                       let obj = data;
                       obj.basic_info["folder"] = text;
                       setData(obj);
-                      alert('Guardado')
+                      alert("Guardado");
                       setModalOpen(false);
                     } else {
-                      throw new Error(json['error'])
+                      throw new Error(json["error"]);
                     }
                   })
                   .catch((error) => {
