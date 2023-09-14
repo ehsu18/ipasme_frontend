@@ -25,16 +25,26 @@ function authToken(){
   return window.localStorage.getItem('IpasmeRMSUserToken')
 }
 
+function checkResponseCode(func){
+  return func.then((response)=>{
+    if(response.status === 403 || response.status === 401){
+      alert('Error de credenciales, deberá ingresar de nuevo.');
+      window.localStorage.removeItem('IpasmeRMSUserToken');
+      window.location.href = '/';
+    }
+    return response
+  })
+}
 
 export async function getRecords(id = "") {
   if (id !== "") {
     id = "/" + id;
   }
-  return await fetch(API_URL + RECORD + id, {
+  return await checkResponseCode(fetch(API_URL + RECORD + id, {
     headers: {
       Authorization: `token ${authToken()}`  
     },
-  });
+  }));
 }
 
 export async function getRecordAffiliates(id) {
@@ -42,11 +52,11 @@ export async function getRecordAffiliates(id) {
     throw new Error("An id is needed to get relations");
   }
 
-  return await fetch(API_URL + RECORD_AFFILIATES + "/" + id , {
+  return await checkResponseCode(fetch(API_URL + RECORD_AFFILIATES + "/" + id , {
     headers: {
       Authorization: `token ${authToken()}`  
     },
-  })
+  }))
 }
 
 export async function getRecordBeneficiarys(id) {
@@ -55,14 +65,14 @@ export async function getRecordBeneficiarys(id) {
     throw new Error("An id is needed to get relations");
   }
 
-  return await fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
+  return await checkResponseCode(fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
     headers: {
       Authorization: `token ${authToken()}`  
     },
-  })
+  }))
 }
 export function putRecordBeneficiary(id, data){
-  return fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
+  return checkResponseCode(fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -70,10 +80,10 @@ export function putRecordBeneficiary(id, data){
       Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify(data),
-  })
+  }))
 }
 export function postRecordBeneficiary(id, data){
-  return fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
+  return checkResponseCode(fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -81,10 +91,10 @@ export function postRecordBeneficiary(id, data){
       Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify(data),
-  })
+  }))
 }
 export function deleteRecordBeneficiary(id, beneficiaryId){
-  return fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
+  return checkResponseCode(fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
     method: "DELETE",
     headers: {
       Accept: "application/json",
@@ -92,7 +102,7 @@ export function deleteRecordBeneficiary(id, beneficiaryId){
       Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify({'beneficiary':beneficiaryId}),
-  })
+  }))
 }
 export function putRecord(id, data) {
   // console.log(data)
@@ -102,7 +112,7 @@ export function putRecord(id, data) {
   if (data === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + RECORD + "/" + id, {
+  return checkResponseCode(fetch(API_URL + RECORD + "/" + id, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -110,14 +120,14 @@ export function putRecord(id, data) {
       Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify(data),
-  });
+  }));
 }
 export function postAffiliate(data) {
   // console.log(data)
   if (data === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + CREATE_AFFILIATE, {
+  return checkResponseCode(fetch(API_URL + CREATE_AFFILIATE, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -125,14 +135,14 @@ export function postAffiliate(data) {
       Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify(data),
-  });
+  }));
 }
 export function postBeneficiary(data, relationData) {
   // console.log(data)
   if (data === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + CREATE_BENEFICIARY + '/' + relationData['affiliate'], {
+  return checkResponseCode(fetch(API_URL + CREATE_BENEFICIARY + '/' + relationData['affiliate'], {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -140,57 +150,57 @@ export function postBeneficiary(data, relationData) {
       Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify({'record_data': data, 'relation_data':relationData}),
-  });
+  }));
 }
 export function deleteRecord(id) {
   // console.log(data)
   if (id && !id.match("^[\\w]{24}$")) {
     throw new Error(`invalid id (${id}) at put affiliate`);
   }
-  return fetch(API_URL + RECORD + "/" + id, {
+  return checkResponseCode(fetch(API_URL + RECORD + "/" + id, {
     method: "DELETE",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization: `token ${authToken()}`  
     }
-  });
+  }));
 }
 
 export function filterAffiliates(text=''){
-  return fetch(API_URL + FILTER_AFFILIATES + '/' + text, {
+  return checkResponseCode(fetch(API_URL + FILTER_AFFILIATES + '/' + text, {
     headers: {
       Authorization: `token ${authToken()}`  
     },
-  })
+  }))
 }
 export function filterRecords(text=''){
-  return fetch(API_URL + FILTER_RECORDS + '/' + text, {
+  return checkResponseCode(fetch(API_URL + FILTER_RECORDS + '/' + text, {
     headers: {
       Authorization: `token ${authToken()}`  
     },
-  })
+  }))
 }
 
 export async function getRecordCitas(recordId) {
-  return await fetch(API_URL + RECORD_CITAS + "/" + recordId, {
+  return await checkResponseCode(fetch(API_URL + RECORD_CITAS + "/" + recordId, {
     headers: {
       Authorization: `token ${authToken()}`  
     },
-  });
+  }));
 }
 export async function getCita(citaId) {
-  return await fetch(API_URL + CITAS + "/" + citaId, {
+  return await checkResponseCode(fetch(API_URL + CITAS + "/" + citaId, {
     headers: {
       Authorization: `token ${authToken()}`  
     },
-  });
+  }));
 }
 export function postCita(citaData){
   if (citaData === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + CITAS, {
+  return checkResponseCode(fetch(API_URL + CITAS, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -198,13 +208,13 @@ export function postCita(citaData){
       Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify(citaData),
-  });
+  }));
 }
 export function putCita(citaId, citaData){
   if (citaData === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + CITAS + '/' + citaId, {
+  return checkResponseCode(fetch(API_URL + CITAS + '/' + citaId, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -212,36 +222,36 @@ export function putCita(citaId, citaData){
       Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify(citaData),
-  });
+  }));
 }
 export function deleteCita(citaId){
-  return fetch(API_URL + CITAS + '/' + citaId, {
+  return checkResponseCode(fetch(API_URL + CITAS + '/' + citaId, {
     method: "DELETE",
     headers: {
       Authorization: `token ${authToken()}`  
     },
-  });
+  }));
 }
 
 export async function getRecordCitasodon(recordId) {
-  return await fetch(API_URL + RECORD_CITASODON + "/" + recordId, {
+  return await checkResponseCode(fetch(API_URL + RECORD_CITASODON + "/" + recordId, {
     headers: {
       Authorization: `token ${authToken()}`  
     },
-  });
+  }));
 }
 export async function getCitaodon(citaodonId) {
-  return await fetch(API_URL + CITASODON + "/" + citaodonId, {
+  return await checkResponseCode(fetch(API_URL + CITASODON + "/" + citaodonId, {
     headers: {
       Authorization: `token ${authToken()}`  
     },
-  });
+  }));
 }
 export function postCitaodon(citaodonData){
   if (citaodonData === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + CITASODON, {
+  return checkResponseCode(fetch(API_URL + CITASODON, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -249,13 +259,13 @@ export function postCitaodon(citaodonData){
       Authorization: `token ${authToken()}`
     },
     body: JSON.stringify(citaodonData),
-  });
+  }));
 }
 export function putCitaodon(citaodonId, citaodonData){
   if (citaodonData === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + CITASODON + '/' + citaodonId, {
+  return checkResponseCode(fetch(API_URL + CITASODON + '/' + citaodonId, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -263,15 +273,15 @@ export function putCitaodon(citaodonId, citaodonData){
       Authorization: `token ${authToken()}`
     },
     body: JSON.stringify(citaodonData),
-  });
+  }));
 }
 export function deleteCitaodon(citaodonId){
-  return fetch(API_URL + CITASODON + '/' + citaodonId, {
+  return checkResponseCode(fetch(API_URL + CITASODON + '/' + citaodonId, {
     method: "DELETE",
     headers: {
       Authorization: `token ${authToken()}`  
     },
-  });
+  }));
 }
 
 
@@ -279,13 +289,17 @@ export async function getReposos(id = "") {
   if (id !== "") {
     id = "/" + id;
   }
-  return await fetch(API_URL + REPOSOS + id);
+  return await checkResponseCode(fetch(API_URL + REPOSOS + id, {
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
+  }));
 }
 export function postReposo(data){
   if (data === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + REPOSOS, {
+  return checkResponseCode(fetch(API_URL + REPOSOS, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -293,13 +307,13 @@ export function postReposo(data){
       Authorization: `token ${authToken()}`
     },
     body: JSON.stringify(data),
-  });
+  }));
 }
 export function putReposo(reposoId ,data){
   if (data === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + REPOSOS + '/'+reposoId, {
+  return checkResponseCode(fetch(API_URL + REPOSOS + '/'+reposoId, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -307,42 +321,42 @@ export function putReposo(reposoId ,data){
       Authorization: `token ${authToken()}`
     },
     body: JSON.stringify(data),
-  });
+  }));
 }
 export function deleteReposo(id){
-  return fetch(API_URL + REPOSOS + '/' + id, {
+  return checkResponseCode(fetch(API_URL + REPOSOS + '/' + id, {
     method: "DELETE",
     headers: {
       Authorization: `token ${authToken()}`  
     },
-  });
+  }));
 }
 export async function searchReposos(record_id = "") {
   if (record_id !== "") {
     record_id = "/" + record_id;
   }
-  return await fetch(API_URL + SEARCH_REPOSOS + record_id, {
+  return await checkResponseCode(fetch(API_URL + SEARCH_REPOSOS + record_id, {
     headers: {
       Authorization: `token ${authToken()}`
     },
-  });
+  }));
 }
 
 export async function getCuidos(id = "") {
   if (id !== "") {
     id = "/" + id;
   }
-  return await fetch(API_URL + CUIDOS + id, {
+  return await checkResponseCode(fetch(API_URL + CUIDOS + id, {
     headers: {
       Authorization: `token ${authToken()}`
     },
-  });
+  }));
 }
 export function postCuido(data){
   if (data === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + CUIDOS, {
+  return checkResponseCode(fetch(API_URL + CUIDOS, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -350,13 +364,13 @@ export function postCuido(data){
       Authorization: `token ${authToken()}`
     },
     body: JSON.stringify(data),
-  });
+  }));
 }
 export function putCuido(cuidoId ,data){
   if (data === undefined) {
     throw new Error("no data received");
   }
-  return fetch(API_URL + CUIDOS + '/'+cuidoId, {
+  return checkResponseCode(fetch(API_URL + CUIDOS + '/'+cuidoId, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -364,28 +378,31 @@ export function putCuido(cuidoId ,data){
       Authorization: `token ${authToken()}`
     },
     body: JSON.stringify(data),
-  });
+  }));
 }
 export function deleteCuido(id){
-  return fetch(API_URL + CUIDOS + '/' + id, {
-    method: "DELETE"
-  });
+  return checkResponseCode(fetch(API_URL + CUIDOS + '/' + id, {
+    method: "DELETE",
+    headers: {
+      Authorization: `token ${authToken()}`
+    },
+  }));
 }
 export async function searchCuidos(record_id = "") {
   if (record_id !== "") {
     record_id = "/" + record_id;
   }
-  return await fetch(API_URL + SEARCH_CUIDOS + record_id, {
+  return await checkResponseCode(fetch(API_URL + SEARCH_CUIDOS + record_id, {
     headers: {
       Authorization: `token ${authToken()}`
     },
-  });
+  }));
 }
 
 export function getRecordsCount(){
-  return fetch(API_URL + 'records_count', {
+  return checkResponseCode(fetch(API_URL + 'records_count', {
     headers: {
       Authorization: `token ${authToken()}`
     },
-  })
+  }))
 }
