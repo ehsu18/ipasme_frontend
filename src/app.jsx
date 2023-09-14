@@ -21,12 +21,27 @@ import { RecordDetailsPage } from "./components/RecordDetailsPage";
 import { AddReposoPage, EditReposoPage } from "./components/RepososPage";
 import { AddCuidoPage, EditCuidoPage } from "./components/CuidosPage";
 import { PageNotFound } from "./components/PageNotFound";
+import { LoginPage } from "./components/LoginPage";
+import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 // TODO revisar si es mejor importar los css asi o en sus respectivas paginas
+// TODO hay que hacer algo si al momento de usar la api el token da error, en ese caso 
+// se debe reiniciar la sesion
+// TODO se debe parar IpasmeRMSUserToken a una variable de entorno
+// TODO hacer un effect que revise si esta el token y si es valido o no
 
 function App() {
-  return (
+  let [userToken, setUserToken] = useState(window.localStorage.getItem('IpasmeRMSUserToken'));
+  useEffect(()=>{
+    let token = window.localStorage.getItem('IpasmeRMSUserToken')
+    if (token){
+      setUserToken(token) // TODO el problema es saber si el token es valido o no
+    }
+  },[])
+
+  return ( userToken ?
     <main className="app-container">
-      <NavBar /> {/* tiene que estar aqui para que se repita en todos las demas paginas aunque hay que ver bien eso */}
+      <NavBar userToken={userToken} setUserToken={setUserToken} /> {/* tiene que estar aqui para que se repita en todos las demas paginas aunque hay que ver bien eso */}
       <Routes>
         <Route path="/viewrecords" element={<ViewRecordsPage />} />
         <Route path="/" element={<HomePage />} />
@@ -42,9 +57,18 @@ function App() {
         <Route path="/edit_reposo/:reposoId" element={<EditReposoPage/>}/>
         <Route path="/add_cuido/:affiliate_id" element={<AddCuidoPage/>}/>
         <Route path="/edit_cuido/:cuidoId" element={<EditCuidoPage/>}/>
+        <Route path="/login" element={<Navigate to='/' />}/>
         <Route path="*" element={<PageNotFound/>}/>
       </Routes>
-    </main>
+    </main> 
+    :
+    <main className="app-container">
+      <Routes>
+        <Route path="/login" element={<LoginPage userToken={userToken} setUserToken={setUserToken} />}/>
+        <Route path="*" element={<Navigate to='/login' />}/>
+      </Routes>
+    </main> 
+    
   );
 }
 

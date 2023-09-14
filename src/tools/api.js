@@ -21,11 +21,20 @@ const SEARCH_CUIDOS = "search_cuidos";
 // TODO faltan algunas validaciones
 // TODO si sobra tiempo se puede pasar a un modelo orientado a objetos
 
+function authToken(){
+  return window.localStorage.getItem('IpasmeRMSUserToken')
+}
+
+
 export async function getRecords(id = "") {
   if (id !== "") {
     id = "/" + id;
   }
-  return await fetch(API_URL + RECORD + id);
+  return await fetch(API_URL + RECORD + id, {
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
+  });
 }
 
 export async function getRecordAffiliates(id) {
@@ -33,7 +42,11 @@ export async function getRecordAffiliates(id) {
     throw new Error("An id is needed to get relations");
   }
 
-  return await fetch(API_URL + RECORD_AFFILIATES + "/" + id)
+  return await fetch(API_URL + RECORD_AFFILIATES + "/" + id , {
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
+  })
 }
 
 export async function getRecordBeneficiarys(id) {
@@ -42,7 +55,11 @@ export async function getRecordBeneficiarys(id) {
     throw new Error("An id is needed to get relations");
   }
 
-  return await fetch(API_URL + RECORD_BENEFICIARYS + "/" + id)
+  return await fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
+  })
 }
 export function putRecordBeneficiary(id, data){
   return fetch(API_URL + RECORD_BENEFICIARYS + "/" + id, {
@@ -50,6 +67,7 @@ export function putRecordBeneficiary(id, data){
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify(data),
   })
@@ -60,6 +78,7 @@ export function postRecordBeneficiary(id, data){
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify(data),
   })
@@ -70,6 +89,7 @@ export function deleteRecordBeneficiary(id, beneficiaryId){
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify({'beneficiary':beneficiaryId}),
   })
@@ -87,6 +107,7 @@ export function putRecord(id, data) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify(data),
   });
@@ -101,6 +122,7 @@ export function postAffiliate(data) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify(data),
   });
@@ -115,6 +137,7 @@ export function postBeneficiary(data, relationData) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify({'record_data': data, 'relation_data':relationData}),
   });
@@ -129,35 +152,39 @@ export function deleteRecord(id) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`  
     }
   });
 }
 
 export function filterAffiliates(text=''){
-  return fetch(API_URL + FILTER_AFFILIATES + '/' + text)
+  return fetch(API_URL + FILTER_AFFILIATES + '/' + text, {
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
+  })
 }
 export function filterRecords(text=''){
-  return fetch(API_URL + FILTER_RECORDS + '/' + text)
+  return fetch(API_URL + FILTER_RECORDS + '/' + text, {
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
+  })
 }
-// export async function getRecords(id = "") {
-//   if (id !== "") {
-//     id = "/" + id;
-//   }
-//   return await fetch(API_URL + RECORDS_URL + id);
-//   // .then((response) => response.json())
-//   // .then((json) => {
-//   //   return json
-//   // })
-//   // .catch((error)=>{
-//   //   throw new Error(error)
-//   // })
-// }
 
 export async function getRecordCitas(recordId) {
-  return await fetch(API_URL + RECORD_CITAS + "/" + recordId);
+  return await fetch(API_URL + RECORD_CITAS + "/" + recordId, {
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
+  });
 }
 export async function getCita(citaId) {
-  return await fetch(API_URL + CITAS + "/" + citaId);
+  return await fetch(API_URL + CITAS + "/" + citaId, {
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
+  });
 }
 export function postCita(citaData){
   if (citaData === undefined) {
@@ -168,6 +195,7 @@ export function postCita(citaData){
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify(citaData),
   });
@@ -181,21 +209,33 @@ export function putCita(citaId, citaData){
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`  
     },
     body: JSON.stringify(citaData),
   });
 }
 export function deleteCita(citaId){
   return fetch(API_URL + CITAS + '/' + citaId, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
   });
 }
 
 export async function getRecordCitasodon(recordId) {
-  return await fetch(API_URL + RECORD_CITASODON + "/" + recordId);
+  return await fetch(API_URL + RECORD_CITASODON + "/" + recordId, {
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
+  });
 }
 export async function getCitaodon(citaodonId) {
-  return await fetch(API_URL + CITASODON + "/" + citaodonId);
+  return await fetch(API_URL + CITASODON + "/" + citaodonId, {
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
+  });
 }
 export function postCitaodon(citaodonData){
   if (citaodonData === undefined) {
@@ -206,6 +246,7 @@ export function postCitaodon(citaodonData){
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`
     },
     body: JSON.stringify(citaodonData),
   });
@@ -219,13 +260,17 @@ export function putCitaodon(citaodonId, citaodonData){
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`
     },
     body: JSON.stringify(citaodonData),
   });
 }
 export function deleteCitaodon(citaodonId){
   return fetch(API_URL + CITASODON + '/' + citaodonId, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
   });
 }
 
@@ -245,6 +290,7 @@ export function postReposo(data){
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`
     },
     body: JSON.stringify(data),
   });
@@ -258,27 +304,39 @@ export function putReposo(reposoId ,data){
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`
     },
     body: JSON.stringify(data),
   });
 }
 export function deleteReposo(id){
   return fetch(API_URL + REPOSOS + '/' + id, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: {
+      Authorization: `token ${authToken()}`  
+    },
   });
 }
 export async function searchReposos(record_id = "") {
   if (record_id !== "") {
     record_id = "/" + record_id;
   }
-  return await fetch(API_URL + SEARCH_REPOSOS + record_id);
+  return await fetch(API_URL + SEARCH_REPOSOS + record_id, {
+    headers: {
+      Authorization: `token ${authToken()}`
+    },
+  });
 }
 
 export async function getCuidos(id = "") {
   if (id !== "") {
     id = "/" + id;
   }
-  return await fetch(API_URL + CUIDOS + id);
+  return await fetch(API_URL + CUIDOS + id, {
+    headers: {
+      Authorization: `token ${authToken()}`
+    },
+  });
 }
 export function postCuido(data){
   if (data === undefined) {
@@ -289,6 +347,7 @@ export function postCuido(data){
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`
     },
     body: JSON.stringify(data),
   });
@@ -302,6 +361,7 @@ export function putCuido(cuidoId ,data){
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`
     },
     body: JSON.stringify(data),
   });
@@ -315,9 +375,17 @@ export async function searchCuidos(record_id = "") {
   if (record_id !== "") {
     record_id = "/" + record_id;
   }
-  return await fetch(API_URL + SEARCH_CUIDOS + record_id);
+  return await fetch(API_URL + SEARCH_CUIDOS + record_id, {
+    headers: {
+      Authorization: `token ${authToken()}`
+    },
+  });
 }
 
 export function getRecordsCount(){
-  return fetch(API_URL + 'records_count')
+  return fetch(API_URL + 'records_count', {
+    headers: {
+      Authorization: `token ${authToken()}`
+    },
+  })
 }

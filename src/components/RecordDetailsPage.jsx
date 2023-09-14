@@ -59,6 +59,8 @@ import BasicModal from "./Modal";
 
 // TODO hay que validar para poder guardar los datos como en las otras paginas
 
+// TODO limitar el ancho de la pagina
+
 export function RecordDetailsPage() {
   let { id } = useParams();
   let [recordData, setRecordData] = useState({});

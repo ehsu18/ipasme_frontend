@@ -116,9 +116,11 @@ export function SearchWidget({}) {
             .then((response) => response.json())
             .then((json) => {
               setOptions(json);
+              console.log(json)
             })
             .catch((error) => {
               setOptions([]);
+              console.log(error)
             });
           setText(e.target.value);
         }}

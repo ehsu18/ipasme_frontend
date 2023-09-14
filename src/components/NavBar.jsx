@@ -4,7 +4,7 @@ import { ButtonBig } from "./Buttons";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
-function NavBar() {
+function NavBar({userToken, setUserToken}) {
   // TODO esto se puede sacar a App
   let [selected, setSelected] = useState(-1);
   // hay que ver si el selected se maneja de otra manera para poder
@@ -92,6 +92,10 @@ function NavBar() {
           type="secondary"
           text="Cerrar Sesión"
           icon={icons.ArrowCircleLeft}
+          action={()=>{
+            if(window.confirm('¿Está seguro de cerrar sesión?')){window.localStorage.removeItem('IpasmeRMSUserToken')
+            setUserToken(null)}
+          }}
         />
       </div>
     </nav>
