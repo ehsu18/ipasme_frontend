@@ -211,9 +211,14 @@ export function CreatingAffiliatePage() {
                     msg.style.display = "block";
                     msg.textContent =
                       "Por favor llene este campo correctamente";
-                    alert("Hay que no se llenaron correctamente");
+                    alert("Hay campos que no se llenaron correctamente");
                   }
                 }
+
+
+                data['names'] = data['names'].toLowerCase().trim()
+                data['lastnames'] = data['lastnames'].toLowerCase().trim()
+
 
                 postAffiliate(data)
                   .then((response) => response.json())
@@ -456,25 +461,28 @@ export function CreatingBeneficiaryPage() {
                     alert("Hay que no se llenaron correctamente");
                   }
                 }
+                data['names'] = data['names'].toLowerCase().trim()
+                data['lastnames'] = data['lastnames'].toLowerCase().trim()
 
                 postBeneficiary(data, relationData)
                   .then((response) => response.json())
                   .then((json) => {
                     // console.log(json);
+                    let input = document.getElementsByName("document")[0];
+                    let msg = input.parentElement.getElementsByClassName("fielderror-msg")[0];
+
                     if (json["result"] === "ok") {
                       console.log("guardado");
                       alert("Beneficiario registrado con éxito.");
                       setData({});
                       setRelationData({})
                       setSearchText('')
+                      input.classList.remove("entry-1-errorstatus");
+                        msg.style.display = "none";
+                        msg.textContent =
+                          "";
                     } else if (json["error"] === "Document already exists") { //TODO cambiar esto en ambos botones
                       try {
-                        let input = document.getElementsByName("document")[0];
-                        let msg =
-                          input.parentElement.getElementsByClassName(
-                            "fielderror-msg"
-                          )[0];
-
                         input.classList.add("entry-1-errorstatus");
                         msg.style.display = "block";
                         msg.textContent =

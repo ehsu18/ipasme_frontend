@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import React from "react";
 import * as icons from "./Icons";
 import { filterAffiliates, getRecords, getReposos, postReposo, putReposo, deleteReposo} from "../tools/api";
@@ -14,6 +14,7 @@ export function AddReposoPage(){
   let { affiliate_id } = useParams();
   let [recordData, setRecordData] = useState({});
   let [reposoData, setReposoData] = useState({});
+  const navigate = useNavigate()
 
   useEffect(() => {
     getRecords(affiliate_id)
@@ -109,7 +110,7 @@ export function AddReposoPage(){
                   )
                 ) {
                   setReposoData({});
-                  window.history.go(-1);
+                  navigate(-1)
                 }
               }}
             />
@@ -180,7 +181,7 @@ export function AddReposoPage(){
                       console.log("guardada");
                       alert("Reposo registrado con éxito.");
                       setReposoData({});
-                      window.history.go(-1);
+                      navigate(-1)
                     } else if (json["error"]) {
                       throw new Error(json["error"]);
                     }
@@ -207,6 +208,7 @@ export function EditReposoPage(){
     let [recordData, setRecordData] = useState({});
     let [reposoData, setReposoData] = useState({});
     let [initialData, setInitialData] = useState({})
+    const navigate = useNavigate()
   
     useEffect(() => {
       getReposos(reposoId)
@@ -340,7 +342,7 @@ export function EditReposoPage(){
                     )
                   ) {
                     setReposoData({});
-                    window.history.go(-1);
+                    navigate(-1)
                   }
                 }}
               />
@@ -419,7 +421,7 @@ export function EditReposoPage(){
                       if (json["result"] === "ok") {
                         console.log("guardado");
                         alert("Reposo editado con éxito.");
-                        window.history.go(-1);
+                        navigate(-1)
                       } else if (json["error"]) {
                         throw new Error(json["error"]);
                       }

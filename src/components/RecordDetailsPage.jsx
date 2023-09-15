@@ -26,7 +26,7 @@ import {
   dateToString,
   titleCase,
 } from "../tools/utilities";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ButtonBig, ButtonSmall, PersonTypeTag } from "./Buttons";
 import * as icons from "./Icons";
 import React, { useEffect, useState } from "react";
@@ -662,6 +662,7 @@ function RecordDetailsFechaContainer({
 }
 function CitasTable({ recordId }) {
   let [citas, setCitas] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     // TODO colocar una animacion de carga
@@ -737,7 +738,7 @@ function CitasTable({ recordId }) {
           icon={icons.DocumentEdit}
           type="secondary"
           action={() => {
-            window.location.href = "/add_cita/" + recordId;
+            navigate("/add_cita/" + recordId, {replace:true})
           }}
         />
       </div>
@@ -746,6 +747,7 @@ function CitasTable({ recordId }) {
 }
 function CitasOdonTable({ recordId }) {
   let [citas, setCitas] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     // TODO colocar una animacion de carga
@@ -817,7 +819,7 @@ function CitasOdonTable({ recordId }) {
           icon={icons.DocumentEdit}
           type="secondary"
           action={() => {
-            window.location.href = `/add_citaodon/${recordId}`;
+            navigate(`/add_citaodon/${recordId}`, {replace:true})
           }}
         />
       </div>
@@ -832,6 +834,7 @@ function RecordDetailsRepososTable({
   recordId,
 }) {
   let [data, setData] = useState({});
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (recordId === undefined) {
@@ -845,7 +848,7 @@ function RecordDetailsRepososTable({
       .catch((error) => {
         throw error;
       });
-  }, [recordId, name]);
+  });
 
   return (
     <section className="recorddetails-section">
@@ -892,7 +895,7 @@ function RecordDetailsRepososTable({
             icon={icons.DocumentEdit}
             type="secondary"
             action={() => {
-              window.location.href = `/add_reposo/${recordId}`;
+              navigate(`/add_reposo/${recordId}`,{replace: true})
             }}
           />
         </div>
@@ -908,6 +911,7 @@ function RecordDetailsCuidosTable({
   recordId,
 }) {
   let [data, setData] = useState({});
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (recordId === undefined) {
@@ -978,7 +982,7 @@ function RecordDetailsCuidosTable({
             icon={icons.DocumentEdit}
             type="secondary"
             action={() => {
-              window.location.href = `/add_cuido/${recordId}`;
+              navigate(`/add_reposo/${recordId}`,{replace: true})
             }}
           />
         </div>
@@ -1036,6 +1040,7 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
   let [editingRelation, setEditingRelation] = useState({});
   let [openCreateDialog, setOpenCreateDialog] = useState(false);
   let [createData, setCreateData] = useState({});
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (recordId === undefined) {
@@ -1099,7 +1104,7 @@ function BeneficiarysTable({ recordId, icon, title = "Beneficiarios" }) {
                         type="secondary"
                         text="Ver"
                         action={() => {
-                          window.location.href = `/record_details/${row.id}`;
+                          navigate(`/record_details/${row.id}`, {replace: true})
                         }}
                       />
                       <ButtonSmall

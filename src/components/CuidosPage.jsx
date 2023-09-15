@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import React from "react";
 import * as icons from "./Icons";
 import { filterAffiliates, getRecords, getCuidos, postCuido, putCuido, deleteCuido} from "../tools/api";
@@ -14,6 +14,7 @@ export function AddCuidoPage(){
   let { affiliate_id } = useParams();
   let [recordData, setRecordData] = useState({});
   let [cuidoData, setCuidoData] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     getRecords(affiliate_id)
@@ -108,7 +109,7 @@ export function AddCuidoPage(){
                   )
                 ) {
                   setCuidoData({});
-                  window.history.go(-1);
+                  navigate(-1)
                 }
               }}
             />
@@ -179,7 +180,7 @@ export function AddCuidoPage(){
                       console.log("guardada");
                       alert("Cuido registrado con éxito.");
                       setCuidoData({});
-                      window.history.go(-1);
+                      navigate(-1)
                     } else if (json["error"]) {
                       throw new Error(json["error"]);
                     }
@@ -206,6 +207,7 @@ export function EditCuidoPage(){
   let [recordData, setRecordData] = useState({});
   let [cuidoData, setCuidoData] = useState({});
   let [initialData, setInitialData] = useState({})
+  const navigate = useNavigate();
 
   useEffect(() => {
     getCuidos(cuidoId)
@@ -339,7 +341,7 @@ export function EditCuidoPage(){
                   )
                 ) {
                   setCuidoData({});
-                  window.history.go(-1);
+                  navigate(-1)
                 }
               }}
             />
@@ -418,7 +420,7 @@ export function EditCuidoPage(){
                     if (json["result"] === "ok") {
                       console.log("guardado");
                       alert("Cuido editado con éxito.");
-                      window.history.go(-1);
+                      navigate(-1)
                     } else if (json["error"]) {
                       throw new Error(json["error"]);
                     }

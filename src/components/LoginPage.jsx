@@ -6,6 +6,9 @@ import * as icons from "./Icons";
 import logoIpasme from "../assets/png/logo-ipasme.png";
 import fondoIllustraciones from "../assets/png/fondo-ilustraciones.png";
 
+
+// TODO enter para ingresar
+
 export function LoginPage({ userToken, setUserToken, setUserData, userData }) {
   useEffect(() => {
     // si se llama a esta pagina se debe borrar el token
