@@ -32,16 +32,23 @@ import { Navigate } from "react-router-dom";
 
 function App() {
   let [userToken, setUserToken] = useState(window.localStorage.getItem('IpasmeRMSUserToken'));
+  let [userData, setUserData] = useState(window.localStorage.getItem('IpasmeRMSUserData'))
+
+
   useEffect(()=>{
     let token = window.localStorage.getItem('IpasmeRMSUserToken')
     if (token){
       setUserToken(token) // TODO el problema es saber si el token es valido o no
     }
+    let user = JSON.parse(window.localStorage.getItem('IpasmeRMSUserData'))
+    if (user){
+      setUserData(user) // TODO el problema es saber si el token es valido o no
+    }
   },[])
 
   return ( userToken ?
     <main className="app-container">
-      <NavBar userToken={userToken} setUserToken={setUserToken} /> {/* tiene que estar aqui para que se repita en todos las demas paginas aunque hay que ver bien eso */}
+      <NavBar userToken={userToken} setUserToken={setUserToken} userData={userData} setUserData={setUserData}/> {/* tiene que estar aqui para que se repita en todos las demas paginas aunque hay que ver bien eso */}
       <Routes>
         <Route path="/viewrecords" element={<ViewRecordsPage />} />
         <Route path="/" element={<HomePage />} />
@@ -64,7 +71,7 @@ function App() {
     :
     <main className="app-container">
       <Routes>
-        <Route path="/login" element={<LoginPage userToken={userToken} setUserToken={setUserToken} />}/>
+        <Route path="/login" element={<LoginPage userToken={userToken} setUserToken={setUserToken} setUserData={setUserData} userData={userData} />}/>
         <Route path="*" element={<Navigate to='/login' />}/>
       </Routes>
     </main> 

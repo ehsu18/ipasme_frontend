@@ -391,3 +391,8 @@ a {
   gap: 24px;
 
 }
+
+
+.innerSVGcolor-white svg path{
+  stroke: var(--white);
+}

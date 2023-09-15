@@ -4,7 +4,7 @@ import { ButtonBig } from "./Buttons";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
-function NavBar({userToken, setUserToken}) {
+function NavBar({userToken, setUserToken, userData, setUserData}) {
   // TODO esto se puede sacar a App
   let [selected, setSelected] = useState(-1);
   // hay que ver si el selected se maneja de otra manera para poder
@@ -82,8 +82,8 @@ function NavBar({userToken, setUserToken}) {
       <div className="user-card">
         {icons.User2(36)}
         <div className="usuario-info">
-          <small className="title-small">Lorena Chacón</small>
-          <small className="paragraph-small">Usuario Estandar</small>
+          <small className="title-small">{ userData.first_name + ' ' + userData.last_name}</small>
+          <small className="paragraph-small">Usuario Estándar</small>
         </div>
       </div>
 
