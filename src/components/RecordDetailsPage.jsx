@@ -65,6 +65,7 @@ export function RecordDetailsPage() {
   let { id } = useParams();
   let [recordData, setRecordData] = useState({});
   let [focusedTab, setFocusedTab] = useState("basic_tab");
+  let navigate = useNavigate()
 
   useEffect(() => {
     getRecords(id)
@@ -326,7 +327,7 @@ export function RecordDetailsPage() {
                 action={() => {
                   if (
                     window.confirm(
-                      "¿Está seguro de querer ELIMINAR esta historia? Esto no se puede deshacer, por lo que se perderán todos los datos de esta historia incluidas las citas, reposos y cuidos."
+                      "¿Está seguro de querer ELIMINAR esta historia? Perderá todos los datos de esta historia incluidas las citas, reposos y cuidos. También SE ELIMINARÁN LOS BENEFICIARIOS que no posean más afiliados."
                     )
                   ) {
                     if (
@@ -350,12 +351,14 @@ export function RecordDetailsPage() {
                     .then((json) => {
                       if (json["result"] === "ok") {
                         alert("Borrada.");
+                        navigate('/viewrecords', {replace: true})
                       } else {
-                        alert("No se pudo borrar.");
+                        throw new Error(json['error'])
                       }
                     })
                     .catch((error) => {
                       console.log(error);
+                      alert("No se pudo borrar.");
                     });
                 }}
               />

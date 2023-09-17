@@ -66,8 +66,13 @@ export function CreatingAffiliatePage() {
             <RecordDetailsDataContainer
               label="Lugar de nacimiento"
               name="placeofbirth"
-              doubleColumn
+              
             />
+            <RecordDetailsOptionsContainer
+                label="Estado civil"
+                name="civilstatus"
+                options={["Soltero", "Casado", "Viudo", "Divorciado"]}
+              />
           </RecordDetailsSection>
           <RecordDetailsSection
             title="Datos de contacto"
@@ -336,11 +341,17 @@ export function CreatingBeneficiaryPage() {
               name="gender"
               options={["M", "F"]}
             />
+            
             <RecordDetailsDataContainer
               label="Lugar de nacimiento"
               name="placeofbirth"
-              doubleColumn
+              
             />
+            <RecordDetailsOptionsContainer
+                label="Estado civil"
+                name="civilstatus"
+                options={["Soltero", "Casado", "Viudo", "Divorciado"]}
+              />
           </RecordDetailsSection>
           <RecordDetailsSection
             title="Datos de contacto"

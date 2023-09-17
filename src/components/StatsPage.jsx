@@ -71,9 +71,9 @@ function InformesTable({ navigate }) {
             </TableHead>
             <TableBody>
               {informes.map((informe, index) => (
-                <TableRow
+                <TableRow 
                   align="center"
-                  key={informe.index}
+                  key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell align="center">{informe.fecha}</TableCell>
