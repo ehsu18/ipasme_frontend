@@ -848,7 +848,7 @@ function RecordDetailsRepososTable({
       .catch((error) => {
         throw error;
       });
-  });
+  }, []);
 
   return (
     <section className="recorddetails-section">
@@ -925,7 +925,7 @@ function RecordDetailsCuidosTable({
       .catch((error) => {
         throw error;
       });
-  }, [recordId, name]);
+  }, []);
 
   return (
     <section className="recorddetails-section">

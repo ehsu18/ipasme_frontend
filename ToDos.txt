@@ -56,3 +56,5 @@ TODO    no se por que al compilar la app, al crear una cita esta regresa automat
         tablas. Hay que hacer que se actualicen automaticamente o no se
 
 TODO    todo debe ir con navlink  <NavLink to={"/record_details/" + relation.record}>
+
+TODO    el search no tiene en cuenta las tildes

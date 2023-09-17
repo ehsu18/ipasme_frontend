@@ -6,6 +6,7 @@ const CREATE_AFFILIATE = "create_affiliate";
 const CREATE_BENEFICIARY = "create_beneficiary";
 const FILTER_AFFILIATES = "filter_affiliates";
 const FILTER_RECORDS = "filter_records"; 
+const RECORDS_COUNT = 'records_count';
 
 const CITAS = "citas";
 const RECORD_CITAS = "record_citas";
@@ -16,6 +17,9 @@ const REPOSOS = "reposos";
 const SEARCH_REPOSOS = "search_reposos";
 const CUIDOS = "cuidos";
 const SEARCH_CUIDOS = "search_cuidos";
+
+const INFORMES  = 'informes';
+const SEARCH_INFORME_CITAS = 'search_informe_citas'
 
 
 // TODO faltan algunas validaciones
@@ -400,9 +404,72 @@ export async function searchCuidos(record_id = "") {
 }
 
 export function getRecordsCount(){
-  return checkResponseCode(fetch(API_URL + 'records_count', {
+  return checkResponseCode(fetch(API_URL + RECORDS_COUNT, {
     headers: {
       Authorization: `token ${authToken()}`
     },
   }))
+}
+
+export function getInformes(){
+  return checkResponseCode(fetch(API_URL + INFORMES, {
+    headers: {
+      Authorization: `token ${authToken()}`
+    },
+  }))
+}
+export function getInforme(id){
+  return checkResponseCode(fetch(API_URL + INFORMES + '/' + id, {
+    headers: { 
+      Authorization: `token ${authToken()}`
+    },
+  }))
+}
+
+export function postInforme(data){
+  if (data === undefined) {
+    throw new Error("no data received");
+  }
+  return checkResponseCode(fetch(API_URL + INFORMES, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`
+    },
+    body: JSON.stringify(data),
+  }))
+}
+export function putInforme(id, data){
+  if (data === undefined) {
+    throw new Error("no data received");
+  }
+  return checkResponseCode(fetch(API_URL + INFORMES+'/'+id, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `token ${authToken()}`
+    },
+    body: JSON.stringify(data),
+  }))
+}
+export function deleteInforme(id){
+return checkResponseCode(fetch(API_URL + INFORMES+'/'+id, {
+  method: "DELETE",
+  headers: {
+    Authorization: `token ${authToken()}`
+  }
+}))
+}
+
+export async function getInformeCitas(informe_id = "") {
+  if (informe_id === "") {
+    throw new Error('Id required')
+  }
+  return await checkResponseCode(fetch(API_URL + SEARCH_INFORME_CITAS + '/' +informe_id, {
+    headers: {
+      Authorization: `token ${authToken()}`
+    },
+  }));
 }

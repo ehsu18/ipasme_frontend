@@ -24,6 +24,8 @@ import { PageNotFound } from "./components/PageNotFound";
 import { LoginPage } from "./components/LoginPage";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { StaticsPage, StatsPage } from "./components/StatsPage";
+import { EditInformePage } from "./components/InformesPage";
 // TODO revisar si es mejor importar los css asi o en sus respectivas paginas
 // TODO hay que hacer algo si al momento de usar la api el token da error, en ese caso 
 // se debe reiniciar la sesion
@@ -57,6 +59,8 @@ function App() {
         <Route path="/creating_record/affiliate" element={<CreatingAffiliatePage  />}/>
         <Route path="/creating_record/beneficiary" element={<CreatingBeneficiaryPage />}/>
         <Route path="/add_cita/:id" element={<AddCitaPage/>}/>
+        {/* <Route path="/add_cita_record/:record_id" element={<AddCitaPage/>}/> */}
+        {/* <Route path="/add_cita_informe/:informe_id" element={<AddCitaPage/>}/> */}
         <Route path="/edit_cita/:id" element={<EditCitaPage/>}/>
         <Route path="/add_citaodon/:id" element={<AddCitaodonPage/>}/>
         <Route path="/edit_citaodon/:id" element={<EditCitaodonPage/>}/>
@@ -64,6 +68,8 @@ function App() {
         <Route path="/edit_reposo/:reposoId" element={<EditReposoPage/>}/>
         <Route path="/add_cuido/:affiliate_id" element={<AddCuidoPage/>}/>
         <Route path="/edit_cuido/:cuidoId" element={<EditCuidoPage/>}/>
+        <Route path="/stats" element={<StatsPage/>}/>
+        <Route path="/edit_informe/:informe_id" element={<EditInformePage/>}/>
         <Route path="/login" element={<Navigate to='/' />}/>
         <Route path="*" element={<PageNotFound/>}/>
       </Routes>
