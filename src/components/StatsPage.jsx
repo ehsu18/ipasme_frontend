@@ -154,7 +154,7 @@ function InformesTable({ navigate }) {
                 .then((response) => response.json())
                 .then((json) => {
                   if (json["result"] === "ok" && json["informe_id"]) {
-                    navigate(`/edit_informe/${json["informe_id"]}`, {});
+                    navigate(`/edit_informe/${json["informe_id"]}`, {replace:true});
                   } else {
                     throw new Error(
                       "An error ocurred recieving the informe id"

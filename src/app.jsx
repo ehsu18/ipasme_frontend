@@ -26,6 +26,7 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { StaticsPage, StatsPage } from "./components/StatsPage";
 import { EditInformePage } from "./components/InformesPage";
+import { AyudaPage } from "./components/AyudaPage";
 // TODO revisar si es mejor importar los css asi o en sus respectivas paginas
 // TODO hay que hacer algo si al momento de usar la api el token da error, en ese caso 
 // se debe reiniciar la sesion
@@ -56,6 +57,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/record_details/:id" element={<RecordDetailsPage />} />
         <Route path="/newrecord" element={<NewRecordPage />}/>
+        <Route path="/help" element={<AyudaPage />}/>
         <Route path="/creating_record/affiliate" element={<CreatingAffiliatePage  />}/>
         <Route path="/creating_record/beneficiary" element={<CreatingBeneficiaryPage />}/>
         <Route path="/add_cita/:id" element={<AddCitaPage/>}/>

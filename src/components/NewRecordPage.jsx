@@ -18,7 +18,7 @@ export function NewRecordPage(){
                     <div className="card">
                         <div className="frame-84">
                             <h1 className="title-big text-center">Afiliado</h1>
-                            <p className="paragraph-regular text-center">Estas son las personas que <br /> forman parte del <br /> de Educación y que reciben <br /> los servicios del IPASME.</p>
+                            <p className="paragraph-regular text-center">Estas son las personas que <br /> forman parte del ministerio <br /> de Educación y que reciben <br /> los servicios del IPASME.</p>
                         </div>
                         {/* <button className="button">Crear Afiliado</button> */}
                         <ButtonBig id="create-affiliate-btn" text="Crear Afiliado" icon={User1} action={() => {window.location.href = '/creating_record/affiliate'}} />
