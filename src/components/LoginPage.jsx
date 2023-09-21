@@ -23,6 +23,49 @@ export function LoginPage({ userToken, setUserToken, setUserData, userData }) {
     height: "36px",
     padding: "12px",
   };
+
+  const loginFunction = () => {
+    let username =
+      document.getElementsByName("input-username")[0].value;
+    let password =
+      document.getElementsByName("input-password")[0].value;
+    let advice = document.getElementsByName("advice")[0];
+    advice.textContent = "";
+    advice.style.display = "none";
+
+    fetch(process.env.REACT_APP_DEV_APIURL + "login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username: username, password: password }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json);
+        if (json.token && json.user ) {
+          advice.textContent = "";
+          advice.style.display = "none";
+          setUserToken(json.token);
+          setUserData(json.user)
+          window.localStorage.setItem("IpasmeRMSUserToken", json.token);
+          window.localStorage.setItem("IpasmeRMSUserData", JSON.stringify(json.user));
+          redirect("/");
+        } else {
+          throw new Error(json.detail);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        advice.textContent = "Error de credenciales";
+        advice.style.display = "Block";
+        setUserToken(null);
+        window.localStorage.removeItem("IpasmeRMSUserToken");
+        window.localStorage.removeItem("IpasmeRMSUserData");
+      });
+  }
+
   return (
     <main
       className="floatingcontainer-parent flex-h flex-center-h"
@@ -93,53 +136,18 @@ export function LoginPage({ userToken, setUserToken, setUserData, userData }) {
             name="input-password"
             type="password"
             placeholder="Contraseña"
+            onKeyUp={(e)=>{
+              if (e.key === 'Enter'){
+                loginFunction()
+              }
+            }}
           />
         </div>
         <ButtonBig
           text="Ingresar"
           type="main"
           icon={icons.ArrowCircleRight}
-          action={() => {
-            let username =
-              document.getElementsByName("input-username")[0].value;
-            let password =
-              document.getElementsByName("input-password")[0].value;
-            let advice = document.getElementsByName("advice")[0];
-            advice.textContent = "";
-            advice.style.display = "none";
-
-            fetch(process.env.REACT_APP_DEV_APIURL + "login", {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ username: username, password: password }),
-            })
-              .then((response) => response.json())
-              .then((json) => {
-                console.log(json);
-                if (json.token && json.user ) {
-                  advice.textContent = "";
-                  advice.style.display = "none";
-                  setUserToken(json.token);
-                  setUserData(json.user)
-                  window.localStorage.setItem("IpasmeRMSUserToken", json.token);
-                  window.localStorage.setItem("IpasmeRMSUserData", JSON.stringify(json.user));
-                  redirect("/");
-                } else {
-                  throw new Error(json.detail);
-                }
-              })
-              .catch((error) => {
-                console.error(error);
-                advice.textContent = "Error de credenciales";
-                advice.style.display = "Block";
-                setUserToken(null);
-                window.localStorage.removeItem("IpasmeRMSUserToken");
-                window.localStorage.removeItem("IpasmeRMSUserData");
-              });
-          }}
+          action={loginFunction}
         />
         <span className="title-regular"
           style={{

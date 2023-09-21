@@ -54,7 +54,7 @@ export function ViewRecordsPage() {
           />
           <DualSelector
             left="todos"
-            right="affiliates"
+            right="afiliados"
             selected={selectedListMode}
             setSelected={setSelectedListMode}
           />
