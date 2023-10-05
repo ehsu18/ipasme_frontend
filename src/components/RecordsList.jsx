@@ -106,7 +106,7 @@ export function RecordsList({
 
       {Array.isArray(recordsList) && recordsList.length > 0 ? (
         recordsList.map((r, index) => {
-          if (selectedListMode === "affiliates" && r.type !== "affiliate") {
+          if (selectedListMode === "afiliados" && r.type !== "affiliate") {
             return;
           }
 
